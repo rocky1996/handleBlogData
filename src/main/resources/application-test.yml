@@ -4,6 +4,10 @@ server:
 spring:
   profiles: test
 
+  elasticsearch:
+    rest:
+      uris: 39.98.138.221:8512
+
 #  datasource:
 #    username: root
 #    password: admin123
