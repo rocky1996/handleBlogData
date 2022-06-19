@@ -1,4 +1,4 @@
-twitter重点表
+twitter历史表
 
 字段            类型       是否允许为空       备注
 uuid           String     不能为空       系统自动生成ID
