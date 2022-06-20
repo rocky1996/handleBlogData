@@ -13,7 +13,7 @@ screen_name    String     可以为空       昵称
 use_name       String     可以为空       用户全名
 user_url       String     可以为空       用户主页URL
 user_avatar    String     可以为空       用户头像
-local_photo_url   String    可以为空     用户头像本地路径
+local_photo_url   String  可以为空     用户头像本地路径
 gender         String     可以为空       性别: -1：男,1：女, 0：未知
 country        String     可以为空       国家
 city           String     可以为空       城市
@@ -94,32 +94,32 @@ verified_reason          String  可以为空          认证原因（数据部�
     "importance":"",  #重要等级,0：普通 （默认）1：关注 2：重要 3：特别重要
     "remark":"",      #扩展字段，对重要数据手动编辑的批注信息
     "language_type":"",  #语种
-    "id":"",          #id【业务字段】   ->   source_id
+    "source_id":"",   #id【业务字段】   对应原字段->    id
     "user_id":"",     #用户id
     "screen_name":"", #用户名称
-    "user_name":"",   #用户名,      ->      use_name
+    "use_name":"",    #用户名,         对应原字段->    user_name
     "user_url":"",    #博主url（若为空需要拼接，格式如下：https://www.facebook.com/profile.php?id=100068526609915)
-    "user_head_url":"",    #用户头像链接   ->    user_avatar
-    "local_profile_pic_url":"", #用户头像本地路径（若为空需要拼接，格式如下：fb_Info_1614294429_photo.jpg）   ->     local_photo_url
-    "user_gender":"",      #用户性别，样例数据既有男，也有FEMALE，需统一编码（若为空，设置为0，-1是男，1是女）       ->     gender
+    "user_avatar":"", #用户头像链接     对应原字段->    user_head_url
+    "local_photo_url":"", #用户头像本地路径（若为空需要拼接，格式如下：fb_Info_1614294429_photo.jpg）   ->     local_profile_pic_url
+    "gender":"",      #用户性别，样例数据既有男，也有FEMALE，需统一编码（若为空，设置为0，-1是男，1是女）       ->     user_gender
     "country":"",     #国家（样例数据有国家中文名也有英文名；英文的统一治理中文，非标准的 原样存储 检索条件增加字典）
-    "current_location":"",        #地址信息（通过currentLocation值抽取城市名称）   ->      city
+    "city":"",        #地址信息（通过currentLocation值抽取城市名称）   ->      current_location
     "user_type":"",   #用户类型（个人、公开page、其他）
-    "is_attestation":"",    #是否认证 1：认证，0：非认证   ->    verified
-    "follower_number":"",     #粉丝人数-个人/ 关注数- 公共page（粉丝总数）,      ->     followers_count
+    "verified":"",    #是否认证 1：认证，0：非认证   ->    is_attestation
+    "followers_count":"",  #粉丝人数-个人/ 关注数- 公共page（粉丝总数）,      ->     follower_number
     "friend_count":"",     #关注数
     "post_count":"",       #发文数
-    "like_number":"",      #喜欢人数（点赞人数）  -> like_count
-    "create_time":"",      #数据产生的时间，如果没有产生时间，则填写入库时间   ->    source_create_time
-    "user_phone":"",       #联系方式（电话号码“-”连接）,     ->     mobile
-    "contact_and_basic_info":"",       #联系方式和基本信息（部分有值，例：Facebook:/tobu.hiroshi.takano|邮箱:celicas2245@gmail.com）  ->    email
-    "name_used_before":"", #用户曾用名（数据部分为空）      ->      name_userd_before
-    "user_language":"",    #用户语言（数据部分为空）        ->      language
-    "user_religion":"",    #宗教信仰（数据部分为空）        ->      user_religion
-    "work_message":"",       #工作信息（数据部分为空）      ->      works
-    "current_location":"",    #地址信息（现居地）         ->       location
-    "significant_other":"",    #夫妻关系（数据部分为空）   ->       marriage
-    "hometown_message":"",   #家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）   ->   home_town
+    "like_count":"",      #喜欢人数（点赞人数）  -> like_number
+    "source_create_time":"",      #数据产生的时间，如果没有产生时间，则填写入库时间   ->    create_time
+    "mobile":"",          #联系方式（电话号码“-”连接）,     ->     user_phone
+    "email":"",           #联系方式和基本信息（部分有值，例：Facebook:/tobu.hiroshi.takano|邮箱:celicas2245@gmail.com）  ->    contact_and_basic_info
+    "name_userd_before":"",#用户曾用名（数据部分为空）      ->      name_used_before
+    "language":"",         #用户语言（数据部分为空）        ->      user_language
+    "user_religion":"",    #宗教信仰（数据部分为空）
+    "works":"",            #工作信息（数据部分为空）      ->      work_message
+    "location":"",         #地址信息（现居地）         ->       current_location
+    "marriage":"",         #夫妻关系（数据部分为空）   ->       significant_other
+    "home_town":"",   #家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）   ->   hometown_message
     "user_political_views":"", #政治观点（数据部分为空）
     "user_summary":"",      #用户简介(个人账户-Intro)（部分有值，例：["目前就职：長距離トラックドライバー","长野市","所在地：Chikuma-shi, Nagano, Japan"]）
     "user_systent_name":"", #用户系统名（数据部分为空）
