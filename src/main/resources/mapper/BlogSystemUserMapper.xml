@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.acat.handleblogdata.mapper.BlogSystemUserMapper">
-  <resultMap id="BaseResultMap" type="com.acat.handleblogdata.domain.BlogSystemUser">
+<mapper namespace="com.acat.handleBlogData.mapper.BlogSystemUserMapper">
+  <resultMap id="BaseResultMap" type="com.acat.handleBlogData.domain.BlogSystemUser">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -70,7 +70,7 @@
   <sql id="Base_Column_List">
     id, username, `password`, user_nickname, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.acat.handleblogdata.domain.BlogSystemUserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.acat.handleBlogData.domain.BlogSystemUserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -94,13 +94,13 @@
     delete from blog_system_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.acat.handleblogdata.domain.BlogSystemUserExample">
+  <delete id="deleteByExample" parameterType="com.acat.handleBlogData.domain.BlogSystemUserExample">
     delete from blog_system_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.acat.handleblogdata.domain.BlogSystemUser">
+  <insert id="insert" parameterType="com.acat.handleBlogData.domain.BlogSystemUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -109,7 +109,7 @@
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{userNickname,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.acat.handleblogdata.domain.BlogSystemUser">
+  <insert id="insertSelective" parameterType="com.acat.handleBlogData.domain.BlogSystemUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -149,7 +149,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.acat.handleblogdata.domain.BlogSystemUserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.acat.handleBlogData.domain.BlogSystemUserExample" resultType="java.lang.Long">
     select count(*) from blog_system_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -193,7 +193,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.acat.handleblogdata.domain.BlogSystemUser">
+  <update id="updateByPrimaryKeySelective" parameterType="com.acat.handleBlogData.domain.BlogSystemUser">
     update blog_system_user
     <set>
       <if test="username != null">
@@ -214,7 +214,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.acat.handleblogdata.domain.BlogSystemUser">
+  <update id="updateByPrimaryKey" parameterType="com.acat.handleBlogData.domain.BlogSystemUser">
     update blog_system_user
     set username = #{username,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=VARCHAR},
