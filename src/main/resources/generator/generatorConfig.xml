@@ -21,9 +21,9 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://39.98.138.221:8512/videoManagementSystem"
+                        connectionURL="jdbc:mysql://39.98.138.221:8512/blogBigDataSystem"
                         userId="root"
-                        password="admin123">
+                        password="123456">
         </jdbcConnection>
 
         <!-- domain类的位置 -->
