@@ -1,6 +1,7 @@
 package com.acat.handleBlogData.interceptor;
 
 import com.acat.handleBlogData.aop.Auth;
+import com.acat.handleBlogData.cache.UserCacheService;
 import com.acat.handleBlogData.dao.UserDao;
 import com.acat.handleBlogData.domain.BlogSystemUser;
 import com.auth0.jwt.JWT;
@@ -23,7 +24,7 @@ import java.lang.reflect.Method;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Resource
-    private UserDao userDao;
+    private UserCacheService userCacheService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
@@ -53,7 +54,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("token认证名称错误，请重新登录");
                 }
 
-                BlogSystemUser blogSystemUser = userDao.selectById(Integer.parseInt(userId));
+                BlogSystemUser blogSystemUser = userCacheService.getUser(Integer.parseInt(userId));
                 if (blogSystemUser == null) {
                     throw new RuntimeException("该用户不存在，请重新登录");
                 }
