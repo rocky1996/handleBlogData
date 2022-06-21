@@ -1,5 +1,6 @@
 package com.acat.handleblogdata.service;
 
+import com.acat.handleblogdata.constants.RestResult;
 import com.acat.handleblogdata.controller.bo.LoginReqBo;
 
 public interface UserService {
@@ -10,5 +11,5 @@ public interface UserService {
      * @param password
      * @return
      */
-    LoginReqBo login(String userName, String password);
+    RestResult<LoginReqBo> login(String userName, String password);
 }
