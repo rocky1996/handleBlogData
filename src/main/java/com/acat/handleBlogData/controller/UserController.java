@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -26,7 +27,7 @@ public class UserController {
     private TokenService tokenService;
 
     @Auth(required = false)
-    @PostMapping("/loginUser")
+    @PostMapping("/login")
     public RestResult<LoginRespVo> login(HttpServletRequest httpServletRequest,
                                          @RequestBody LoginReqBo loginReqBo) {
         try {
@@ -50,9 +51,15 @@ public class UserController {
         }
     }
 
-    @Auth
-    @GetMapping("/getMessage")
-    public Object getMessage(){
-        return new RestResult<>(RestEnum.SUCCESS);
+    @Auth(required = false)
+    @PostMapping("/logout")
+    public RestResult logout(HttpServletRequest httpServletRequest) {
+        try {
+            httpServletRequest.getSession().removeAttribute("token");
+            httpServletRequest.getSession().invalidate();
+            return new RestResult<>(RestEnum.SUCCESS);
+        } catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
     }
 }
