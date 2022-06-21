@@ -5,17 +5,18 @@ import com.acat.handleblogdata.dao.UserDao;
 import com.acat.handleblogdata.domain.BlogSystemUser;
 import com.acat.handleblogdata.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 @Slf4j
 @Service
+@Component
 public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDao userDao;
-
 
     @Override
     public LoginRespVo login(String userName, String password) {

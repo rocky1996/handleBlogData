@@ -4,11 +4,11 @@ import com.acat.handleblogdata.dao.UserDao;
 import com.acat.handleblogdata.domain.BlogSystemUser;
 import com.acat.handleblogdata.domain.BlogSystemUserExample;
 import com.acat.handleblogdata.mapper.BlogSystemUserMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 
-@Service
+@Repository
 public class UserDaoImpl implements UserDao {
 
     @Resource
