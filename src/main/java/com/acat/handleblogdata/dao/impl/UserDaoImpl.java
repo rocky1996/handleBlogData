@@ -22,4 +22,12 @@ public class UserDaoImpl implements UserDao {
                 .andPasswordEqualTo(password);
         return blogSystemUserMapper.selectByExample(example).stream().findFirst().orElse(null);
     }
+
+    @Override
+    public BlogSystemUser selectById(Integer userId) {
+        BlogSystemUserExample example = new BlogSystemUserExample();
+        example.createCriteria()
+                .andIdEqualTo(userId);
+        return blogSystemUserMapper.selectByExample(example).stream().findFirst().orElse(null);
+    }
 }
