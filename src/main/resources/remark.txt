@@ -1,6 +1,9 @@
 mysql图形化地址:
     http://39.98.138.221:8511/index.php?route=/&route=%2F
-
+前端github地址:
+    https://github.com/betaincao/big-data-blog-front/tree/master
+后端github地址:
+    https://github.com/rocky1996/handleBlogData/tree/master
 
 
 put http://47.93.185.66:9400/shopping
