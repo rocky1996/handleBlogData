@@ -1,4 +1,4 @@
-package com.acat.handleblogdata.controller;
+package com.acat.handleBlogData.controller;
 
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
@@ -32,6 +32,7 @@ public class EsController {
     }
 
     @GetMapping("/findById/{id}")
+    @Auth(required = false)
     public RestResult findById(@PathVariable String id) {
         Optional<Article> article = articleRepository.findById(id);
         return new RestResult(RestEnum.SUCCESS, article);
