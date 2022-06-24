@@ -13,7 +13,7 @@ screen_name    String     可以为空       昵称
 use_name       String     可以为空       用户全名
 user_url       String     可以为空       用户主页URL
 user_avatar    String     可以为空       用户头像
-local_photo_url   String    可以为空     用户头像本地路径
+local_photo_url   String  可以为空       用户头像本地路径
 gender         String     可以为空       性别: -1：男,1：女, 0：未知
 country        String     可以为空       国家
 city           String     可以为空       城市
