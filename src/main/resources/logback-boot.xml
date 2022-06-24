@@ -16,7 +16,7 @@
     <!-- ERROR级别日志 -->
     <appender name="ERROR"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>C:\home\logs\videoManagementSystem\error.log</file>
+        <file>C:\home\logs\blogBigDataSystem\error.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -24,7 +24,7 @@
         </filter>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\home\logs\videoManagementSystem\%d{yyyyMMdd}\error.%i.log</fileNamePattern>
+            <fileNamePattern>C:\home\logs\blogBigDataSystem\%d{yyyyMMdd}\error.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -42,7 +42,7 @@
     <!-- WARN级别日志 -->
     <appender name="WARN"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>C:\home\logs\videoManagementSystem\warn.log</file>
+        <file>C:\home\logs\blogBigDataSystem\warn.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
@@ -50,7 +50,7 @@
         </filter>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\home\logs\videoManagementSystem\%d{yyyyMMdd}\warn.%i.log</fileNamePattern>
+            <fileNamePattern>C:\home\logs\blogBigDataSystem\%d{yyyyMMdd}\warn.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -67,7 +67,7 @@
     <!-- INFO级别日志 -->
     <appender name="INFO"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>C:\home\logs\videoManagementSystem\info.log</file>
+        <file>C:\home\logs\blogBigDataSystem\info.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
@@ -75,7 +75,7 @@
         </filter>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\home\logs\videoManagementSystem\%d{yyyyMMdd}\info.%i.log</fileNamePattern>
+            <fileNamePattern>C:\home\logs\blogBigDataSystem\%d{yyyyMMdd}\info.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
