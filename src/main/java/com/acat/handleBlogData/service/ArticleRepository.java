@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Component
 public interface ArticleRepository extends ElasticsearchRepository<Article, String> {
 
 }
