@@ -1,6 +1,8 @@
 package com.acat.handleblogdata.controller;
 
+import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
+import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.Article;
 import com.acat.handleBlogData.service.ArticleRepository;
@@ -12,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/es")
+@RequestMapping(UrlConstants.BLOG_SYSTEM_ES_URL)
 public class EsController {
 
     @Autowired

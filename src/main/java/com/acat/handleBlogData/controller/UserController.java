@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @Slf4j
 @RestController
-@RequestMapping(UrlConstants.USER_URL)
+@RequestMapping(UrlConstants.BLOG_SYSTEM_USER_URL)
 public class UserController {
 
     @Resource
