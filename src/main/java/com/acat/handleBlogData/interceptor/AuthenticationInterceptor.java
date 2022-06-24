@@ -38,7 +38,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String token = request.getSession().getAttribute("token") != null ? request.getSession().getAttribute("token").toString() : null;
         if (method.isAnnotationPresent(Auth.class)) {
             Auth auth = method.getAnnotation(Auth.class);
-            //运维
             if (!auth.required()) {
                 return true;
             }else {
