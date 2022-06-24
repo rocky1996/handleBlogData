@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Integer ERROR_CODE = 503;
+    private static String DEFAULT_ERROR_MSG = "服务端错误！！！";
+
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public RestResult handleException(Exception exception) {
-        String exMessage = exception.getMessage();
-        if (StringUtils.isBlank(exMessage)) {
-            exMessage = "服务端错误！！！";
-        }
-        return new RestResult(501, exMessage);
+        String exMessage = StringUtils.isNotBlank(exception.getMessage())
+                ? exception.getMessage() : DEFAULT_ERROR_MSG;
+        return new RestResult(ERROR_CODE, exMessage);
     }
 }
