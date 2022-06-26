@@ -1,7 +1,7 @@
 package com.acat.handleBlogData.mapper;
 
-import com.acat.handleBlogData.domain.BlogSystemUser;
-import com.acat.handleBlogData.domain.BlogSystemUserExample;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

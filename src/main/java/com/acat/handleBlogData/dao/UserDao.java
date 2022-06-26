@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.dao;
 
-import com.acat.handleBlogData.domain.BlogSystemUser;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
 
 public interface UserDao {
 

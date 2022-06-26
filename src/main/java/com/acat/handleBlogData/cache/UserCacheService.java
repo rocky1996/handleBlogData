@@ -1,7 +1,7 @@
 package com.acat.handleBlogData.cache;
 
 import com.acat.handleBlogData.dao.UserDao;
-import com.acat.handleBlogData.domain.BlogSystemUser;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
