@@ -6,7 +6,7 @@ import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.controller.bo.LoginReqBo;
 import com.acat.handleBlogData.controller.vo.LoginRespVo;
 import com.acat.handleBlogData.enums.RestEnum;
-import com.acat.handleBlogData.service.TokenService;
+import com.acat.handleBlogData.service.tokenService.TokenServiceImpl;
 import com.acat.handleBlogData.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -24,7 +23,7 @@ public class UserController {
     @Resource
     private UserService userService;
     @Resource
-    private TokenService tokenService;
+    private TokenServiceImpl tokenServiceImpl;
 
     @Auth(required = false)
     @PostMapping("/login")
@@ -43,7 +42,7 @@ public class UserController {
                 return new RestResult<>(RestEnum.USER_NOT_EXISTS);
             }
 
-            String token = tokenService.getToken(loginRespVo);
+            String token = tokenServiceImpl.getToken(loginRespVo);
             httpServletRequest.getSession().setAttribute("token", token);
             return new RestResult<>(RestEnum.SUCCESS, loginRespVo);
         } catch (Exception e) {

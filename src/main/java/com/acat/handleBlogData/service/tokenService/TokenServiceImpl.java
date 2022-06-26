@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.service;
+package com.acat.handleBlogData.service.tokenService;
 
 import com.acat.handleBlogData.controller.vo.LoginRespVo;
 import com.auth0.jwt.JWT;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Service
 @Slf4j
-public class TokenService {
+public class TokenServiceImpl {
 
     private static final Long TOKEN_EXPIRE_TIME = 5 * 60 * 1000L;
 
