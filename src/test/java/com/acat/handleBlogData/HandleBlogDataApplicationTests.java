@@ -1,25 +1,23 @@
 package com.acat.handleBlogData;
 
 import com.acat.handleBlogData.domain.esDb.TwitterUserData;
-import com.acat.handleBlogData.service.ArticleRepository;
-import com.acat.handleBlogData.service.esService.TwitterRepository;
-import com.acat.handleBlogData.util.JacksonUtil;
+import com.acat.handleBlogData.enums.MediaSourceEnum;
+import com.acat.handleBlogData.service.esService.repository.TwitterRepository;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
 @Slf4j
 @Component
 class HandleBlogDataApplicationTests {
 
-    @Resource
-    private ArticleRepository articleRepository;
     @Resource
     private TwitterRepository twitterRepository;
 
@@ -61,13 +59,10 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test01() {
-        String filePath = "D:\\en-001.txt";
-        String textValue = ReaderFileUtil.readFile(filePath);
-        if (StringUtils.isNotBlank(textValue)) {
-            TwitterUserData twitterUserData = JacksonUtil.strToBean(textValue, TwitterUserData.class);
-//            System.out.println(JacksonUtil.beanToStr(twitterUserData));
-            TwitterUserData es = twitterRepository.save(twitterUserData);
-            System.out.println(JacksonUtil.beanToStr(es));
-        }
+//        String filePath = "D:\\es-r-00000";
+//        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readFile(filePath, MediaSourceEnum.TWITTER);
+//        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
+//            twitterRepository.saveAll(twitterUserDataList);
+//        }
     }
 }
