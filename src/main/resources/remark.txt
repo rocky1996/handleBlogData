@@ -4,6 +4,8 @@ mysql图形化地址:
     https://github.com/betaincao/big-data-blog-front/tree/master
 后端github地址:
     https://github.com/rocky1996/handleBlogData/tree/master
+kibana:
+    http://39.98.138.221:8513/?appname=&url=&mode=edit
 分词组件:
 https://stanfordnlp.github.io/stanza/
 Stanza – A Python NLP Package for Many Human Languages
