@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.domain;
+package com.acat.handleBlogData.domain.mysqlDb;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,8 +1,8 @@
 package com.acat.handleBlogData.dao.impl;
 
 import com.acat.handleBlogData.dao.UserDao;
-import com.acat.handleBlogData.domain.BlogSystemUser;
-import com.acat.handleBlogData.domain.BlogSystemUserExample;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
+import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUserExample;
 import com.acat.handleBlogData.mapper.BlogSystemUserMapper;
 import org.springframework.stereotype.Repository;
 
