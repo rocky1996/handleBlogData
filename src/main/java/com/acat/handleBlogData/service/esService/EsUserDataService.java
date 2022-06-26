@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TwitterService {
+public class EsUserDataService {
 
     @Resource
     private TwitterRepository twitterRepository;
