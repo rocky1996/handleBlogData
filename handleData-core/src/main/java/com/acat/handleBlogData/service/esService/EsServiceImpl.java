@@ -21,8 +21,8 @@ public class EsServiceImpl {
 
     @Resource
     private TwitterRepository twitterRepository;
-//    @Resource
-//    private InstagramRepository instagramRepository;
+    @Resource
+    private InstagramRepository instagramRepository;
 //    @Resource
 //    private FbImplRepository fbImplRepository;
 //    @Resource
@@ -53,12 +53,12 @@ public class EsServiceImpl {
                         Lists.partition(twitterUserDataList, LIMIT_SIZE).forEach(twitter -> twitterRepository.saveAll(twitter));
                     }
                     break;
-//                case INSTAGRAM:
-//                    List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readFile(file, MediaSourceEnum.INSTAGRAM);
-//                    if (!CollectionUtils.isEmpty(instagramUserDataList)) {
-//                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
-//                    }
-//                    break;
+                case INSTAGRAM:
+                    List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readFile(file, MediaSourceEnum.INSTAGRAM);
+                    if (!CollectionUtils.isEmpty(instagramUserDataList)) {
+                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
+                    }
+                    break;
 //                case FB_IMPL:
 //                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FB_IMPL);
 //                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
