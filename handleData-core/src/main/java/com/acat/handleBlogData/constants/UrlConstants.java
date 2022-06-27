@@ -10,4 +10,9 @@ public class UrlConstants {
      * es
      */
     public static final String BLOG_SYSTEM_ES_URL = "/blogSystem/search";
+
+    /**
+     * common
+     */
+    public static final String BLOG_SYSTEM_COMMON = "/blogSystem/common";
 }
