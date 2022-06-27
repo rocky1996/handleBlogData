@@ -20,16 +20,16 @@ public class TwitterService {
 
     @Resource
     private TwitterRepository twitterRepository;
-    @Resource
-    private InstagramRepository instagramRepository;
-    @Resource
-    private FbImplRepository fbImplRepository;
-    @Resource
-    private FbHistoryRepository fbHistoryRepository;
-    @Resource
-    private FqImplRepository fqImplRepository;
-    @Resource
-    private FqHistoryRepository fqHistoryRepository;
+//    @Resource
+//    private InstagramRepository instagramRepository;
+//    @Resource
+//    private FbImplRepository fbImplRepository;
+//    @Resource
+//    private FbHistoryRepository fbHistoryRepository;
+//    @Resource
+//    private FqImplRepository fqImplRepository;
+//    @Resource
+//    private FqHistoryRepository fqHistoryRepository;
     //标准桶大小
     private static final Integer LIMIT_SIZE = 100;
 
@@ -49,36 +49,36 @@ public class TwitterService {
                         Lists.partition(twitterUserDataList, LIMIT_SIZE).forEach(twitter -> twitterRepository.saveAll(twitter));
                     }
                     break;
-                case INSTAGRAM:
-                    List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readFile(file, MediaSourceEnum.INSTAGRAM);
-                    if (!CollectionUtils.isEmpty(instagramUserDataList)) {
-                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
-                    }
-                    break;
-                case FB_IMPL:
-                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FB_IMPL);
-                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
-                        Lists.partition(fbUserImplDataList, LIMIT_SIZE).forEach(fbImpl -> fbImplRepository.saveAll(fbImpl));
-                    }
-                    break;
-                case FB_HISTORY:
-                    List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FB_HISTORY);
-                    if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
-                        Lists.partition(fbUserHistoryDataList, LIMIT_SIZE).forEach(fbHistory -> fbHistoryRepository.saveAll(fbHistory));
-                    }
-                    break;
-                case FQ_IMPL:
-                    List<FqUserImplData> fqUserImplDataList = (List<FqUserImplData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FQ_IMPL);
-                    if (!CollectionUtils.isEmpty(fqUserImplDataList)) {
-                        Lists.partition(fqUserImplDataList, LIMIT_SIZE).forEach(fqImpl -> fqImplRepository.saveAll(fqImpl));
-                    }
-                    break;
-                case FQ_HISTORY:
-                    List<FqUserHistoryData> fqUserHistoryData = (List<FqUserHistoryData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FQ_HISTORY);
-                    if (!CollectionUtils.isEmpty(fqUserHistoryData)) {
-                        Lists.partition(fqUserHistoryData, LIMIT_SIZE).forEach(fqHistory -> fqHistoryRepository.saveAll(fqHistory));
-                    }
-                    break;
+//                case INSTAGRAM:
+//                    List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readFile(file, MediaSourceEnum.INSTAGRAM);
+//                    if (!CollectionUtils.isEmpty(instagramUserDataList)) {
+//                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
+//                    }
+//                    break;
+//                case FB_IMPL:
+//                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FB_IMPL);
+//                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
+//                        Lists.partition(fbUserImplDataList, LIMIT_SIZE).forEach(fbImpl -> fbImplRepository.saveAll(fbImpl));
+//                    }
+//                    break;
+//                case FB_HISTORY:
+//                    List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FB_HISTORY);
+//                    if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
+//                        Lists.partition(fbUserHistoryDataList, LIMIT_SIZE).forEach(fbHistory -> fbHistoryRepository.saveAll(fbHistory));
+//                    }
+//                    break;
+//                case FQ_IMPL:
+//                    List<FqUserImplData> fqUserImplDataList = (List<FqUserImplData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FQ_IMPL);
+//                    if (!CollectionUtils.isEmpty(fqUserImplDataList)) {
+//                        Lists.partition(fqUserImplDataList, LIMIT_SIZE).forEach(fqImpl -> fqImplRepository.saveAll(fqImpl));
+//                    }
+//                    break;
+//                case FQ_HISTORY:
+//                    List<FqUserHistoryData> fqUserHistoryData = (List<FqUserHistoryData>) ReaderFileUtil.readFile(file, MediaSourceEnum.FQ_HISTORY);
+//                    if (!CollectionUtils.isEmpty(fqUserHistoryData)) {
+//                        Lists.partition(fqUserHistoryData, LIMIT_SIZE).forEach(fqHistory -> fqHistoryRepository.saveAll(fqHistory));
+//                    }
+//                    break;
                 default:
                     break;
             }
