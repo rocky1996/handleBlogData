@@ -22,8 +22,8 @@ public class EsServiceImpl {
     private TwitterRepository twitterRepository;
     @Resource
     private InstagramRepository instagramRepository;
-//    @Resource
-//    private FbImplRepository fbImplRepository;
+    @Resource
+    private FbImplRepository fbImplRepository;
     @Resource
     private FbHistoryRepository fbHistoryRepository;
     @Resource
@@ -58,12 +58,12 @@ public class EsServiceImpl {
                         Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
                     }
                     break;
-//                case FB_IMPL:
-//                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL);
-//                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
-//                        Lists.partition(fbUserImplDataList, LIMIT_SIZE).forEach(fbImpl -> fbImplRepository.saveAll(fbImpl));
-//                    }
-//                    break;
+                case FB_IMPL:
+                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL);
+                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
+                        Lists.partition(fbUserImplDataList, LIMIT_SIZE).forEach(fbImpl -> fbImplRepository.saveAll(fbImpl));
+                    }
+                    break;
                 case FB_HISTORY:
                     List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY);
                     if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
