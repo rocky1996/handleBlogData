@@ -39,8 +39,7 @@ public class EsController {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
 
-            File targetFile = ReaderFileUtil.transferToFile(file);
-            boolean isOk = esService.insertEsData(targetFile, mediaSourceEnum);
+            boolean isOk = esService.insertEsData(file, mediaSourceEnum);
             if (isOk) {
                 return new RestResult<>(RestEnum.SUCCESS);
             }else {
