@@ -9,5 +9,5 @@ public class UrlConstants {
     /**
      * es
      */
-    public static final String BLOG_SYSTEM_ES_URL = "/blogSystem/es";
+    public static final String BLOG_SYSTEM_ES_URL = "/blogSystem/search";
 }

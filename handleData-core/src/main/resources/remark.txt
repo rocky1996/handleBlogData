@@ -1,3 +1,5 @@
+接口地址:
+    https://console-docs.apipost.cn/preview/d09d1aaa814283d8/fe29ff3b43206c85
 mysql图形化地址:
     http://39.98.138.221:8511/index.php?route=/&route=%2F
 前端github地址:
@@ -9,6 +11,29 @@ kibana:
 分词组件:
 https://stanfordnlp.github.io/stanza/
 Stanza – A Python NLP Package for Many Human Languages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 put http://47.93.185.66:9400/shopping
