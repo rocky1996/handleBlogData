@@ -158,6 +158,13 @@
             <artifactId>client-jar-sdk</artifactId>
             <version>1.14.0</version>
         </dependency>
+
+        <!-- jre -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.1-jre</version>
+        </dependency>
     </dependencies>
 
     <build>
