@@ -4,10 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>etl</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
+    <parent>
+        <groupId>com.acat</groupId>
+        <artifactId>handleBlogData</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <artifactId>handleData-etl</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>handleData-api</name>
+    <description>handleData-etl</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.language>java</sonar.language>

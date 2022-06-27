@@ -18,6 +18,7 @@
     <modules>
         <module>handleData-api</module>
         <module>handleData-core</module>
+        <module>handleData-etl</module>
     </modules>
 
     <properties>
