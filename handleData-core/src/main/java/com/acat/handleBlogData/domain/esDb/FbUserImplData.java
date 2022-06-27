@@ -6,6 +6,6 @@
 //
 //@Data
 //@Builder
-//@Document(indexName = "facebookImpl")
+//@Document(indexName = "fb_impl")
 //public class FbUserImplData {
 //}
