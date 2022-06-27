@@ -1,4 +1,4 @@
-//package com.acat.handleBlogData.controller;
+package com.acat.handleBlogData.controller;//package com.acat.handleBlogData.controller;
 //
 //import com.acat.handleBlogData.aop.Auth;
 //import com.acat.handleBlogData.constants.RestResult;
