@@ -1,8 +1,22 @@
 package com.acat.handleBlogData.controller;
 
+import com.acat.handleBlogData.aop.Auth;
+import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
+import com.acat.handleBlogData.controller.bo.LoginReqBo;
+import com.acat.handleBlogData.controller.vo.LoginRespVo;
+import com.acat.handleBlogData.enums.MediaSourceEnum;
+import com.acat.handleBlogData.enums.RestEnum;
+import com.acat.handleBlogData.service.esService.EsServiceImpl;
+import com.acat.handleBlogData.util.ReaderFileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 
 @Slf4j
@@ -10,4 +24,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(UrlConstants.BLOG_SYSTEM_ES_URL)
 public class EsController {
 
+    @Resource
+    private EsServiceImpl esService;
+
+    @Auth(required = false)
+    @PostMapping("/upload")
+    public RestResult login(HttpServletRequest httpServletRequest,
+                            @RequestParam("file") MultipartFile file,
+                            Integer mediaSourceCode) {
+        try {
+
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
+            if (mediaSourceEnum == null) {
+                return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
+            }
+
+            File targetFile = ReaderFileUtil.transferToFile(file);
+            boolean isOk = esService.insertEsData(targetFile, mediaSourceEnum);
+            if (isOk) {
+                return new RestResult<>(RestEnum.SUCCESS);
+            }else {
+                return new RestResult<>(RestEnum.FAILED);
+            }
+        } catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
 }

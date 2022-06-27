@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TwitterService {
+public class EsServiceImpl {
 
     @Resource
     private TwitterRepository twitterRepository;
@@ -41,6 +42,9 @@ public class TwitterService {
      */
     @Transactional
     public boolean insertEsData(File file, MediaSourceEnum mediaSourceEnum) {
+        if (file == null) {
+            return false;
+        }
         try {
             switch (mediaSourceEnum) {
                 case TWITTER:

@@ -5,6 +5,7 @@ import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
@@ -59,5 +60,25 @@ public class ReaderFileUtil {
             log.info("ReaderFileUtil.readFile has error:{}",e.getMessage());
         }
         return objList;
+    }
+
+    /**
+     *
+     * @param multipartFile to File
+     * @return
+     */
+    public static File transferToFile(MultipartFile multipartFile) {
+//        选择用缓冲区来实现这个转换即使用java 创建的临时文件 使用 MultipartFile.transferto()方法 。
+        File file = null;
+        try {
+            String originalFilename = multipartFile.getOriginalFilename();
+            String[] filename = originalFilename.split("\\.");
+            file=File.createTempFile(filename[0], filename[1]);
+            multipartFile.transferTo(file);
+            file.deleteOnExit();
+        } catch (IOException e) {
+            log.info("ReaderFileUtil.transferToFile has error:{}",e.getMessage());
+        }
+        return file;
     }
 }
