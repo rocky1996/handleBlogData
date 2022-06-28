@@ -18,6 +18,7 @@
     <modules>
         <module>handleData-api</module>
         <module>handleData-core</module>
+        <module>handleData-emailAlarm</module>
     </modules>
 
     <properties>
