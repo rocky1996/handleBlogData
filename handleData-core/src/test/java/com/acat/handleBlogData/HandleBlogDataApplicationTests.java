@@ -1,12 +1,9 @@
 package com.acat.handleBlogData;
 
 import com.acat.handleBlogData.service.esService.repository.TwitterRepository;
-import com.example.handledata.email.alarm.service.SendEmailServiceImpl;
-import com.example.handledata.email.alarm.vo.SendEmailReq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +16,6 @@ class HandleBlogDataApplicationTests {
 
     @Resource
     private TwitterRepository twitterRepository;
-
-    @Autowired
-    @Qualifier(value = "emailService")
-    private SendEmailServiceImpl emailService;
 
     @Test
     void contextLoads() {
@@ -60,20 +53,20 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(JacksonUtil.beanToStr(es));
     }
 
-    @Test
-    public void test01() {
-//        String filePath = "D:\\es-r-00000";
-//        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readFile(filePath, MediaSourceEnum.TWITTER);
-//        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
-//            twitterRepository.saveAll(twitterUserDataList);
-//        }
-
-        SendEmailReq sendEmailReq = SendEmailReq
-                .builder()
-                .toEmail("2791752775@qq.com")
-                .subject("数学")
-                .content("数学及格了")
-                .build();
-        emailService.sendSimpleEmail(sendEmailReq);
-    }
+//    @Test
+//    public void test01() {
+////        String filePath = "D:\\es-r-00000";
+////        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readFile(filePath, MediaSourceEnum.TWITTER);
+////        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
+////            twitterRepository.saveAll(twitterUserDataList);
+////        }
+//
+//        SendEmailReq sendEmailReq = SendEmailReq
+//                .builder()
+//                .toEmail("2791752775@qq.com")
+//                .subject("数学")
+//                .content("数学及格了")
+//                .build();
+//        emailService.sendSimpleEmail(sendEmailReq);
+//    }
 }

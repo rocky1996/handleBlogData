@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @MapperScan(basePackages = "com.acat.handleBlogData.mapper")
-@ComponentScan("com.example.handledata.email.alarm")
 public class HandleBlogDataApplication {
 
     public static void main(String[] args) {
