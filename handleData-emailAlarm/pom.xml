@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>handleData-emailAlarm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>handleData-emailAlarm</name>
 	<description>handleData-emailAlarm</description>
 	<properties>

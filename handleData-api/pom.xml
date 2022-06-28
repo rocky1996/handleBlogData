@@ -10,6 +10,7 @@
     </parent>
     <artifactId>handleData-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>handleData-api</name>
     <description>handleData-api</description>
     <properties>
