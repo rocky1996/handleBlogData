@@ -6,7 +6,7 @@
         <groupId>com.acat</groupId>
         <artifactId>handleBlogData</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>handleData-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
