@@ -33,7 +33,6 @@ public class EsController {
                             @RequestParam("file") MultipartFile file,
                             Integer mediaSourceCode) {
         try {
-
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
             if (mediaSourceEnum == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);

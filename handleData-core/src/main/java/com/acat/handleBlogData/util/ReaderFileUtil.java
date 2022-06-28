@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.util;
 
-import com.acat.handleBlogData.domain.esDb.TwitterUserData;
+import com.acat.handleBlogData.domain.esDb.*;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -83,14 +83,24 @@ public class ReaderFileUtil {
                             objList.add(twitterUserData);
                             break;
                         case FB_IMPL:
+                            FbUserImplData fbUserImplData = JacksonUtil.strToBean(textLine, FbUserImplData.class);
+                            objList.add(fbUserImplData);
                             break;
                         case FB_HISTORY:
+                            FbUserHistoryData fbUserHistoryData = JacksonUtil.strToBean(textLine, FbUserHistoryData.class);
+                            objList.add(fbUserHistoryData);
                             break;
                         case FQ_IMPL:
+                            FqUserImplData fqUserImplData = JacksonUtil.strToBean(textLine, FqUserImplData.class);
+                            objList.add(fqUserImplData);
                             break;
                         case FQ_HISTORY:
+                            FqUserHistoryData fqUserHistoryData = JacksonUtil.strToBean(textLine, FqUserHistoryData.class);
+                            objList.add(fqUserHistoryData);
                             break;
                         case INSTAGRAM:
+                            InstagramUserData instagramUserData = JacksonUtil.strToBean(textLine, InstagramUserData.class);
+                            objList.add(instagramUserData);
                             break;
                         case LINKEDIN_IMPL:
                             break;

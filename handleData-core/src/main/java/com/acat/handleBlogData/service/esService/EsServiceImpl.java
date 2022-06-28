@@ -49,13 +49,21 @@ public class EsServiceImpl {
                 case TWITTER:
                     List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER);
                     if (!CollectionUtils.isEmpty(twitterUserDataList)) {
-                        Lists.partition(twitterUserDataList, LIMIT_SIZE).forEach(twitter -> twitterRepository.saveAll(twitter));
+
+                        List<TwitterUserData> dataList = (List<TwitterUserData>) twitterRepository.saveAll(twitterUserDataList);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            return false;
+                        }
                     }
                     break;
                 case INSTAGRAM:
                     List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.INSTAGRAM);
                     if (!CollectionUtils.isEmpty(instagramUserDataList)) {
-                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
+//                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
+                        List<InstagramUserData> dataList = (List<InstagramUserData>) instagramRepository.saveAll(instagramUserDataList);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            return false;
+                        }
                     }
                     break;
                 case FB_IMPL:
