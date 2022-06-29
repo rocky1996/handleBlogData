@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class SendEmailReq {
 
-    private String toEmail;
-
     private String subject;
 
     private String content;

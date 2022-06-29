@@ -1,12 +1,14 @@
 package com.acat.handleBlogData.service.emailService;
 
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +24,17 @@ public class SendEmailServiceImpl {
     @Resource
     private JavaMailSender mailSender;
 
+    private static String[] toEmailStr = {"2791752775@qq.com","betaincao@gmail.com","cuibo@peredo.com","986025158@qq.com"};
+
+    @Async
     public void sendSimpleEmail(SendEmailReq emailReq) {
-        if (StringUtils.isBlank(emailReq.getToEmail()) || StringUtils.isBlank(emailReq.getContent())) {
+        if (StringUtils.isBlank(emailReq.getSubject()) || StringUtils.isBlank(emailReq.getContent())) {
             return;
         }
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
-        message.setTo(emailReq.getToEmail());
+        message.setTo(toEmailStr);
         message.setSubject(emailReq.getSubject());
         message.setText(emailReq.getContent());
 

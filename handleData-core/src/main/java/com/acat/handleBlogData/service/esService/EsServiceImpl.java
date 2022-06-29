@@ -2,6 +2,8 @@ package com.acat.handleBlogData.service.esService;
 
 import com.acat.handleBlogData.domain.esDb.*;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
+import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
+import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
@@ -12,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +33,8 @@ public class EsServiceImpl {
     private FqImplRepository fqImplRepository;
     @Resource
     private FqHistoryRepository fqHistoryRepository;
+    @Resource
+    private SendEmailServiceImpl sendEmailService;
     //标准桶大小
     private static final Integer LIMIT_SIZE = 100;
 
@@ -49,9 +54,9 @@ public class EsServiceImpl {
                 case TWITTER:
                     List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER);
                     if (!CollectionUtils.isEmpty(twitterUserDataList)) {
-
                         List<TwitterUserData> dataList = (List<TwitterUserData>) twitterRepository.saveAll(twitterUserDataList);
                         if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.TWITTER));
                             return false;
                         }
                     }
@@ -59,9 +64,9 @@ public class EsServiceImpl {
                 case INSTAGRAM:
                     List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.INSTAGRAM);
                     if (!CollectionUtils.isEmpty(instagramUserDataList)) {
-//                        Lists.partition(instagramUserDataList, LIMIT_SIZE).forEach(instagram -> instagramRepository.saveAll(instagram));
                         List<InstagramUserData> dataList = (List<InstagramUserData>) instagramRepository.saveAll(instagramUserDataList);
                         if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.INSTAGRAM));
                             return false;
                         }
                     }
@@ -81,13 +86,21 @@ public class EsServiceImpl {
                 case FQ_IMPL:
                     List<FqUserImplData> fqUserImplDataList = (List<FqUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_IMPL);
                     if (!CollectionUtils.isEmpty(fqUserImplDataList)) {
-                        Lists.partition(fqUserImplDataList, LIMIT_SIZE).forEach(fqImpl -> fqImplRepository.saveAll(fqImpl));
+                        List<FqUserImplData> dataList = (List<FqUserImplData>) fqImplRepository.saveAll(fqUserImplDataList);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_IMPL));
+                            return false;
+                        }
                     }
                     break;
                 case FQ_HISTORY:
                     List<FqUserHistoryData> fqUserHistoryData = (List<FqUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_HISTORY);
                     if (!CollectionUtils.isEmpty(fqUserHistoryData)) {
-                        Lists.partition(fqUserHistoryData, LIMIT_SIZE).forEach(fqHistory -> fqHistoryRepository.saveAll(fqHistory));
+                        List<FqUserHistoryData> dataList = (List<FqUserHistoryData>) fqHistoryRepository.saveAll(fqUserHistoryData);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_HISTORY));
+                            return false;
+                        }
                     }
                     break;
                 default:
@@ -98,5 +111,19 @@ public class EsServiceImpl {
             log.error("TwitterService.insertEsData has error:{}",e.getMessage());
         }
         return false;
+    }
+
+    /**
+     * 组装
+     * @param mediaSourceEnum
+     * @return
+     */
+    private SendEmailReq covBean(MediaSourceEnum mediaSourceEnum) {
+        SendEmailReq emailReq = SendEmailReq
+                .builder()
+                .subject("落es库失败")
+                .content("您好,系统于北京时间" + new Date() + "入" + mediaSourceEnum.name() + "类型数据时失败,请联系rd紧急排查,谢谢！！！")
+                .build();
+        return emailReq;
     }
 }
