@@ -1,9 +1,10 @@
 package com.acat.handleBlogData;
 
+import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.esService.repository.TwitterRepository;
+import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ class HandleBlogDataApplicationTests {
 
     @Resource
     private TwitterRepository twitterRepository;
+    @Resource
+    private SendEmailServiceImpl sendEmailService;
 
     @Test
     void contextLoads() {
@@ -53,20 +56,19 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(JacksonUtil.beanToStr(es));
     }
 
-//    @Test
-//    public void test01() {
-////        String filePath = "D:\\es-r-00000";
-////        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readFile(filePath, MediaSourceEnum.TWITTER);
-////        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
-////            twitterRepository.saveAll(twitterUserDataList);
-////        }
-//
+    @Test
+    public void test01() {
+//        String filePath = "D:\\es-r-00000";
+//        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readFile(filePath, MediaSourceEnum.TWITTER);
+//        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
+//            twitterRepository.saveAll(twitterUserDataList);
+//        }
 //        SendEmailReq sendEmailReq = SendEmailReq
 //                .builder()
 //                .toEmail("2791752775@qq.com")
 //                .subject("数学")
 //                .content("数学及格了")
 //                .build();
-//        emailService.sendSimpleEmail(sendEmailReq);
-//    }
+//        sendEmailService.sendSimpleEmail(sendEmailReq);
+    }
 }

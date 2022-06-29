@@ -15,9 +15,9 @@ class HandleDataEmailAlarmApplicationTests {
 	@Resource
 	private SendEmailServiceImpl sendEmailService;
 
-	@Test
-	void contextLoads() {
-		SendEmailReq sendEmailReq = SendEmailReq.builder().toEmail("2791752775@qq.com").subject("语文").content("语文及格了").build();
-		sendEmailService.sendSimpleEmail(sendEmailReq);
-	}
+//	@Test
+//	void contextLoads() {
+//		SendEmailReq sendEmailReq = SendEmailReq.builder().toEmail("2791752775@qq.com").subject("语文").content("语文及格了").build();
+//		sendEmailService.sendSimpleEmail(sendEmailReq);
+//	}
 }
