@@ -267,9 +267,62 @@ public class FqUserHistoryData {
      */
     private String friends;
 
+    /**
+     * 算法标签
+     */
+    private String alg_remark;
+
+    /**
+     * 喜欢数
+     */
+    private String like_count;
+
+    /**
+     * 语言
+     */
+    private String language;
+
+    /**
+     * {
+     *     "contact":"{\"twitter\": \"katiebethea\", \"facebook\": \"692622425\"}",
+     *     "alg_remark":"junshi "
+     *     "checkins_count":"0",
+     *     "first_name":"Katie",
+     *     "last_name":"Bethea",
+     *     "lists_count":"0",
+     *     "photo":"",
+     *     "photo_prefix":"https://fastly.4sqi.net/img/user/",
+     *     "photo_suffix":"/27758970-4QWFBXA5VKBXCBYT.jpg",
+     *     "visibility":"",
+     *     "friends":"0",
+     *     "uuid":"deafc408-3f17-4dea-84a1-fc8da75f6553",
+     *     "platform":"FQ",
+     *     "data_source":"fq_user_data_2022-05-10.json",
+     *     "create_time":"08:42:09.627",
+     *     "importance":"0",
+     *     "remark":"",
+     *     "language_type":"la",
+     *     "source_id":"36",
+     *     "user_id":"27758970",
+     *     "screen_name":"",
+     *     "use_name":"Katie Bethea",
+     *     "user_url":"https://foursquare.com/user/27758970",
+     *     "local_photo_url":"fq_Info_27758970_photo.jpg",
+     *     "gender":"0",
+     *     "country":"US",
+     *     "city":"Columbia, SC",
+     *     "verified":"",
+     *     "followers_count":"0",
+     *     "friend_count":"0",
+     *     "post_count":"2",
+     *     "like_count":"0",  cuo
+     *     "language":"la",   cuo
+     * }
+     */
+
     public FqUserHistoryData() {}
 
-    public FqUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_result, String bio, String checkins_count, String first_name, String last_name, String lenses, String lists, String lists_count, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String top_tips, String visibility, String friends) {
+    public FqUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_result, String bio, String checkins_count, String first_name, String last_name, String lenses, String lists, String lists_count, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String top_tips, String visibility, String friends, String alg_remark, String like_count, String language) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -312,5 +365,8 @@ public class FqUserHistoryData {
         this.top_tips = top_tips;
         this.visibility = visibility;
         this.friends = friends;
+        this.alg_remark = alg_remark;
+        this.like_count = like_count;
+        this.language = language;
     }
 }

@@ -74,13 +74,20 @@ public class EsServiceImpl {
                 case FB_IMPL:
                     List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL);
                     if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
-                        Lists.partition(fbUserImplDataList, LIMIT_SIZE).forEach(fbImpl -> fbImplRepository.saveAll(fbImpl));
-                    }
+                        List<FbUserImplData> dataList = (List<FbUserImplData>) fbImplRepository.saveAll(fbUserImplDataList);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_IMPL));
+                            return false;
+                        }                    }
                     break;
                 case FB_HISTORY:
                     List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY);
                     if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
-                        Lists.partition(fbUserHistoryDataList, LIMIT_SIZE).forEach(fbHistory -> fbHistoryRepository.saveAll(fbHistory));
+                        List<FbUserHistoryData> dataList = (List<FbUserHistoryData>) fbHistoryRepository.saveAll(fbUserHistoryDataList);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_HISTORY));
+                            return false;
+                        }
                     }
                     break;
                 case FQ_IMPL:

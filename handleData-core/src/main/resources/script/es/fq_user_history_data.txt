@@ -87,4 +87,7 @@ friends           String     可以为空    朋友数量
     "top_tips":"",          #top评论
     "visibility":"",        #可见性
     "friends":"",           #朋友数量
+    "alg_remark":"",        #算法标签
+    "like_count":"",        #喜欢数
+    "language":"",
 }
