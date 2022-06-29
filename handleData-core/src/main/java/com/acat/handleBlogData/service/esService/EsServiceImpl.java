@@ -6,9 +6,7 @@ import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
-import com.acat.handleBlogData.service.esService.vo.SearchReq;
-import com.acat.handleBlogData.service.esService.vo.SearchResp;
-import com.acat.handleBlogData.service.esService.vo.UserDetailResp;
+import com.acat.handleBlogData.service.esService.vo.*;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +131,26 @@ public class EsServiceImpl {
         return null;
     }
 
+    /**
+     * 详情
+     */
     public RestResult<UserDetailResp> retrieveUserDetail(String UserId) {
+        return null;
+    }
+
+    /**
+     * 获取国家列表
+     * @return
+     */
+    public RestResult<List<SearchCountryResp>> getCountryList() {
+        return null;
+    }
+
+    /**
+     * 获取城市列表
+     * @return
+     */
+    public RestResult<List<SearchCityResp>> getCityList() {
         return null;
     }
 
