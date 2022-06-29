@@ -10,6 +10,7 @@ import com.acat.handleBlogData.service.esService.vo.*;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -23,6 +24,8 @@ import java.util.List;
 @Slf4j
 public class EsServiceImpl {
 
+    @Resource
+    private RestHighLevelClient restHighLevelClient;
     @Resource
     private TwitterRepository twitterRepository;
     @Resource
@@ -128,6 +131,7 @@ public class EsServiceImpl {
      * @return
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
+//        restHighLevelClient.
         return null;
     }
 

@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.service;
 
-import com.acat.handleBlogData.controller.vo.LoginRespVo;
+import com.acat.handleBlogData.controller.resp.LoginRespVo;
 
 public interface UserService {
 

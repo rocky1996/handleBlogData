@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.service.tokenService;
 
-import com.acat.handleBlogData.controller.vo.LoginRespVo;
+import com.acat.handleBlogData.controller.resp.LoginRespVo;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;

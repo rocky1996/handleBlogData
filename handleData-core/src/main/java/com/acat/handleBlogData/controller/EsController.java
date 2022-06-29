@@ -3,24 +3,19 @@ package com.acat.handleBlogData.controller;
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
-import com.acat.handleBlogData.controller.bo.LoginReqBo;
-import com.acat.handleBlogData.controller.vo.LoginRespVo;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.service.esService.vo.SearchReq;
 import com.acat.handleBlogData.service.esService.vo.SearchResp;
 import com.acat.handleBlogData.service.esService.vo.UserDetailResp;
-import com.acat.handleBlogData.util.ReaderFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 
 
 @Slf4j

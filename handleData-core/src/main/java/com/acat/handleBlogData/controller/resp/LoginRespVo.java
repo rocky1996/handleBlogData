@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.controller.vo;
+package com.acat.handleBlogData.controller.resp;
 
 import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
 import lombok.Builder;

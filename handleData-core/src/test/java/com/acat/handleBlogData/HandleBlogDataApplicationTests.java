@@ -2,8 +2,13 @@ package com.acat.handleBlogData;
 
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.esService.repository.TwitterRepository;
-import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +27,10 @@ class HandleBlogDataApplicationTests {
     private SendEmailServiceImpl sendEmailService;
     @Value("${spring.profiles.active}")
     private String env;
+    @Value("${spring.elasticsearch.rest.uris}")
+    private String hostList;
+    @Resource
+    private RestHighLevelClient restHighLevelClient;
 
     @Test
     void contextLoads() {
@@ -74,6 +83,27 @@ class HandleBlogDataApplicationTests {
 //                .build();
 //        sendEmailService.sendSimpleEmail(sendEmailReq);
 
-        System.out.println(env);
+        System.out.println(hostList);
+    }
+
+    /**
+     * https://www.qb5200.com/article/492194.html
+     * https://www.csdn.net/tags/MtTaEgxsNzk1ODAwLWJsb2cO0O0O.html
+     */
+    @Test
+    public void test02() throws Exception{
+        // 创建请求
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .query(QueryBuilders.termsQuery("country", "国"));
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("twitter");
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+        // 执行请求
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        // 解析查询结果
+        System.out.println(response.toString());
     }
 }

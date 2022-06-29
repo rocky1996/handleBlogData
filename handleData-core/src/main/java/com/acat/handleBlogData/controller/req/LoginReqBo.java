@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.controller.bo;
+package com.acat.handleBlogData.controller.req;
 
 import lombok.Builder;
 import lombok.Data;
