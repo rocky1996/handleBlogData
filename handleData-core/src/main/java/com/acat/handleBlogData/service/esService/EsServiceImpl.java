@@ -1,10 +1,14 @@
 package com.acat.handleBlogData.service.esService;
 
+import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.domain.esDb.*;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
+import com.acat.handleBlogData.service.esService.vo.SearchReq;
+import com.acat.handleBlogData.service.esService.vo.SearchResp;
+import com.acat.handleBlogData.service.esService.vo.UserDetailResp;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -115,9 +119,22 @@ public class EsServiceImpl {
             }
             return true;
         }catch (Exception e) {
-            log.error("TwitterService.insertEsData has error:{}",e.getMessage());
+            log.error("EsServiceImpl.insertEsData has error:{}",e.getMessage());
         }
         return false;
+    }
+
+    /**
+     * 搜索查询
+     * @param searchReq
+     * @return
+     */
+    public RestResult<SearchResp> searchData(SearchReq searchReq) {
+        return null;
+    }
+
+    public RestResult<UserDetailResp> retrieveUserDetail(String UserId) {
+        return null;
     }
 
     /**
