@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.service.esService.vo;
+package com.acat.handleBlogData.controller.resp;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.service.esService.vo;
+package com.acat.handleBlogData.controller.req;
 
 import lombok.Builder;
 import lombok.Data;
@@ -45,6 +45,11 @@ public class SearchReq {
     private String city;
 
     /**
+     * 数据来源
+     */
+    private Integer mediaType;
+
+    /**
      * 开始时间
      */
     private Date startTime;
@@ -66,7 +71,7 @@ public class SearchReq {
 
     public SearchReq() {}
 
-    public SearchReq(String userId, String userName, String userQuanName, String phoneNum, String email, String country, String city, Date startTime, Date endTime, Integer pageNum, Integer pageSize) {
+    public SearchReq(String userId, String userName, String userQuanName, String phoneNum, String email, String country, String city, Integer mediaType, Date startTime, Date endTime, Integer pageNum, Integer pageSize) {
         this.userId = userId;
         this.userName = userName;
         this.userQuanName = userQuanName;
@@ -74,6 +79,7 @@ public class SearchReq {
         this.email = email;
         this.country = country;
         this.city = city;
+        this.mediaType = mediaType;
         this.startTime = startTime;
         this.endTime = endTime;
         this.pageNum = pageNum;

@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.service.esService.vo;
+package com.acat.handleBlogData.controller.resp;
 
 import cn.hutool.db.DaoTemplate;
 import lombok.Builder;

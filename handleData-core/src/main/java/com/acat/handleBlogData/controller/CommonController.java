@@ -7,13 +7,10 @@ import com.acat.handleBlogData.controller.resp.MediaTypeResp;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
-import com.acat.handleBlogData.service.esService.vo.SearchCityResp;
-import com.acat.handleBlogData.service.esService.vo.SearchCountryResp;
-import com.acat.handleBlogData.service.esService.vo.UserDetailResp;
+import com.acat.handleBlogData.controller.resp.SearchCityResp;
+import com.acat.handleBlogData.controller.resp.SearchCountryResp;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
