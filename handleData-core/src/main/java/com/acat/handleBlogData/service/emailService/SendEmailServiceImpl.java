@@ -20,13 +20,14 @@ public class SendEmailServiceImpl {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
-    @Value("{spring.profiles.active}")
+    @Value("${spring.profiles.active}")
     private String env;
 
     @Resource
     private JavaMailSender mailSender;
 
-    private static String[] toEmailStr = {"2791752775@qq.com","betaincao@gmail.com","cuibo@peredo.com","986025158@qq.com"};
+    private static String[] toEmailStr = {"2791752775@qq.com","betaincao@gmail.com",
+            "cuibo@peredo.com","986025158@qq.com"};
 
     @Async
     public void sendSimpleEmail(SendEmailReq emailReq) {
@@ -34,7 +35,8 @@ public class SendEmailServiceImpl {
             return;
         }
 
-        if (StringUtils.isBlank(emailReq.getSubject()) || StringUtils.isBlank(emailReq.getContent())) {
+        if (StringUtils.isBlank(emailReq.getSubject())
+                || StringUtils.isBlank(emailReq.getContent())) {
             return;
         }
 

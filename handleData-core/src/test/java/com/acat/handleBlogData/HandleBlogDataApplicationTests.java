@@ -5,6 +5,7 @@ import com.acat.handleBlogData.service.esService.repository.TwitterRepository;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,8 @@ class HandleBlogDataApplicationTests {
     private TwitterRepository twitterRepository;
     @Resource
     private SendEmailServiceImpl sendEmailService;
+    @Value("${spring.profiles.active}")
+    private String env;
 
     @Test
     void contextLoads() {
@@ -70,5 +73,7 @@ class HandleBlogDataApplicationTests {
 //                .content("数学及格了")
 //                .build();
 //        sendEmailService.sendSimpleEmail(sendEmailReq);
+
+        System.out.println(env);
     }
 }
