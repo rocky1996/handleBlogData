@@ -20,6 +20,8 @@ public class SendEmailServiceImpl {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
+    @Value("{spring.profiles.active}")
+    private String env;
 
     @Resource
     private JavaMailSender mailSender;
@@ -28,6 +30,10 @@ public class SendEmailServiceImpl {
 
     @Async
     public void sendSimpleEmail(SendEmailReq emailReq) {
+        if (!"prod".equals(env)) {
+            return;
+        }
+
         if (StringUtils.isBlank(emailReq.getSubject()) || StringUtils.isBlank(emailReq.getContent())) {
             return;
         }
