@@ -9,8 +9,8 @@ mysql图形化地址:
 kibana:
     http://39.98.138.221:8513/?appname=&url=&mode=edit
 分词组件:
-https://stanfordnlp.github.io/stanza/
-Stanza – A Python NLP Package for Many Human Languages
+    https://stanfordnlp.github.io/stanza/
+    Stanza – A Python NLP Package for Many Human Languages
 
 
 
