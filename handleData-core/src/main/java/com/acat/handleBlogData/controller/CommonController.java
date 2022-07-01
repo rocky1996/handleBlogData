@@ -29,7 +29,7 @@ public class CommonController {
 
     @Auth
     @GetMapping("/getCountryList")
-    public RestResult<List<SearchCountryResp>> getCountryList() {
+    public RestResult<SearchCountryResp> getCountryList() {
 
         try {
             return esService.getCountryList();
@@ -41,7 +41,7 @@ public class CommonController {
 
     @Auth
     @GetMapping("/getCityList")
-    public RestResult<List<SearchCityResp>> getCityList() {
+    public RestResult<SearchCityResp> getCityList() {
 
         try {
             return esService.getCityList();
