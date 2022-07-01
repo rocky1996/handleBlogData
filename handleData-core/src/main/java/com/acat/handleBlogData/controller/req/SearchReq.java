@@ -1,12 +1,16 @@
 package com.acat.handleBlogData.controller.req;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchReq {
 
     /**
@@ -68,21 +72,4 @@ public class SearchReq {
      * 分页
      */
     private Integer pageSize;
-
-    public SearchReq() {}
-
-    public SearchReq(String userId, String userName, String userQuanName, String phoneNum, String email, String country, String city, Integer mediaType, Date startTime, Date endTime, Integer pageNum, Integer pageSize) {
-        this.userId = userId;
-        this.userName = userName;
-        this.userQuanName = userQuanName;
-        this.phoneNum = phoneNum;
-        this.email = email;
-        this.country = country;
-        this.city = city;
-        this.mediaType = mediaType;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
-    }
 }

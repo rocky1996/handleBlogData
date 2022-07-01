@@ -1,24 +1,30 @@
 package com.acat.handleBlogData.controller.resp;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchResp {
 
     /**
      * 总数
      */
-    public Integer totalSize;
+    public Long totalSize;
 
     public List<UserData> dataList;
 
     @Data
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserData {
 
         /**
@@ -105,5 +111,10 @@ public class SearchResp {
          * 家乡地址
          */
         private String homeAddress;
+
+        /**
+         * 数据来源
+         */
+        private MediaTypeResp mediaTypeResp;
     }
 }

@@ -1,14 +1,18 @@
 package com.acat.handleBlogData.controller.resp;
 
 import cn.hutool.db.DaoTemplate;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDetailResp {
 
     /**
@@ -158,6 +162,8 @@ public class UserDetailResp {
 
     @Data
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Field{
 
         private String field;
