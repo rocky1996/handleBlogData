@@ -19,11 +19,6 @@ public class SearchReq {
     private String userId;
 
     /**
-     * uuid
-     */
-    private String uuid;
-
-    /**
      * 用户名
      */
     private String userName;
