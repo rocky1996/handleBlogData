@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.domain.esDb;
+package com.acat.handleBlogData.domain;
 
 import lombok.Builder;
 import lombok.Data;

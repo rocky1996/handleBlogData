@@ -1,7 +1,7 @@
 package com.acat.handleBlogData.cache;
 
 import com.acat.handleBlogData.dao.UserDao;
-import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
+import com.acat.handleBlogData.domain.BlogSystemUser;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.controller.resp;
 
-import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
+import com.acat.handleBlogData.domain.BlogSystemUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

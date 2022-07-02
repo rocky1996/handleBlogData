@@ -1,7 +1,10 @@
-package com.acat.handleBlogData.domain.mysqlDb;
+package com.acat.handleBlogData.domain;
+
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
 public class BlogSystemUser {
     private Integer id;
 

@@ -18,7 +18,7 @@ public class UserDetailResp {
     /**
      * 媒介
      */
-    private String mediaSource;
+    private MediaTypeResp mediaSource;
 
     /**
      * 用户头像
@@ -43,12 +43,12 @@ public class UserDetailResp {
     /**
      * 出生日期
      */
-    private Date bornTime;
+    private String bornTime;
 
     /**
      * 粉丝数
      */
-    private String followCount;
+    private String followersCount;
 
     /**
      * 关注数

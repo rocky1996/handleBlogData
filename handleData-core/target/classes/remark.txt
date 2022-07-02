@@ -1,7 +1,7 @@
 接口地址:
     https://console-docs.apipost.cn/preview/d09d1aaa814283d8/fe29ff3b43206c85
 mysql图形化地址:
-    http://39.98.138.221:8511/index.php?route=/&route=%2F
+    http://39.98.138.221:8506/index.php?route=/&route=%2F
 前端github地址:
     https://github.com/betaincao/big-data-blog-front/tree/master
 后端github地址:

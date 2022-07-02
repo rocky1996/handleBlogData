@@ -3,6 +3,7 @@ package com.acat.handleBlogData.controller;
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
+import com.acat.handleBlogData.controller.req.SearchDetailReq;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 
 @Slf4j
@@ -49,7 +51,7 @@ public class EsController {
         }
     }
 
-    @Auth
+    @Auth(required = false)
     @PostMapping("/retrieveDataList")
     public RestResult<SearchResp> retrieveDataList(@RequestBody SearchReq searchReq) {
 
@@ -64,15 +66,20 @@ public class EsController {
         }
     }
 
-    @Auth
-    @GetMapping("/retrieveUserDetail")
-    public RestResult<UserDetailResp> retrieveUserDetail(@PathVariable("userId") String userId) {
+    @Auth(required = false)
+    @PostMapping("/retrieveUserDetail")
+    public RestResult<UserDetailResp> retrieveUserDetail(@RequestBody SearchDetailReq searchDetailReq) {
 
         try {
-            if (StringUtils.isBlank(userId)) {
-                return new RestResult<>(RestEnum.USER_ID_ERROR);
+            if (Objects.isNull(searchDetailReq.getMediaCode())
+                || StringUtils.isBlank(searchDetailReq.getUuid())) {
+                return new RestResult<>(RestEnum.PARAM_IS_NOT_EMPTY);
             }
-            return esService.retrieveUserDetail(userId);
+
+            if (MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode()) == null) {
+                return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
+            }
+            return esService.retrieveUserDetail(searchDetailReq);
         }catch (Exception e) {
             log.error("EsController.retrieveUserDetail has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

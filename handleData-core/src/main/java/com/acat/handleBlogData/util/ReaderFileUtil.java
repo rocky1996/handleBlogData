@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.util;
 
-import com.acat.handleBlogData.domain.esDb.*;
+import com.acat.handleBlogData.domain.*;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.acat.handleBlogData.interceptor;
 
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.cache.UserCacheService;
-import com.acat.handleBlogData.domain.mysqlDb.BlogSystemUser;
+import com.acat.handleBlogData.domain.BlogSystemUser;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

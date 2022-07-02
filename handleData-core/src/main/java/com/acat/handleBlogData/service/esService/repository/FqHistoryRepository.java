@@ -1,6 +1,6 @@
 package com.acat.handleBlogData.service.esService.repository;
 
-import com.acat.handleBlogData.domain.esDb.FqUserHistoryData;
+import com.acat.handleBlogData.domain.FqUserHistoryData;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
