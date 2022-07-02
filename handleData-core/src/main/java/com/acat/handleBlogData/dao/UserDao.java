@@ -13,9 +13,9 @@ public interface UserDao extends JpaRepository<BlogSystemUserEntity,Integer> {
 //    BlogSystemUser userLogin(String userName, String password);
 //
 //    BlogSystemUser selectById(Integer userId);
-    @Query(value = "select e from BlogSystemUserEntity e where e.username = ?1 and e.password = ?2", nativeQuery = true)
+    @Query(value = "select e from BlogSystemUserEntity e where e.username = ?1 and e.password = ?2", nativeQuery = false)
     BlogSystemUserEntity userLogin(@Param("username") String username, @Param("password") String password);
 
-    @Query(value = "select e from BlogSystemUserEntity e where e.id = ?1", nativeQuery = true)
+    @Query(value = "select e from BlogSystemUserEntity e where e.id = ?1", nativeQuery = false)
     BlogSystemUserEntity selectById(@Param("id") Integer id);
 }
