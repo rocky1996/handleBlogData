@@ -202,7 +202,8 @@ public class EsServiceImpl {
             SearchHit[] searchHits = response.getHits().getHits();
             for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
                 SearchResp.UserData userData = new SearchResp.UserData();
-                userData.setUserId(String.valueOf(hit.getSourceAsMap().get("user_id")));
+                userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
                 userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
                 userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
                 userData.setPhoneNum(String.valueOf(hit.getSourceAsMap().get("mobile")));
