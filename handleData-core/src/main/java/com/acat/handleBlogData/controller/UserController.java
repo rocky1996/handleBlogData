@@ -8,12 +8,14 @@ import com.acat.handleBlogData.controller.resp.LoginRespVo;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.tokenService.TokenServiceImpl;
 import com.acat.handleBlogData.service.UserService;
+import com.carrotsearch.hppc.ObjectScatterSet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -38,7 +40,7 @@ public class UserController {
             }
 
             LoginRespVo loginRespVo = userService.login(loginReqBo.getUsername(), loginReqBo.getPassword());
-            if (loginReqBo == null) {
+            if (Objects.isNull(loginRespVo)) {
                 return new RestResult<>(RestEnum.USER_NOT_EXISTS);
             }
 
