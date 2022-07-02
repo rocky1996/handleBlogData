@@ -187,7 +187,8 @@ public class EsServiceImpl {
 
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
-            sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize()).sort("registered_time.keyword", SortOrder.DESC);
+            sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
+//            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(getEsIndex(searchReq).stream().toArray(String[]::new));
@@ -398,10 +399,11 @@ public class EsServiceImpl {
         MediaSourceEnum sourceEnum = MediaSourceEnum.getMediaSourceEnum(searchReq.getMediaType());
         if (MediaSourceEnum.ALL == sourceEnum
             || null == sourceEnum) {
-            return Lists.newArrayList(MediaSourceEnum.TWITTER.getEs_index(), MediaSourceEnum.FB_IMPL.getEs_index(),MediaSourceEnum.FB_HISTORY.getEs_index(),
-                    MediaSourceEnum.FQ_IMPL.getEs_index(), MediaSourceEnum.FQ_HISTORY.getEs_index(), MediaSourceEnum.INSTAGRAM.getEs_index(),
-                    MediaSourceEnum.LINKEDIN_IMPL.getEs_index(), MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
-                    MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(), MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index());
+//            return Lists.newArrayList(MediaSourceEnum.TWITTER.getEs_index(), MediaSourceEnum.FB_IMPL.getEs_index(),MediaSourceEnum.FB_HISTORY.getEs_index(),
+//                    MediaSourceEnum.FQ_IMPL.getEs_index(), MediaSourceEnum.FQ_HISTORY.getEs_index(), MediaSourceEnum.INSTAGRAM.getEs_index(),
+//                    MediaSourceEnum.LINKEDIN_IMPL.getEs_index(), MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
+//                    MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(), MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index());
+            return Arrays.stream(indexArray).collect(Collectors.toList());
         }else {
             return Lists.newArrayList(sourceEnum.getEs_index());
         }

@@ -135,7 +135,9 @@ class HandleBlogDataApplicationTests {
      * 深度分页场景
      */
     public void test02() throws Exception{
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+        try {
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 //        if (StringUtils.isNotBlank(searchReq.getUserId())) {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
 //        }
@@ -151,11 +153,11 @@ class HandleBlogDataApplicationTests {
 //        if (StringUtils.isNotBlank(searchReq.getEmail())) {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
 //        }
-      //  if (StringUtils.isNotBlank(searchReq.getCountry())) {
-        boolQueryBuilder.must(QueryBuilders.matchQuery("country", "美国"));
+            //  if (StringUtils.isNotBlank(searchReq.getCountry())) {
+            //boolQueryBuilder.must(QueryBuilders.matchQuery("country", "美国"));
 //        boolQueryBuilder.must(QueryBuilders.matchQuery("user_type", "-1"));
 //        boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", "everybery_photo".trim()));
-     //   }
+            //   }
 //        if (StringUtils.isNotBlank(searchReq.getCity())) {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
 //        }
@@ -163,18 +165,21 @@ class HandleBlogDataApplicationTests {
 //            boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time").lte(searchReq.getEndTime()).gte(searchReq.getStartTime()));
 //        }
 
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(boolQueryBuilder);
-        sourceBuilder.from(10).size(10).sort("registered_time.keyword", SortOrder.DESC);
-//            sourceBuilder.from(searchReq.getPageNum()).size(searchReq.getPageSize());
-        //sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+            sourceBuilder.query(boolQueryBuilder);
+            sourceBuilder.from(0).size(10).sort("source_create_time.keyword", SortOrder.DESC);
+            //            sourceBuilder.from(searchReq.getPageNum()).size(searchReq.getPageSize());
+            //sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
 
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter","instagram");
-        searchRequest.types("_doc");
-        searchRequest.source(sourceBuilder);
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(response);
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices("instagram");
+            searchRequest.types("_doc");
+            searchRequest.source(sourceBuilder);
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            System.out.println(response);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
