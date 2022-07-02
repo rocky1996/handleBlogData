@@ -9,9 +9,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 /**
  * https://juejin.cn/post/6884851582983208967
  */
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
+//@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableAsync
 //@MapperScan(basePackages = "com.acat.handleBlogData.mapper")
+@MapperScan(basePackages = "com.acat.handleBlogData.dao")
 public class HandleBlogDataApplication {
 
     public static void main(String[] args) {

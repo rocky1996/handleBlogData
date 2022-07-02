@@ -1,7 +1,8 @@
 package com.acat.handleBlogData.cache;
 
 import com.acat.handleBlogData.dao.UserDao;
-import com.acat.handleBlogData.domain.BlogSystemUser;
+//import com.acat.handleBlogData.domain.BlogSystemUser;
+import com.acat.handleBlogData.domain.entity.BlogSystemUserEntity;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -21,18 +22,18 @@ public class UserCacheService {
     @Resource
     private UserDao userDao;
 
-    private final LoadingCache<Integer, Optional<BlogSystemUser>> userCache = CacheBuilder.newBuilder()
+    private final LoadingCache<Integer, Optional<BlogSystemUserEntity>> userCache = CacheBuilder.newBuilder()
             .maximumSize(10000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
-            .build(new CacheLoader<Integer, Optional<BlogSystemUser>>() {
+            .build(new CacheLoader<Integer, Optional<BlogSystemUserEntity>>() {
 
                 @Override
-                public Optional<BlogSystemUser> load(Integer id) {
+                public Optional<BlogSystemUserEntity> load(Integer id) {
                     return Optional.ofNullable(userDao.selectById(id));
                 }
             });
 
-    public BlogSystemUser getUser(Integer id) {
+    public BlogSystemUserEntity getUser(Integer id) {
         return userCache.getUnchecked(id).orElse(null);
     }
 }

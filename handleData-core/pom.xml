@@ -135,6 +135,23 @@
 <!--            <artifactId>stanford-corenlp</artifactId>-->
 <!--            <version>4.4.0</version>-->
 <!--        </dependency>-->
+
+        <!-- Spring Data JPA 依赖（重要） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- MySQL 驱动（重要） -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- MySQL连接 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
