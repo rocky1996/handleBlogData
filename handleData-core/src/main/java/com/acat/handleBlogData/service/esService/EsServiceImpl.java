@@ -176,7 +176,7 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
