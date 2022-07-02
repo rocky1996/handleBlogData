@@ -19,7 +19,7 @@ public class UserDaoImpl implements UserDao {
     private static Map<Integer, BlogSystemUser> blogSystemUserMap = new HashMap<>();
     static {
         blogSystemUserMap.put(1, BlogSystemUser.builder().id(1).username("qinglong-001").password("qinglong-001").userNickname("青龙").build());
-        blogSystemUserMap.put(2, BlogSystemUser.builder().id(2).username("baihu-002").password("baihu-002").userNickname("青龙").build());
+        blogSystemUserMap.put(2, BlogSystemUser.builder().id(2).username("baihu-002").password("baihu-002").userNickname("白虎").build());
         blogSystemUserMap.put(3, BlogSystemUser.builder().id(3).username("zhuque-003").password("zhuque-003").userNickname("朱雀").build());
         blogSystemUserMap.put(4, BlogSystemUser.builder().id(4).username("xuanwu-004").password("xuanwu-004").userNickname("玄武").build());
     }
