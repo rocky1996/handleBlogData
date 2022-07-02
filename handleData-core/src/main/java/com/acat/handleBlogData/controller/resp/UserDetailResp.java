@@ -148,7 +148,7 @@ public class UserDetailResp {
     /**
      * 数据产生时间
      */
-    private Date sourceCreateTime;
+    private String sourceCreateTime;
 
     /**
      * 用户简介
