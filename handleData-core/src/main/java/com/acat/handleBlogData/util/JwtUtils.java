@@ -141,7 +141,7 @@ public class JwtUtils {
     /**
      * 过期半小时
      * */
-    private static final long EXPIRE_TIME = 30 * 60 * 1000;
+//    private static final long EXPIRE_TIME = 30 * 60 * 1000;
 
     /**
      * jwt密钥
@@ -155,7 +155,7 @@ public class JwtUtils {
      * */
     public static String sign(LoginRespVo loginRespVo) {
         try {
-            Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+//            Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             return JWT.create()
                     //将userId保存到token里面
@@ -163,7 +163,7 @@ public class JwtUtils {
                     //存放自定义数据
                     .withClaim("info", JacksonUtil.beanToStr(loginRespVo))
                     //五分钟后token过期
-                    .withExpiresAt(date)
+//                    .withExpiresAt(date)
                     //token的密钥
                     .sign(algorithm);
         } catch (Exception e) {
