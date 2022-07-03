@@ -333,9 +333,13 @@ public class EsServiceImpl {
             }
 
             SearchHit[] searchHits = response.getHits().getHits();
-            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(
-                    country -> country.getFields().get("country.keyword").forEach(e -> countryList.add(String.valueOf(e)))
-            );
+//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> countryList.add(e.getSourceAsMap().get("country").toString()));
+            for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                Map<String, Object> map = documentFields.getSourceAsMap();
+                if (map.get("country") != null) {
+                    countryList.add((String) map.get("country"));
+                }
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -370,9 +374,15 @@ public class EsServiceImpl {
             }
 
             SearchHit[] searchHits = response.getHits().getHits();
-            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(
-                    country -> country.getFields().get("city.keyword").forEach(e -> cityList.add(String.valueOf(e)))
-            );
+//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(
+//                    country -> country.getFields().get("city.keyword").forEach(e -> cityList.add(String.valueOf(e)))
+//            );
+            for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                Map<String, Object> map = documentFields.getSourceAsMap();
+                if (map.get("city") != null) {
+                    cityList.add((String) map.get("city"));
+                }
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
