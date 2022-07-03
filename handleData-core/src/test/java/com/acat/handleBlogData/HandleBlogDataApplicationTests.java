@@ -129,93 +129,93 @@ class HandleBlogDataApplicationTests {
      * https://www.qb5200.com/article/492194.html
      * https://www.csdn.net/tags/MtTaEgxsNzk1ODAwLWJsb2cO0O0O.html
      */
-    @Test
-    /**
-     * https://blog.csdn.net/W_Meng_H/article/details/123940475?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123940475-blog-122363360.pc_relevant_aa&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123940475-blog-122363360.pc_relevant_aa&utm_relevant_index=1
-     * 深度分页场景
-     */
-    public void test02() throws Exception{
-
-        try {
-            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        if (StringUtils.isNotBlank(searchReq.getUserId())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
+//    @Test
+//    /**
+//     * https://blog.csdn.net/W_Meng_H/article/details/123940475?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123940475-blog-122363360.pc_relevant_aa&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123940475-blog-122363360.pc_relevant_aa&utm_relevant_index=1
+//     * 深度分页场景
+//     */
+//    public void test02() throws Exception{
+//
+//        try {
+//            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+////        if (StringUtils.isNotBlank(searchReq.getUserId())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getUserName())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("source_id", "95b25fe3c9720b0963ca6969593fd55e"));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getEmail())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
+////        }
+//            //  if (StringUtils.isNotBlank(searchReq.getCountry())) {
+//            //boolQueryBuilder.must(QueryBuilders.matchQuery("country", "美国"));
+////        boolQueryBuilder.must(QueryBuilders.matchQuery("user_type", "-1"));
+////        boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", "everybery_photo".trim()));
+//            //   }
+////        if (StringUtils.isNotBlank(searchReq.getCity())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
+////        }
+////        if (!Objects.isNull(searchReq.getStartTime()) && !Objects.isNull(searchReq.getEndTime())) {
+////            boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time").lte(searchReq.getEndTime()).gte(searchReq.getStartTime()));
+////        }
+//
+//            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//            sourceBuilder.query(boolQueryBuilder);
+//            sourceBuilder.from(0).size(10).sort("source_create_time.keyword", SortOrder.DESC);
+//            //            sourceBuilder.from(searchReq.getPageNum()).size(searchReq.getPageSize());
+//            //sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+//
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices("instagram");
+//            searchRequest.types("_doc");
+//            searchRequest.source(sourceBuilder);
+//            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//            System.out.println(response);
+//        }catch (Exception e) {
+//            e.printStackTrace();
 //        }
-//        if (StringUtils.isNotBlank(searchReq.getUserName())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("source_id", "95b25fe3c9720b0963ca6969593fd55e"));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getEmail())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
-//        }
-            //  if (StringUtils.isNotBlank(searchReq.getCountry())) {
-            //boolQueryBuilder.must(QueryBuilders.matchQuery("country", "美国"));
-//        boolQueryBuilder.must(QueryBuilders.matchQuery("user_type", "-1"));
-//        boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", "everybery_photo".trim()));
-            //   }
-//        if (StringUtils.isNotBlank(searchReq.getCity())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
-//        }
-//        if (!Objects.isNull(searchReq.getStartTime()) && !Objects.isNull(searchReq.getEndTime())) {
-//            boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time").lte(searchReq.getEndTime()).gte(searchReq.getStartTime()));
-//        }
+//    }
 
-            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-            sourceBuilder.query(boolQueryBuilder);
-            sourceBuilder.from(0).size(10).sort("source_create_time.keyword", SortOrder.DESC);
-            //            sourceBuilder.from(searchReq.getPageNum()).size(searchReq.getPageSize());
-            //sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+//    @Test
+//    public void test03() throws Exception{
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(QueryBuilders.matchQuery("uuid", "ed8badcc-19a9-4fb1-a8a7-a58fecc7d643"));
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter");
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//        // 执行请求
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        System.out.println(response);
+//    }
 
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices("instagram");
-            searchRequest.types("_doc");
-            searchRequest.source(sourceBuilder);
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-            System.out.println(response);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void test03() throws Exception{
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(QueryBuilders.matchQuery("uuid", "ed8badcc-19a9-4fb1-a8a7-a58fecc7d643"));
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter");
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-        // 执行请求
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(response);
-    }
-
-    @Test
-    public void test04() throws Exception{
-        String[] includeFields = new String[] {"country"};
-        CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(QueryBuilders.matchAllQuery())
-                .fetchSource(includeFields, null)
-                .collapse(collapseBuilder);
-
-
-
-        //搜索
-        //"instagram","fq_history","fq_impl","fb_history","fb_impl"
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter","instagram","fq_history","fq_impl","fb_history","fb_impl");
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-        // 执行请求
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(response);
-    }
+//    @Test
+//    public void test04() throws Exception{
+//        String[] includeFields = new String[] {"country"};
+//        CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(QueryBuilders.matchAllQuery())
+//                .fetchSource(includeFields, null)
+//                .collapse(collapseBuilder);
+//
+//
+//
+//        //搜索
+//        //"instagram","fq_history","fq_impl","fb_history","fb_impl"
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter","instagram","fq_history","fq_impl","fb_history","fb_impl");
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//        // 执行请求
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        System.out.println(response);
+//    }
 }
