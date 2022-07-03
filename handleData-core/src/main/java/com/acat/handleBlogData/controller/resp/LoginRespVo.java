@@ -17,6 +17,7 @@ public class LoginRespVo {
     private String userName;
     private String passWord;
     private String userNickname;
+    private String token;
 
     public static LoginRespVo covertBean(BlogSystemUserEntity blogSystemUser) {
         if (blogSystemUser != null) {

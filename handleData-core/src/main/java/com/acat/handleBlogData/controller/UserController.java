@@ -10,7 +10,7 @@ import com.acat.handleBlogData.domain.entity.BlogSystemUserEntity;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.tokenService.TokenServiceImpl;
 import com.acat.handleBlogData.service.UserService;
-import com.carrotsearch.hppc.ObjectScatterSet;
+import com.acat.handleBlogData.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -79,8 +79,10 @@ public class UserController {
                 return new RestResult<>(RestEnum.USER_NOT_EXISTS);
             }
 
-            String token = tokenServiceImpl.getToken(loginRespVo);
-            httpServletRequest.getSession().setAttribute("token", token);
+//            String token = tokenServiceImpl.getToken(loginRespVo);
+            String token = JwtUtils.sign(loginRespVo);
+            loginRespVo.setToken(token);
+//            httpServletRequest.getSession().setAttribute("token", token);
             return new RestResult<>(RestEnum.SUCCESS, loginRespVo);
         } catch (Exception e) {
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

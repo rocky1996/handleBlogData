@@ -402,10 +402,6 @@ public class EsServiceImpl {
         MediaSourceEnum sourceEnum = MediaSourceEnum.getMediaSourceEnum(searchReq.getMediaType());
         if (MediaSourceEnum.ALL == sourceEnum
             || null == sourceEnum) {
-//            return Lists.newArrayList(MediaSourceEnum.TWITTER.getEs_index(), MediaSourceEnum.FB_IMPL.getEs_index(),MediaSourceEnum.FB_HISTORY.getEs_index(),
-//                    MediaSourceEnum.FQ_IMPL.getEs_index(), MediaSourceEnum.FQ_HISTORY.getEs_index(), MediaSourceEnum.INSTAGRAM.getEs_index(),
-//                    MediaSourceEnum.LINKEDIN_IMPL.getEs_index(), MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
-//                    MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(), MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index());
             return Arrays.stream(indexArray).collect(Collectors.toList());
         }else {
             return Lists.newArrayList(sourceEnum.getEs_index());

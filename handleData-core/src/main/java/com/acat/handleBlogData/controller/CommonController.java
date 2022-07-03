@@ -27,7 +27,7 @@ public class CommonController {
     @Resource
     private EsServiceImpl esService;
 
-    @Auth
+    @Auth(required = false)
     @GetMapping("/getCountryList")
     public RestResult<SearchCountryResp> getCountryList() {
 
@@ -39,7 +39,7 @@ public class CommonController {
         }
     }
 
-    @Auth
+    @Auth(required = false)
     @GetMapping("/getCityList")
     public RestResult<SearchCityResp> getCityList() {
 

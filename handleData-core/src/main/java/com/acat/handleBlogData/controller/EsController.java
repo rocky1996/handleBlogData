@@ -51,7 +51,7 @@ public class EsController {
         }
     }
 
-    @Auth(required = false)
+    @Auth
     @PostMapping("/retrieveDataList")
     public RestResult<SearchResp> retrieveDataList(@RequestBody SearchReq searchReq) {
 
@@ -66,7 +66,7 @@ public class EsController {
         }
     }
 
-    @Auth(required = false)
+    @Auth
     @PostMapping("/retrieveUserDetail")
     public RestResult<UserDetailResp> retrieveUserDetail(@RequestBody SearchDetailReq searchDetailReq) {
 
