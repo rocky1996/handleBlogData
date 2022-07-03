@@ -1,6 +1,7 @@
 package com.acat.handleBlogData.controller.resp;
 
 import cn.hutool.db.DaoTemplate;
+import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -158,16 +160,17 @@ public class UserDetailResp {
     /**
      *
      */
-    private List<Field> fieldList;
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Field{
-
-        private String field;
-
-        private String fieldExplanation;
-    }
+    private Map<String, Object> fieldMap = Maps.newHashMap();
+//    private List<Field> fieldList;
+//
+//    @Data
+//    @Builder
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    public static class Field{
+//
+//        private String field;
+//
+//        private String fieldExplanation;
+//    }
 }
