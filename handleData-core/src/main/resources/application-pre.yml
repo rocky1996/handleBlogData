@@ -7,7 +7,7 @@ spring:
   datasource:
     username: lhuser
     password: p3bS94Vk4*my
-    url: jdbc:mysql://20.10.0.18:3306/lh_d?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://20.10.0.18:3306/lh_db?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
     type: org.springframework.jdbc.datasource.DriverManagerDataSource
     dbcp2:
