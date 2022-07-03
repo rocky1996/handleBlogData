@@ -4,7 +4,9 @@ import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.controller.req.LoginReqBo;
+import com.acat.handleBlogData.controller.req.UserReq;
 import com.acat.handleBlogData.controller.resp.LoginRespVo;
+import com.acat.handleBlogData.domain.entity.BlogSystemUserEntity;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.tokenService.TokenServiceImpl;
 import com.acat.handleBlogData.service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -26,6 +29,38 @@ public class UserController {
     private UserService userService;
     @Resource
     private TokenServiceImpl tokenServiceImpl;
+
+    @Auth(required = false)
+    @GetMapping("/getAllUser")
+    public RestResult<List<BlogSystemUserEntity>> getAllUser(HttpServletRequest httpServletRequest) {
+        try {
+            List<BlogSystemUserEntity> blogSystemUserEntityList = userService.getAllUser();
+            return new RestResult<>(RestEnum.SUCCESS, blogSystemUserEntityList);
+        }catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @PostMapping("/addOrUpdate")
+    public RestResult addOrUpdate(HttpServletRequest httpServletRequest,
+                                  @RequestBody UserReq userReq) {
+        try {
+            if (StringUtils.isBlank(userReq.getUserName())) {
+                return new RestResult<>(RestEnum.USERNAME_EMPTY_PARAM);
+            }
+            if (StringUtils.isBlank(userReq.getPassWord())) {
+                return new RestResult<>(RestEnum.PASSWORD_EMPTY_PARAM);
+            }
+            if (StringUtils.isBlank(userReq.getUserNickname())) {
+                return new RestResult<>(RestEnum.NICK_NAME_EMPTY);
+            }
+            userService.addOrUpdate(userReq);
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
 
     @Auth(required = false)
     @PostMapping("/login")

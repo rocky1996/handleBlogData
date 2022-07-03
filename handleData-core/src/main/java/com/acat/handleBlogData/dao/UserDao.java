@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserDao extends JpaRepository<BlogSystemUserEntity,Integer> {
 
@@ -18,4 +20,7 @@ public interface UserDao extends JpaRepository<BlogSystemUserEntity,Integer> {
 
     @Query(value = "select e from BlogSystemUserEntity e where e.id = ?1", nativeQuery = false)
     BlogSystemUserEntity selectById(@Param("id") Integer id);
+
+    @Query(value = "select e from BlogSystemUserEntity e order by e.id desc", nativeQuery = false)
+    List<BlogSystemUserEntity> getAllUser();
 }

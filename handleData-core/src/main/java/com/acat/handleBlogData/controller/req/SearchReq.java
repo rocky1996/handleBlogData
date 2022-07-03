@@ -29,6 +29,11 @@ public class SearchReq {
     private String userQuanName;
 
     /**
+     * 曾用名
+     */
+    private String beforeName;
+
+    /**
      * 手机号
      */
     private String phoneNum;

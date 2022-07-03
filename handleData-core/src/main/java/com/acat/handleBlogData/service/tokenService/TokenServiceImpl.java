@@ -12,7 +12,7 @@ import java.util.Date;
 @Slf4j
 public class TokenServiceImpl {
 
-    private static final Long TOKEN_EXPIRE_TIME = 5 * 60 * 1000L;
+    private static final Long TOKEN_EXPIRE_TIME = 10 * 60 * 1000L;
 
     public String getToken(LoginRespVo vo) {
         try {

@@ -3,6 +3,7 @@ package com.acat.handleBlogData.enums;
 public enum RestEnum {
 
     SUCCESS(0, "成功"),
+    NICK_NAME_EMPTY(301, "昵称不能为空"),
     USERNAME_EMPTY_PARAM(401, "用户名不能为空"),
     PASSWORD_EMPTY_PARAM(402, "密码不能为空"),
     USER_NOT_EXISTS(403, "该用户不存在"),
