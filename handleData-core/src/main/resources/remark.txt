@@ -12,6 +12,9 @@ kibana:
     https://stanfordnlp.github.io/stanza/
     Stanza – A Python NLP Package for Many Human Languages
 
+curl:
+    curl -i -X POST -H 'Content-type':'application/json' -d {"username":"wujinfan","password":"wujinfan"} http://20.10.0.5:8081/blogSystem/user/login
+
 
 
 
