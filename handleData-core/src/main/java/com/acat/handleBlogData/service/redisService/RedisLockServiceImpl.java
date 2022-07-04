@@ -17,8 +17,8 @@ public class RedisLockServiceImpl {
      */
     private static final Long DEFAULT_TIMEOUT = 30000L;
 
-    @Resource(name = "stringRedisTemplate")
-    private RedisTemplate<String, String> stringRedisTemplate;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 加锁
@@ -29,15 +29,15 @@ public class RedisLockServiceImpl {
     public boolean getLock(String key, Long expireTime) {
         Long finalExpireTime = expireTime == null ? DEFAULT_TIMEOUT : expireTime;
         //value值为系统当前时间
-        if (stringRedisTemplate.opsForValue().setIfAbsent(key, String.valueOf(System.currentTimeMillis()))) {
-            stringRedisTemplate.expire(key,
+        if (redisTemplate.opsForValue().setIfAbsent(key, String.valueOf(System.currentTimeMillis()))) {
+            redisTemplate.expire(key,
                     finalExpireTime,
                     TimeUnit.MILLISECONDS);
             return true;
         }
 
         //获取上锁时间 判断锁是否超时，超时则删除key（redis重启会造成重启时间内一些过期的key未被清理）,防止死锁
-        String valueTime = stringRedisTemplate.opsForValue().get(key);
+        String valueTime = redisTemplate.opsForValue().get(key);
         if (StringUtils.isBlank(valueTime) &&
                 System.currentTimeMillis() - Long.parseLong(valueTime) > finalExpireTime) {
             //释放锁 再次抢锁
@@ -53,10 +53,10 @@ public class RedisLockServiceImpl {
      * @return
      */
     public void unLock(String key) {
-        String value = stringRedisTemplate.opsForValue().get(key);
+        String value = redisTemplate.opsForValue().get(key);
         try {
             if (!StringUtils.isBlank(value)) {
-                stringRedisTemplate.opsForValue().getOperations().delete(key);
+                redisTemplate.opsForValue().getOperations().delete(key);
             }
         } catch (Exception e) {
             log.error("redisLockServiceImpl.unLock has error", e.getMessage());

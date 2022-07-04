@@ -73,7 +73,7 @@ public class CommonController {
     public RestResult<BatchQueryResp> getBatchQueryField() {
         try {
             List<BatchQueryResp.Field> fieldList = Lists.newLinkedList();
-            fieldList.add(BatchQueryResp.Field.builder().fieldName("姓名").fieldValue("use_name").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("用户名").fieldValue("screen_name").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("曾用名").fieldValue("name_userd_before").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("手机号").fieldValue("mobile").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("用户简介").fieldValue("user_summary").build());
