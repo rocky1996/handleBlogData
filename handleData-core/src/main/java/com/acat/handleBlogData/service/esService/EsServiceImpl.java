@@ -174,41 +174,12 @@ public class EsServiceImpl {
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
         try {
-            if (!judgeSearchParamAllEmpty(searchReq)) {
-                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
-            }
+//            if (!judgeSearchParamAllEmpty(searchReq)) {
+//                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
+//            }
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-            if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name.keyword", searchReq.getUserQuanName()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getEmail())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
-            }
-            if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
-            }
-            if (!Objects.isNull(searchReq.getStartTime()) && !Objects.isNull(searchReq.getEndTime())) {
-                boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time").lte(searchReq.getEndTime()).gte(searchReq.getStartTime()));
-            }
+            assembleParam(searchReq, boolQueryBuilder);
 
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
@@ -216,14 +187,18 @@ public class EsServiceImpl {
 //            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(getEsIndex(searchReq).stream().toArray(String[]::new));
+            if (!judgeSearchParamAllEmpty(searchReq)) {
+                searchRequest.indices(indexArray);
+            }else {
+                searchRequest.indices(getEsIndex(searchReq).stream().toArray(String[]::new));
+            }
             searchRequest.types("_doc");
             searchRequest.source(sourceBuilder);
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
-            return new RestResult<>(RestEnum.SUCCESS, covSearchResult(response));
+            return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.searchData has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED);
@@ -339,7 +314,7 @@ public class EsServiceImpl {
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
-            return new RestResult<>(RestEnum.SUCCESS, covSearchResult(response));
+            return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.batchQuery has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED);
@@ -478,7 +453,7 @@ public class EsServiceImpl {
      * @param response
      * @return
      */
-    private SearchResp covSearchResult(SearchResponse response) {
+    private SearchResp assembleParam(SearchResponse response) {
         List<SearchResp.UserData> userDataList = Lists.newArrayList();
         SearchHit[] searchHits = response.getHits().getHits();
         if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
@@ -526,5 +501,73 @@ public class EsServiceImpl {
                 .totalSize(totalHits.value)
                 .dataList(userDataList)
                 .build();
+    }
+
+    /**
+     * 组装查询参数
+     * @param searchReq
+     * @param boolQueryBuilder
+     */
+    private void assembleParam(SearchReq searchReq, BoolQueryBuilder boolQueryBuilder) {
+        //精准查询
+        if (!searchReq.isParticiple()) {
+            if (StringUtils.isNotBlank(searchReq.getUserId())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getUserName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name.keyword", searchReq.getUserQuanName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getEmail())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getCountry())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getCity())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
+            }
+        }else {
+            //分词查询
+            //todo
+            if (StringUtils.isNotBlank(searchReq.getUserId())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getUserName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name.keyword", searchReq.getUserQuanName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getEmail())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getCountry())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+            }
+            if (StringUtils.isNotBlank(searchReq.getCity())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
+            }
+        }
+        if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
+        }
     }
 }

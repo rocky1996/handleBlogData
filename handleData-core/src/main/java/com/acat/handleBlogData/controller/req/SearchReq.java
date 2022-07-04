@@ -74,6 +74,11 @@ public class SearchReq {
     private Date endTime;
 
     /**
+     * 是否是分词查询
+     */
+    private boolean isParticiple;
+
+    /**
      * 分页
      */
     private Integer pageNum;
