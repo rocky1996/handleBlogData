@@ -9,6 +9,7 @@ import com.acat.handleBlogData.enums.*;
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
+import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,8 @@ public class EsServiceImpl {
     @Resource
     private SendEmailServiceImpl sendEmailService;
     @Resource
+    private RedisLockServiceImpl redisLock;
+    @Resource
     private RestHighLevelClient restHighLevelClient;
     @Value("${spring.profiles.active}")
     private String env;
@@ -75,13 +78,21 @@ public class EsServiceImpl {
      * @param file
      * @param mediaSourceEnum
      * @return
-     */
-    @Transactional
+//     */
+//    @Transactional
     public boolean insertEsData(MultipartFile file, MediaSourceEnum mediaSourceEnum) {
-        if (file == null) {
-            return false;
-        }
+        String  lockKey = String.valueOf(System.currentTimeMillis());
+        long time = System.currentTimeMillis() + 1000*10;
         try {
+            boolean isLock = redisLock.getLock(lockKey, time);
+            if (!isLock) {
+                throw new RuntimeException("当前锁拥挤获取锁失败,请重试！！！");
+            }
+
+            if (file == null) {
+                return false;
+            }
+
             switch (mediaSourceEnum) {
                 case TWITTER:
                     List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER);
@@ -110,7 +121,8 @@ public class EsServiceImpl {
                         if (CollectionUtils.isEmpty(dataList)) {
                             sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_IMPL));
                             return false;
-                        }                    }
+                        }
+                    }
                     break;
                 case FB_HISTORY:
                     List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY);
@@ -148,6 +160,8 @@ public class EsServiceImpl {
             return true;
         }catch (Exception e) {
             log.error("EsServiceImpl.insertEsData has error:{}",e.getMessage());
+        }finally {
+            redisLock.unLock(lockKey);
         }
         return false;
     }
@@ -267,7 +281,19 @@ public class EsServiceImpl {
             userDetailResp.setVerified(hit.getSourceAsMap().get("source_id") == null ? "未知" : VerifiedEnum.getVerifiedEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc());
             userDetailResp.setNameUserdBefore(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-            userDetailResp.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+
+            if(hit.getSourceAsMap().get("country") == null) {
+                userDetailResp.setCountry("");
+            }else {
+                String country = String.valueOf(hit.getSourceAsMap().get("country"));
+                if (ReaderFileUtil.isChinese(country)) {
+                    userDetailResp.setCountry(country);
+                }else {
+                    userDetailResp.setCountry(ReaderFileUtil.countryMap(country));
+                }
+            }
+
+//            userDetailResp.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
             userDetailResp.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
             userDetailResp.setUserReligion(hit.getSourceAsMap().get("user_religion") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religion")));
             userDetailResp.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
@@ -464,6 +490,17 @@ public class EsServiceImpl {
                 userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
                 userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
                 userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
+
+//                if(hit.getSourceAsMap().get("country") == null) {
+//                    userData.setCountry("");
+//                }else {
+//                    String country = String.valueOf(hit.getSourceAsMap().get("country"));
+//                    if (ReaderFileUtil.isChinese(country)) {
+//                        userData.setCountry(country);
+//                    }else {
+//                        userData.setCountry(ReaderFileUtil.countryMap(country));
+//                    }
+//                }
                 userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
                 userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
                 userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));

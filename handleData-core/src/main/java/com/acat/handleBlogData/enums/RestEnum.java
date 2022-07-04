@@ -18,7 +18,7 @@ public enum RestEnum {
 //    FORBIDDEN(402, "没有权限"),
 //    SYSTEM_ERROR(402, "系统错误"),
 //    NO_HAVING_DATA(403, "没有搜索到任何相关数据"),
-    FAILED(500, "失败"),
+    FAILED(500, "服务端失败"),
     PLEASE_TRY(504, "请重试"),
     ;
 

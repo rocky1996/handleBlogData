@@ -8,10 +8,28 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class ReaderFileUtil {
+
+    public static Map<String, String> countryMap = new HashMap<>();
+    static {
+        countryMap.put("TW", "中国");
+        countryMap.put("MX", "墨西哥");
+        countryMap.put("US", "美国");
+        countryMap.put("TH", "泰国");
+        countryMap.put("USA|美国", "美国");
+        countryMap.put("IN", "印度");
+        countryMap.put("Spain", "西班牙");
+        countryMap.put("Panama", "巴拿马");
+        countryMap.put("Philippines", "菲律宾");
+        countryMap.put("Bosnia and Herzegovina", "波斯尼亚和黑塞哥维那");
+        countryMap.put("Malaysla", "马来西亚");
+    }
 
     /**
      * 读取本地文件
@@ -93,5 +111,14 @@ public class ReaderFileUtil {
             log.info("ReaderFileUtil.readMultipartFileFile has error:{}",e.getMessage());
         }
         return objList;
+    }
+
+    public static boolean isChinese(String value) {
+        Pattern pattern = Pattern.compile("[\u0391-\uFFE5]+$");
+        return pattern.matcher(value).matches();
+    }
+
+    public static String countryMap(String countryKey) {
+        return countryMap.get(countryKey) == null ? "" : countryMap.get(countryKey);
     }
 }
