@@ -9,7 +9,7 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
 
-    #redis配置信息
+  #redis配置信息
   redis:
     database: 0
     host: 39.98.138.221

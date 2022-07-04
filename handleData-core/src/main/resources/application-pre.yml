@@ -9,6 +9,19 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
 
+  #redis配置信息
+  redis:
+    database: 0
+    host: 20.10.0.5
+    password:
+    port: 6379
+    timeout: 5000
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+
   datasource:
     username: lhuser
     password: p3bS94Vk4*my
