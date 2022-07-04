@@ -24,6 +24,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -53,8 +54,12 @@ public class EsServiceImpl {
     private SendEmailServiceImpl sendEmailService;
     @Resource
     private RestHighLevelClient restHighLevelClient;
+    @Value("${spring.profiles.active}")
+    private String env;
     //标准桶大小
     private static final Integer LIMIT_SIZE = 100;
+    private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
+    private static final String PROD_PIC_URL = "";
 
     private static String[] indexArray = new String[]{
             MediaSourceEnum.TWITTER.getEs_index(),
@@ -220,8 +225,8 @@ public class EsServiceImpl {
                 userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
                 userData.setGender(hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() : GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc());
                 userData.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "未知" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
-                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
+                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
+                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
                 userData.setMaidernName(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
                 userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
                 userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
@@ -274,15 +279,22 @@ public class EsServiceImpl {
             UserDetailResp userDetailResp = new UserDetailResp();
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode());
             userDetailResp.setMediaSource(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
-            userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+
+            if ("test".equals(env)) {
+                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+            }else if ("pre".equals(env)) {
+                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : PRO_PIC_URL + String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+            }else {
+                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : PROD_PIC_URL + String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+            }
             userDetailResp.setGender(hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() : GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc());
             userDetailResp.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
             userDetailResp.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
             userDetailResp.setBornTime(hit.getSourceAsMap().get("born_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("born_time")));
-            userDetailResp.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
-            userDetailResp.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
-            userDetailResp.setPostCount(hit.getSourceAsMap().get("post_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("post_count")));
-            userDetailResp.setLikeCount(hit.getSourceAsMap().get("like_count") == null ? "" : String.valueOf(hit.getSourceAsMap().get("like_count")));
+            userDetailResp.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
+            userDetailResp.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
+            userDetailResp.setPostCount(hit.getSourceAsMap().get("post_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("post_count")));
+            userDetailResp.setLikeCount(hit.getSourceAsMap().get("like_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("like_count")));
             userDetailResp.setDataId(hit.getSourceAsMap().get("source_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_id")));
             userDetailResp.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
             userDetailResp.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
