@@ -15,51 +15,25 @@ public class ReaderFileUtil {
 
     /**
      * 读取本地文件
-     * @param targetFile
+     * @param multipartFile
      * @return
      */
-    public static Object readFile(File targetFile, MediaSourceEnum mediaSourceEnum) {
+    public static List<String> readFile(MultipartFile multipartFile) {
 
-        List<Object> objList = Lists.newLinkedList();
+        List<String> fieldList = Lists.newLinkedList();
         try {
-            InputStreamReader rdCto = new InputStreamReader(new FileInputStream(targetFile));
-            BufferedReader bfReader = new BufferedReader(rdCto);
+            InputStreamReader isr = new InputStreamReader(multipartFile.getInputStream());
+            BufferedReader bf = new BufferedReader(isr);
             String textLine = null;
-            while ((textLine = bfReader.readLine()) != null) {
+            while ((textLine = bf.readLine()) != null) {
                 if (StringUtils.isNotBlank(textLine)) {
-
-                    switch (mediaSourceEnum) {
-                        case TWITTER:
-                            TwitterUserData twitterUserData = JacksonUtil.strToBean(textLine, TwitterUserData.class);
-                            objList.add(twitterUserData);
-                            break;
-                        case FB_IMPL:
-                            break;
-                        case FB_HISTORY:
-                            break;
-                        case FQ_IMPL:
-                            break;
-                        case FQ_HISTORY:
-                            break;
-                        case INSTAGRAM:
-                            break;
-                        case LINKEDIN_IMPL:
-                            break;
-                        case LINKEDIN_HISTORY:
-                            break;
-                        case LINKEDIN_BUSINESS:
-                            break;
-                        case LINKEDIN_SCHOOL:
-                            break;
-                        default:
-                            break;
-                    }
+                    fieldList.add(textLine);
                 }
             }
         } catch (IOException e) {
             log.info("ReaderFileUtil.readFile has error:{}",e.getMessage());
         }
-        return objList;
+        return fieldList;
     }
 
     /**

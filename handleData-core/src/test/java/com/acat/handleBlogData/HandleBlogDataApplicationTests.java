@@ -1,9 +1,13 @@
 package com.acat.handleBlogData;
 
+import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.dao.UserDao;
 //import com.acat.handleBlogData.domain.BlogSystemUser;
 //import com.acat.handleBlogData.domain.BlogSystemUserExample;
 //import com.acat.handleBlogData.mapper.BlogSystemUserMapper;
+import com.acat.handleBlogData.enums.MediaSourceEnum;
+import com.acat.handleBlogData.enums.RestEnum;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
 //import org.ejml.dense.row.decomposition.qr.QrUpdate_DDRM;
@@ -50,6 +54,15 @@ class HandleBlogDataApplicationTests {
 
 //    @Resource
 //    private BlogSystemUserMapper blogSystemUserMapper;
+
+    private static String[] indexArray = new String[]{
+            MediaSourceEnum.TWITTER.getEs_index(),
+            MediaSourceEnum.INSTAGRAM.getEs_index(),
+            MediaSourceEnum.FB_IMPL.getEs_index(),
+            MediaSourceEnum.FB_HISTORY.getEs_index(),
+            MediaSourceEnum.FQ_IMPL.getEs_index(),
+            MediaSourceEnum.FQ_HISTORY.getEs_index()
+    };
 
 //    @Override
 //    public BlogSystemUser userLogin(String userName, String password) {
@@ -218,4 +231,31 @@ class HandleBlogDataApplicationTests {
 //        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 //        System.out.println(response);
 //    }
+
+    @Test
+    public void test05() throws Exception{
+        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+        List<String> list = Lists.newArrayList("ideolo", "astro", "Joe");
+        for(String channel: list){
+            channelQueryBuilder.should(QueryBuilders.matchPhraseQuery("use_name",channel));
+        }
+        builder.must(channelQueryBuilder);
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(builder);
+
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(indexArray);
+        searchRequest.types("_doc");
+        searchRequest.source(sourceBuilder);
+
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        if (response == null) {
+            log.info("");
+        }
+    }
+
 }

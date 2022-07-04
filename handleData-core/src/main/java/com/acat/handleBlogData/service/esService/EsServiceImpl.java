@@ -189,7 +189,7 @@ public class EsServiceImpl {
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
             }
-            if (StringUtils.isBlank(searchReq.getUserSummary())) {
+            if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
             }
             if (!Objects.isNull(searchReq.getStartTime()) && !Objects.isNull(searchReq.getEndTime())) {
@@ -209,42 +209,7 @@ public class EsServiceImpl {
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
-
-            List<SearchResp.UserData> userDataList = Lists.newArrayList();
-            SearchHit[] searchHits = response.getHits().getHits();
-            for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
-                SearchResp.UserData userData = new SearchResp.UserData();
-                userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-                userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
-                userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-                userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
-                userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
-                userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
-                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
-                userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
-                userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
-                userData.setGender(hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() : GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc());
-                userData.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "未知" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
-                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
-                userData.setMaidernName(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
-                userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
-                userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
-                userData.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
-                userData.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
-
-                MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
-                userData.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
-                userDataList.add(userData);
-            }
-
-            TotalHits totalHits = response.getHits().getTotalHits();
-            SearchResp searchResp = SearchResp
-                    .builder()
-                    .totalSize(totalHits.value)
-                    .dataList(userDataList)
-                    .build();
-            return new RestResult<>(RestEnum.SUCCESS, searchResp);
+            return new RestResult<>(RestEnum.SUCCESS, covSearchResult(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.searchData has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED);
@@ -319,6 +284,40 @@ public class EsServiceImpl {
             log.error("EsServiceImpl.retrieveUserDetail has error:{}",e.getMessage());
         }
         return new RestResult<>(RestEnum.FAILED);
+    }
+
+    /**
+     * 批量搜索
+     * @param searchField
+     * @param fieldList
+     * @return
+     */
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList) {
+        try {
+            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+            for(String fieldValue: fieldList){
+                channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
+            }
+            bigBuilder.must(channelQueryBuilder);
+
+            SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(bigBuilder);
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices(indexArray);
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            if (response == null) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+            return new RestResult<>(RestEnum.SUCCESS, covSearchResult(response));
+        }catch (Exception e) {
+            log.error("EsServiceImpl.batchQuery has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED);
+        }
     }
 
     /**
@@ -446,5 +445,49 @@ public class EsServiceImpl {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 组装搜索的返回参数
+     * @param response
+     * @return
+     */
+    private SearchResp covSearchResult(SearchResponse response) {
+        List<SearchResp.UserData> userDataList = Lists.newArrayList();
+        SearchHit[] searchHits = response.getHits().getHits();
+        if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+            for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                SearchResp.UserData userData = new SearchResp.UserData();
+                userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
+                userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+                userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
+                userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
+                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+                userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
+                userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
+                userData.setGender(hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() : GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc());
+                userData.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "未知" : String.valueOf(hit.getSourceAsMap().get("marriage")));
+                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
+                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
+                userData.setMaidernName(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
+                userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
+                userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
+                userData.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
+                userData.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
+
+                MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
+                userData.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+                userDataList.add(userData);
+            }
+        }
+
+        TotalHits totalHits = response.getHits().getTotalHits();
+        return SearchResp
+                .builder()
+                .totalSize(totalHits.value)
+                .dataList(userDataList)
+                .build();
     }
 }

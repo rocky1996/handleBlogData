@@ -10,13 +10,17 @@ import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.SearchResp;
 import com.acat.handleBlogData.controller.resp.UserDetailResp;
+import com.acat.handleBlogData.util.ReaderFileUtil;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -82,6 +86,33 @@ public class EsController {
             return esService.retrieveUserDetail(searchDetailReq);
         }catch (Exception e) {
             log.error("EsController.retrieveUserDetail has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @PostMapping("/batchQuery")
+    public RestResult<SearchResp> batchQuery(HttpServletRequest httpServletRequest,
+                                             @RequestParam("file") MultipartFile file,
+                                             String searchField) {
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
+            if (!".txt".equals(fileType)) {
+                return new RestResult<>(RestEnum.FILE_TYPE_ERROR);
+            }
+
+            if (StringUtils.isBlank(searchField)) {
+                return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
+            }
+
+            List<String> fieldList = ReaderFileUtil.readFile(file);
+            if (CollectionUtils.isEmpty(fieldList)) {
+                return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_LIST_EMPTY);
+            }
+            return esService.batchQuery(searchField, fieldList);
+        }catch (Exception e) {
+            log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }
