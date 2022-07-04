@@ -178,6 +178,10 @@ public class EsServiceImpl {
 //                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
 //            }
 
+            if(searchReq.isParticiple()) {
+                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "现不支持模糊分词查询,请更换精准匹配!!!");
+            }
+
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             assembleParam(searchReq, boolQueryBuilder);
 
