@@ -70,7 +70,7 @@ public class CommonController {
 
     @Auth(required = false)
     @GetMapping("/getBatchQueryField")
-    public RestResult<BatchQueryResp> BatchQueryResp() {
+    public RestResult<BatchQueryResp> getBatchQueryField() {
         try {
             List<BatchQueryResp.Field> fieldList = Lists.newLinkedList();
             fieldList.add(BatchQueryResp.Field.builder().fieldName("姓名").fieldValue("use_name").build());
