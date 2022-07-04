@@ -54,6 +54,11 @@ public class SearchReq {
     private String city;
 
     /**
+     * 用户简介
+     */
+    private String userSummary;
+
+    /**
      * 数据来源
      */
     private Integer mediaType;
