@@ -13,7 +13,7 @@ spring:
   redis:
     database: 0
     host: 20.10.0.5
-    password:
+    password:  test@123
     port: 6379
     timeout: 5000
     pool:
