@@ -188,7 +188,8 @@ public class EsServiceImpl {
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
-//            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+            sourceBuilder.trackTotalHits(true);
+            //            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
             if (!judgeSearchParamAllEmpty(searchReq)) {
@@ -317,7 +318,8 @@ public class EsServiceImpl {
             bigBuilder.must(channelQueryBuilder);
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(bigBuilder);
+                    .query(bigBuilder)
+                    .trackTotalHits(true);
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexArray);
@@ -348,7 +350,8 @@ public class EsServiceImpl {
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
-                    .collapse(collapseBuilder);
+                    .collapse(collapseBuilder)
+                    .trackTotalHits(true);
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -389,7 +392,8 @@ public class EsServiceImpl {
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
-                    .collapse(collapseBuilder);
+                    .collapse(collapseBuilder)
+                    .trackTotalHits(true);
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
