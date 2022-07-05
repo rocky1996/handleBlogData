@@ -99,8 +99,12 @@ public class ReaderFileUtil {
                         case LINKEDIN_HISTORY:
                             break;
                         case LINKEDIN_BUSINESS:
+                            LinkBusinessUserData linkBusinessUserData = JacksonUtil.strToBean(textLine, LinkBusinessUserData.class);
+                            objList.add(linkBusinessUserData);
                             break;
                         case LINKEDIN_SCHOOL:
+                            LinkSchoolUserData linkSchoolUserData = JacksonUtil.strToBean(textLine, LinkSchoolUserData.class);
+                            objList.add(linkSchoolUserData);
                             break;
                         default:
                             break;

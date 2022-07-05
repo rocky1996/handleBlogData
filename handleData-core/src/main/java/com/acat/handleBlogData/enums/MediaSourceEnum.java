@@ -12,9 +12,9 @@ public enum MediaSourceEnum {
     FQ_HISTORY(4, "FourceQuare-历史", "fq_history"),
     INSTAGRAM(5, "INSTAGRAM", "instagram"),
     LINKEDIN_IMPL(6, "领英-重点", "link_impl"),
-    LINKEDIN_HISTORY(7, "领英-历史", "link-history"),
-    LINKEDIN_BUSINESS(8, "领英-企业", "link-business"),
-    LINKEDIN_SCHOOL(9, "领英-学校", "link-school"),
+    LINKEDIN_HISTORY(7, "领英-历史", "link_history"),
+    LINKEDIN_BUSINESS(8, "领英-企业", "link_business"),
+    LINKEDIN_SCHOOL(9, "领英-学校", "link_school"),
     ALL(10, "全部", "all")
     ;
 
