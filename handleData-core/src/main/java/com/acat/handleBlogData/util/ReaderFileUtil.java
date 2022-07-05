@@ -25,7 +25,6 @@ public class ReaderFileUtil {
         countryMap.put("USA|美国", "美国");
         countryMap.put("IN", "印度");
         countryMap.put("Spain", "西班牙");
-        countryMap.put("Panama", "巴拿马");
         countryMap.put("Philippines", "菲律宾");
         countryMap.put("Bosnia and Herzegovina", "波斯尼亚和黑塞哥维那");
         countryMap.put("Malaysla", "马来西亚");
