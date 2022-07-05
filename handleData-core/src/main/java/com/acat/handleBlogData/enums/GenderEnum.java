@@ -34,6 +34,7 @@ public enum GenderEnum {
     }
 
     public static GenderEnum getGenderEnum(Integer code) {
-        return enumMap.get(code);
+        GenderEnum genderEnum = enumMap.get(code);
+        return genderEnum != null ? genderEnum : GenderEnum.WEI_ZHI;
     }
 }

@@ -12,6 +12,7 @@ public enum VerifiedEnum {
 
     REN_ZHENG(1, "认证"),
     FEI_REN_ZHENG(0, "非认证"),
+    WEIZHI(-1, "未知"),
     ;
     private Integer code;
     private String desc;
@@ -32,6 +33,7 @@ public enum VerifiedEnum {
     }
 
     public static VerifiedEnum getVerifiedEnum(Integer code) {
-        return enumMap.get(code);
+        VerifiedEnum verifiedEnum = enumMap.get(code);
+        return verifiedEnum != null ? verifiedEnum : VerifiedEnum.WEIZHI;
     }
 }

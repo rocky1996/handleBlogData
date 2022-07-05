@@ -33,7 +33,8 @@ public enum UserTypeEnum {
     }
 
     public static UserTypeEnum getUserTypeEnum(Integer code) {
-        return enumMap.get(code);
+        UserTypeEnum typeEnum = enumMap.get(code);
+        return typeEnum != null ? typeEnum : UserTypeEnum.WEI_ZHI;
     }
 }
 
