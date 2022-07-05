@@ -258,4 +258,56 @@ class HandleBlogDataApplicationTests {
         }
     }
 
+
+    @Test
+    /**
+     * 分词
+     */
+    public void test06() {
+        try {
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        if (StringUtils.isNotBlank(searchReq.getUserId())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getUserName())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("source_id", "95b25fe3c9720b0963ca6969593fd55e"));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "Douglas"));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getEmail())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
+//        }
+            //  if (StringUtils.isNotBlank(searchReq.getCountry())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", "美国"));
+//        boolQueryBuilder.must(QueryBuilders.matchQuery("user_type", "-1"));
+//        boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", "everybery_photo".trim()));
+            //   }
+//        if (StringUtils.isNotBlank(searchReq.getCity())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
+//        }
+//        if (!Objects.isNull(searchReq.getStartTime()) && !Objects.isNull(searchReq.getEndTime())) {
+//            boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time").lte(searchReq.getEndTime()).gte(searchReq.getStartTime()));
+//        }
+
+            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+            sourceBuilder.query(boolQueryBuilder);
+            sourceBuilder.from(0).size(10);
+//            .sort("source_create_time.keyword", SortOrder.DESC);
+            sourceBuilder.trackTotalHits(true);
+
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices("twitter");
+            searchRequest.types("_doc");
+            searchRequest.source(sourceBuilder);
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            System.out.println(response);
+        }catch (Exception e) {
+            log.error("{}:",e.getMessage());
+        }
+    }
+
 }

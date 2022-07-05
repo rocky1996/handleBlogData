@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 
@@ -148,11 +150,13 @@ public class TwitterUserData{
     /**
      * 用户名称    ->   nick_name
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String screen_name;
 
     /**
      * 博主全名,      ->      full_name或者user_name
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String use_name;
 
     /**
@@ -178,6 +182,7 @@ public class TwitterUserData{
     /**
      * 国家（样例数据有国家中文名也有英文名；英文的统一治理中文，非标准的 原样存储 检索条件增加字典）
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String country;
 
     /**

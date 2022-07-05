@@ -13,16 +13,51 @@
     <packaging>jar</packaging>
     <name>handleData-core</name>
     <description>handleData-core</description>
+
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steven</name>
+            <email>stevenchenworking@gmail.com</email>
+            <organization>godLockin</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:godlockin/esStanfordNLPAnalyzer.git</connection>
+        <developerConnection>scm:git:git@github.com:godlockin/esStanfordNLPAnalyzer.git</developerConnection>
+        <url>https://github.com/godlockin/esStanfordNLPAnalyzer</url>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <elasticsearch.version>6.5.0</elasticsearch.version>
+        <elasticsearch.assembly.descriptor>${project.basedir}/src/main/assemblies/plugin.xml</elasticsearch.assembly.descriptor>
+        <elasticsearch.plugin.name>analysis-stanford-nlp</elasticsearch.plugin.name>
+        <elasticsearch.plugin.classname>org.elasticsearch.plugin.analysis.AnalysisSDPlugin</elasticsearch.plugin.classname>
+        <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
+
+        <stanfordNLP.version>3.9.2</stanfordNLP.version>
+        <org.apache.maven.compiler.plugin.version>3.5.1</org.apache.maven.compiler.plugin.version>
+        <org.apache.maven.dependency.plugin.version>2.8</org.apache.maven.dependency.plugin.version>
     </properties>
     <dependencies>
 
-<!--        <dependency>-->
-<!--            <groupId>com.acat</groupId>-->
-<!--            <artifactId>handleData-emailAlarm</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.acat</groupId>-->
+        <!--            <artifactId>handleData-emailAlarm</artifactId>-->
+        <!--            <version>0.0.1-SNAPSHOT</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -130,11 +165,11 @@
         </dependency>
 
         <!-- nip斯坦福 -->
-<!--        <dependency>-->
-<!--            <groupId>edu.stanford.nlp</groupId>-->
-<!--            <artifactId>stanford-corenlp</artifactId>-->
-<!--            <version>4.4.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>edu.stanford.nlp</groupId>-->
+        <!--            <artifactId>stanford-corenlp</artifactId>-->
+        <!--            <version>4.4.0</version>-->
+        <!--        </dependency>-->
 
         <!-- Spring Data JPA 依赖（重要） -->
         <dependency>
@@ -158,14 +193,70 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.23</version>
         </dependency>
+
+        <!-- nip斯坦福 -->
+<!--        <dependency>-->
+<!--            <groupId>edu.stanford.nlp</groupId>-->
+<!--            <artifactId>stanford-corenlp</artifactId>-->
+<!--            <version>4.4.0</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.lucene</groupId>-->
+<!--                    <artifactId>lucene-core</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${stanfordNLP.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${stanfordNLP.version}</version>
+            <classifier>models</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${stanfordNLP.version}</version>
+            <classifier>models-chinese</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.springframework.boot</groupId>-->
+            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -179,23 +270,56 @@
                 </configuration>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.mybatis.generator</groupId>-->
-<!--                <artifactId>mybatis-generator-maven-plugin</artifactId>-->
-<!--                <version>1.3.7</version>-->
-<!--                <configuration>-->
-<!--                    <configurationFile>src/main/resources/generator/generatorConfig.xml</configurationFile>-->
-<!--                    <overwrite>true</overwrite>-->
-<!--                    <verbose>true</verbose>-->
-<!--                </configuration>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>mysql</groupId>-->
-<!--                        <artifactId>mysql-connector-java</artifactId>-->
-<!--                        <version>8.0.23</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.mybatis.generator</groupId>-->
+            <!--                <artifactId>mybatis-generator-maven-plugin</artifactId>-->
+            <!--                <version>1.3.7</version>-->
+            <!--                <configuration>-->
+            <!--                    <configurationFile>src/main/resources/generator/generatorConfig.xml</configurationFile>-->
+            <!--                    <overwrite>true</overwrite>-->
+            <!--                    <verbose>true</verbose>-->
+            <!--                </configuration>-->
+            <!--                <dependencies>-->
+            <!--                    <dependency>-->
+            <!--                        <groupId>mysql</groupId>-->
+            <!--                        <artifactId>mysql-connector-java</artifactId>-->
+            <!--                        <version>8.0.23</version>-->
+            <!--                    </dependency>-->
+            <!--                </dependencies>-->
+            <!--            </plugin>-->
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${org.apache.maven.dependency.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>edu.stanford.nlp</groupId>
+                                    <artifactId>stanford-corenlp</artifactId>
+                                    <version>${stanfordNLP.version}</version>
+                                    <classifier>models</classifier>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/target</outputDirectory>
+                                    <destFileName>stanford-corenlp-models-${stanfordNLP.version}.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
