@@ -71,7 +71,6 @@ media_title           String     可以为空        ²  文章含有媒介时�
     "verified":"",    #是否认证 1：认证，0：非认证   ->    is_attestation
     "followers_count":"",  #粉丝人数-个人/ 关注数- 公共page（粉丝总数）,      ->     followers
     "location":"",         #地址信息（现居地）
-
     "cover":"",            #背景图片
     "local_cover":"",      #本地背景图片
     "staffing_company":"", #是否是上市公司

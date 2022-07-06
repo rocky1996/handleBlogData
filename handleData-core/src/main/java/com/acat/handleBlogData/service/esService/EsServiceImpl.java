@@ -52,6 +52,10 @@ public class EsServiceImpl {
     @Resource
     private FqHistoryRepository fqHistoryRepository;
     @Resource
+    private LinkSchoolRepository linkSchoolRepository;
+    @Resource
+    private LinkBusinessRepository linkBusinessRepository;
+    @Resource
     private SendEmailServiceImpl sendEmailService;
     @Resource
     private RedisLockServiceImpl redisLock;
@@ -65,12 +69,14 @@ public class EsServiceImpl {
     private static final String PROD_PIC_URL = "";
 
     private static String[] indexArray = new String[]{
-            MediaSourceEnum.TWITTER.getEs_index(),
-            MediaSourceEnum.INSTAGRAM.getEs_index(),
-            MediaSourceEnum.FB_IMPL.getEs_index(),
-            MediaSourceEnum.FB_HISTORY.getEs_index(),
-            MediaSourceEnum.FQ_IMPL.getEs_index(),
-            MediaSourceEnum.FQ_HISTORY.getEs_index()
+        MediaSourceEnum.TWITTER.getEs_index(),
+        MediaSourceEnum.INSTAGRAM.getEs_index(),
+        MediaSourceEnum.FB_IMPL.getEs_index(),
+        MediaSourceEnum.FB_HISTORY.getEs_index(),
+        MediaSourceEnum.FQ_IMPL.getEs_index(),
+        MediaSourceEnum.FQ_HISTORY.getEs_index(),
+        MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(),
+        MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index()
     };
 
     /**
@@ -150,6 +156,30 @@ public class EsServiceImpl {
                         List<FqUserHistoryData> dataList = (List<FqUserHistoryData>) fqHistoryRepository.saveAll(fqUserHistoryData);
                         if (CollectionUtils.isEmpty(dataList)) {
                             sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_HISTORY));
+                            return false;
+                        }
+                    }
+                    break;
+                case LINKEDIN_IMPL:
+                    break;
+                case LINKEDIN_HISTORY:
+                    break;
+                case LINKEDIN_BUSINESS:
+                    List<LinkBusinessUserData> linkBusinessUserData = (List<LinkBusinessUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_BUSINESS);
+                    if (!CollectionUtils.isEmpty(linkBusinessUserData)) {
+                        List<LinkBusinessUserData> dataList = (List<LinkBusinessUserData>) linkBusinessRepository.saveAll(linkBusinessUserData);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_BUSINESS));
+                            return false;
+                        }
+                    }
+                    break;
+                case LINKEDIN_SCHOOL:
+                    List<LinkSchoolUserData> linkSchoolUserData = (List<LinkSchoolUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_SCHOOL);
+                    if (!CollectionUtils.isEmpty(linkSchoolUserData)) {
+                        List<LinkSchoolUserData> dataList = (List<LinkSchoolUserData>) linkSchoolRepository.saveAll(linkSchoolUserData);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_SCHOOL));
                             return false;
                         }
                     }
