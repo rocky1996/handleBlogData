@@ -150,13 +150,13 @@ public class TwitterUserData{
     /**
      * 用户名称    ->   nick_name stanford-core-nlp
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Field(type = FieldType.Text, searchAnalyzer = "ik_max_word")
     private String screen_name;
 
     /**
      * 博主全名,      ->      full_name或者user_name
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Field(type = FieldType.Text, searchAnalyzer = "ik_max_word")
     private String use_name;
 
     /**
