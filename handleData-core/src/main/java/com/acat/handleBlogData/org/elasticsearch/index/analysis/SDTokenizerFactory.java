@@ -34,7 +34,7 @@ import org.elasticsearch.index.analysis.AbstractTokenizerFactory;
 public class SDTokenizerFactory extends AbstractTokenizerFactory {
 
     public SDTokenizerFactory(IndexSettings indexSettings, Environment env, String name, Settings settings) {
-        super(indexSettings, name, settings);
+        super(indexSettings, settings, name);
     }
 
     @Override

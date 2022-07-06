@@ -547,7 +547,7 @@ public class EsServiceImpl {
 //        TotalHits totalHits = response.getHits().getTotalHits();
         return SearchResp
                 .builder()
-                .totalSize(response.getHits().getTotalHits())
+                .totalSize(response.getHits().getTotalHits().value)
                 .dataList(userDataList)
                 .build();
     }
