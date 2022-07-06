@@ -27,7 +27,7 @@ public class TranslateOuterServiceImpl {
     private static String CHINESE_PARAM_VALUE = "nzh";
     private static String TEXT_KEY = "text";
 
-    public String getTranslateValue(String textValue) {
+    public String getTranslateValue(String tranLanguageType, String textValue) {
 
         try {
             if (StringUtils.isBlank(textValue)) {
@@ -40,7 +40,7 @@ public class TranslateOuterServiceImpl {
             HttpHeaders httpHeader = new HttpHeaders();
             httpHeader.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
-            paramMap.add(ENGLISH_PARAM_KEY, "");
+            paramMap.add(ENGLISH_PARAM_KEY, "n"+tranLanguageType);
             paramMap.add(CHINESE_PARAM_KEY, CHINESE_PARAM_VALUE);
             paramMap.add(TEXT_KEY, textValue);
             HttpEntity<MultiValueMap<String, Object>> requestParam = new HttpEntity<>(paramMap, httpHeader);
