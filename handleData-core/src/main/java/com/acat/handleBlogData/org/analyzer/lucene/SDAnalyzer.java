@@ -33,6 +33,5 @@ public final class SDAnalyzer extends Analyzer {
 	@Override
 	protected TokenStreamComponents createComponents(String fieldName) {
 		return new TokenStreamComponents(new SDTokenizer());
-    }
-
+	}
 }

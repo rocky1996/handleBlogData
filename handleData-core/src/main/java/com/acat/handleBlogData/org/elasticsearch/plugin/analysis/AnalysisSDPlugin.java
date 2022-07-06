@@ -24,10 +24,10 @@
  */
 package com.acat.handleBlogData.org.elasticsearch.plugin.analysis;
 
+import com.acat.handleBlogData.org.elasticsearch.index.analysis.SDAnalyzerProvider;
+import com.acat.handleBlogData.org.elasticsearch.index.analysis.SDTokenizerFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.elasticsearch.index.analysis.AnalyzerProvider;
-import org.elasticsearch.index.analysis.SDAnalyzerProvider;
-import org.elasticsearch.index.analysis.SDTokenizerFactory;
 import org.elasticsearch.index.analysis.TokenizerFactory;
 import org.elasticsearch.indices.analysis.AnalysisModule;
 import org.elasticsearch.plugins.AnalysisPlugin;

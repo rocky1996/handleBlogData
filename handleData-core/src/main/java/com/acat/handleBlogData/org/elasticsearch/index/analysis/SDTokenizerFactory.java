@@ -24,7 +24,7 @@
  */
 package com.acat.handleBlogData.org.elasticsearch.index.analysis;
 
-import org.analyzer.lucene.SDTokenizer;
+import com.acat.handleBlogData.org.analyzer.lucene.SDTokenizer;
 import org.apache.lucene.analysis.Tokenizer;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.env.Environment;

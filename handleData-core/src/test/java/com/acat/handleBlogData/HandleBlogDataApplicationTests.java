@@ -42,8 +42,8 @@ class HandleBlogDataApplicationTests {
 //    private String hostList;
     @Resource
     private RestHighLevelClient restHighLevelClient;
-    @Resource
-    private UserDao userDao;
+//    @Resource
+//    private UserDao userDao;
 //    @Autowired
 //    private ElasticsearchTemplate esTemplate;
 
@@ -55,14 +55,14 @@ class HandleBlogDataApplicationTests {
 //    @Resource
 //    private BlogSystemUserMapper blogSystemUserMapper;
 
-    private static String[] indexArray = new String[]{
-            MediaSourceEnum.TWITTER.getEs_index(),
-            MediaSourceEnum.INSTAGRAM.getEs_index(),
-            MediaSourceEnum.FB_IMPL.getEs_index(),
-            MediaSourceEnum.FB_HISTORY.getEs_index(),
-            MediaSourceEnum.FQ_IMPL.getEs_index(),
-            MediaSourceEnum.FQ_HISTORY.getEs_index()
-    };
+//    private static String[] indexArray = new String[]{
+//            MediaSourceEnum.TWITTER.getEs_index(),
+//            MediaSourceEnum.INSTAGRAM.getEs_index(),
+//            MediaSourceEnum.FB_IMPL.getEs_index(),
+//            MediaSourceEnum.FB_HISTORY.getEs_index(),
+//            MediaSourceEnum.FQ_IMPL.getEs_index(),
+//            MediaSourceEnum.FQ_HISTORY.getEs_index()
+//    };
 
 //    @Override
 //    public BlogSystemUser userLogin(String userName, String password) {
@@ -73,8 +73,8 @@ class HandleBlogDataApplicationTests {
 //        return blogSystemUserMapper.selectByExample(example).stream().findFirst().orElse(null);
 //    }
 
-    @Test
-    void contextLoads() {
+//    @Test
+//    void contextLoads() {
 //        try{
 //            BlogSystemUserExample example = new BlogSystemUserExample();
 //            example.createCriteria()
@@ -85,8 +85,7 @@ class HandleBlogDataApplicationTests {
 //        }catch (Exception e){
 //            log.error("{}",e.getMessage());
 //        }
-
-    }
+//    }
 
 //    @Test
 //    public void testLanguageIdentify() {
@@ -232,31 +231,31 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(response);
 //    }
 
-    @Test
-    public void test05() throws Exception{
-        BoolQueryBuilder builder = QueryBuilders.boolQuery();
-        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-        List<String> list = Lists.newArrayList("ideolo", "astro", "Joe");
-        for(String channel: list){
-            channelQueryBuilder.should(QueryBuilders.matchPhraseQuery("use_name",channel));
-        }
-        builder.must(channelQueryBuilder);
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(builder);
-
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(indexArray);
-        searchRequest.types("_doc");
-        searchRequest.source(sourceBuilder);
-
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        if (response == null) {
-            log.info("");
-        }
-    }
+//    @Test
+//    public void test05() throws Exception{
+//        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+//        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+//        List<String> list = Lists.newArrayList("ideolo", "astro", "Joe");
+//        for(String channel: list){
+//            channelQueryBuilder.should(QueryBuilders.matchPhraseQuery("use_name",channel));
+//        }
+//        builder.must(channelQueryBuilder);
+//
+//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//        sourceBuilder.query(builder);
+//
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices(indexArray);
+//        searchRequest.types("_doc");
+//        searchRequest.source(sourceBuilder);
+//
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        if (response == null) {
+//            log.info("");
+//        }
+//    }
 
 
     @Test
@@ -296,7 +295,6 @@ class HandleBlogDataApplicationTests {
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from(0).size(10);
-//            .sort("source_create_time.keyword", SortOrder.DESC);
             sourceBuilder.trackTotalHits(true);
 
             SearchRequest searchRequest = new SearchRequest();

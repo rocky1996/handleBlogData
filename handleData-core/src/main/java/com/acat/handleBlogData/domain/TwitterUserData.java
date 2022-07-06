@@ -148,9 +148,9 @@ public class TwitterUserData{
     private String user_id;
 
     /**
-     * 用户名称    ->   nick_name
+     * 用户名称    ->   nick_name stanford-core-nlp
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String screen_name;
 
     /**

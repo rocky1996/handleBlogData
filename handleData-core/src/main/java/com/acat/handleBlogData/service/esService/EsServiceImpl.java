@@ -14,7 +14,7 @@ import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.search.TotalHits;
+//import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -515,10 +515,10 @@ public class EsServiceImpl {
             }
         }
 
-        TotalHits totalHits = response.getHits().getTotalHits();
+//        TotalHits totalHits = response.getHits().getTotalHits();
         return SearchResp
                 .builder()
-                .totalSize(totalHits.value)
+                .totalSize(response.getHits().getTotalHits())
                 .dataList(userDataList)
                 .build();
     }
