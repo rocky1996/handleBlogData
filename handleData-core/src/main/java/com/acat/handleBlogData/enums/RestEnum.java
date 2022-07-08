@@ -7,6 +7,7 @@ public enum RestEnum {
     FILE_TYPE_ERROR(302, "上传文件类型不正确,请上传txt文件"),
     BATCH_QUERY_FIELD_EMPTY(303, "批量搜索字段不能为空"),
     BATCH_QUERY_FIELD_LIST_EMPTY(304, "上传文件数据为空,请重新上传"),
+    FIELD_NOT_SUPPORT_DIM_SEARCH(305, ""),
     USERNAME_EMPTY_PARAM(401, "用户名不能为空"),
     PASSWORD_EMPTY_PARAM(402, "密码不能为空"),
     USER_NOT_EXISTS(403, "该用户不存在"),

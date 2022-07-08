@@ -4,6 +4,7 @@ import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.controller.req.SearchDetailReq;
+import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
@@ -106,6 +107,10 @@ public class EsController {
 
             if (StringUtils.isBlank(searchField)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
+            }
+
+            if (!isParticiple && BatchSearchFieldEnum.mustDimSearchField().contains(searchField)) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, searchField + "字段不支持精准查询,请改为模糊(分词)查询");
             }
 
             List<String> fieldList = ReaderFileUtil.readFile(file);

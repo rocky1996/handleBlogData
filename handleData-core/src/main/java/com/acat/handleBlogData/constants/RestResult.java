@@ -39,7 +39,10 @@ public class RestResult<T> {
         this.code = code;
         this.msg = msg;
     }
-
+    public RestResult(RestEnum restEnum, String msg) {
+        this.code = restEnum.getCode();
+        this.msg = msg;
+    }
     public RestResult(RestEnum restEnum, T data) {
         this.code = restEnum.getCode();
         this.msg = restEnum.getMsg();
