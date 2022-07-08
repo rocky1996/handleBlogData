@@ -33,6 +33,7 @@ public class ReaderFileUtil {
         countryMap.put("DE", "德国");
         countryMap.put("CN", "中国");
         countryMap.put("JP", "日本");
+        countryMap.put("Botswana", "博茨瓦纳");
     }
 
     /**
