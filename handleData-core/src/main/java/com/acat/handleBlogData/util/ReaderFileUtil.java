@@ -29,6 +29,10 @@ public class ReaderFileUtil {
         countryMap.put("Philippines", "菲律宾");
         countryMap.put("Bosnia and Herzegovina", "波斯尼亚和黑塞哥维那");
         countryMap.put("Malaysla", "马来西亚");
+        countryMap.put("AU", "澳大利亚");
+        countryMap.put("DE", "德国");
+        countryMap.put("CN", "中国");
+        countryMap.put("JP", "日本");
     }
 
     /**
