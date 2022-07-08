@@ -365,19 +365,23 @@ public class EsServiceImpl {
      * 批量搜索
      * @param searchField
      * @param fieldList
+     * @param isParticiple
+     * @param pageNum
+     * @param pageSize
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, boolean isParticiple, Integer pageNum, Integer pageSize) {
         try {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
-                channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
+                channelQueryBuilder.should(isParticiple ? QueryBuilders.matchQuery(searchField, fieldValue) : QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
             }
             bigBuilder.must(channelQueryBuilder);
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(bigBuilder)
+                    .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
                     .trackTotalHits(true);
             //搜索
             SearchRequest searchRequest = new SearchRequest();
