@@ -32,6 +32,8 @@ public class EsController {
     @Resource
     private EsServiceImpl esService;
 
+    public static final String TXT_EXTENSION = ".txt";
+
     @Auth(required = false)
     @PostMapping("/upload")
     public RestResult upload(HttpServletRequest httpServletRequest,
@@ -101,7 +103,7 @@ public class EsController {
         try {
             String originalFilename = file.getOriginalFilename();
             String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
-            if (!".txt".equals(fileType)) {
+            if (!TXT_EXTENSION.equals(fileType)) {
                 return new RestResult<>(RestEnum.FILE_TYPE_ERROR);
             }
 
