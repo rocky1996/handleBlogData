@@ -349,13 +349,7 @@ public class EsServiceImpl {
                     .trackTotalHits(true);
             //搜索
             SearchRequest searchRequest = new SearchRequest();
-
-            if (MediaSourceEnum.ALL == mediaSourceEnum) {
-                //todo
-                searchRequest.indices(mediaSourceEnum.getEs_index());
-            }else {
-                searchRequest.indices(mediaSourceEnum.getEs_index());
-            }
+            searchRequest.indices(mediaSourceEnum.getEs_index());
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
