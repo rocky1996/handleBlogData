@@ -81,8 +81,12 @@ public class CommonController {
             fieldList.add(BatchQueryResp.Field.builder().fieldName("用户名").fieldValue("screen_name").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("曾用名").fieldValue("name_userd_before").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("手机号").fieldValue("mobile").build());
-            fieldList.add(BatchQueryResp.Field.builder().fieldName("用户简介").fieldValue("user_summary").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("用户简介(仅支持模糊查询)").fieldValue("user_summary").build());
             fieldList.add(BatchQueryResp.Field.builder().fieldName("邮箱").fieldValue("email").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("算法标签(仅支持模糊查询)").fieldValue("alg_remark").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("技能(仅支持模糊查询)").fieldValue("skills_name").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("教育经历(仅支持模糊查询)").fieldValue("educations_school_name").build());
+            fieldList.add(BatchQueryResp.Field.builder().fieldName("工作经历(仅支持模糊查询)").fieldValue("experiences_company_name").build());
             return new RestResult(RestEnum.SUCCESS, BatchQueryResp
                     .builder()
                     .queryFieldList(fieldList)
