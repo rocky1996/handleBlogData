@@ -1,18 +1,21 @@
 package com.acat.handleBlogData.outerService.outerInterface;
 
 import com.acat.handleBlogData.outerService.outerConstants.OutUrlConstants;
+import com.acat.handleBlogData.outerService.outerResp.DelectResp;
 import com.acat.handleBlogData.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -22,13 +25,50 @@ public class TranslateOuterServiceImpl {
     @Resource
     private RestTemplate restTemplate;
 
+    private static String DELECT_PARAM_Q = "q";
     private static String ENGLISH_PARAM_KEY = "srcl";
     private static String CHINESE_PARAM_KEY = "tgtl";
     private static String CHINESE_PARAM_VALUE = "nzh";
     private static String TEXT_KEY = "text";
+    private static String APP_SOURCE = "app_source";
+    private static String APP_SOURCE_4003 = "4003";
 
+    /**
+     * 语种识别
+     * @param textValue
+     * @return
+     */
+    public String getLanguageDelectResult(String textValue) {
+        try {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            HttpHeaders httpHeader = new HttpHeaders();
+            httpHeader.setContentType(MediaType.APPLICATION_JSON);
+            MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
+            paramMap.put(DELECT_PARAM_Q, Collections.singletonList(textValue));
+            HttpEntity<MultiValueMap<String, Object>> requestParam = new HttpEntity<>(paramMap, httpHeader);
+            ResponseEntity<String> outResp = restTemplate.postForEntity(OutUrlConstants.LANGUAGE_IDENTIFY_URL, requestParam, String.class);
+            stopWatch.stop();
+
+            DelectResp delectResp = JacksonUtil.strToBean(outResp.getBody(), DelectResp.class);
+            if (200 != delectResp.getResponseStatus()) {
+                log.info("TranslateOuterServiceImpl.getLanguageDelectResult,translate failed!!!");
+                return null;
+            }
+            return delectResp.getResponseData().getLanguage();
+        }catch (Exception e) {
+            log.error("TranslateOuterServiceImpl.getLanguageDelectResult has error",e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 语种翻译
+     * @param tranLanguageType
+     * @param textValue
+     * @return
+     */
     public String getTranslateValue(String tranLanguageType, String textValue) {
-
         try {
             if (StringUtils.isBlank(textValue)) {
                 log.info("TranslateOuterServiceImpl.getTranslateValue,textValue is null");
@@ -43,6 +83,7 @@ public class TranslateOuterServiceImpl {
             paramMap.add(ENGLISH_PARAM_KEY, "n"+tranLanguageType);
             paramMap.add(CHINESE_PARAM_KEY, CHINESE_PARAM_VALUE);
             paramMap.add(TEXT_KEY, textValue);
+            paramMap.add(APP_SOURCE, APP_SOURCE_4003);
             HttpEntity<MultiValueMap<String, Object>> requestParam = new HttpEntity<>(paramMap, httpHeader);
             ResponseEntity<String> outerResp = restTemplate.postForEntity(OutUrlConstants.TRANSLATE_URL, requestParam, String.class);
             stopWatch.stop();
@@ -52,7 +93,21 @@ public class TranslateOuterServiceImpl {
                 log.info("TranslateOuterServiceImpl.getTranslateValue,translate failed!!!");
                 return null;
             }
-            return JacksonUtil.beanToStr(outerResp.getBody());
+
+//            Map<String, Object> resultMap = (Map<String, Object>) translateOuterService.getTranslateValue("en", str);
+            Map<String, Object> tranMap = JacksonUtil.strToBean(outerResp.getBody(), Map.class);
+            List<Map<String, Object>> translationList = (List<Map<String, Object>>) tranMap.get("translation");
+            if (CollectionUtils.isEmpty(translationList)) {
+                System.out.println("");
+            }
+
+            Map<String, Object> oneMap = translationList.get(0);
+            List<Map<String, Object>> translatedList = (List<Map<String, Object>>) oneMap.get("translated");
+            if (CollectionUtils.isEmpty(translatedList)) {
+                System.out.println("");
+            }
+            Map<String, Object> trMap = (Map<String, Object>) translatedList.get(0);
+            return Objects.isNull(trMap) ? "" : (String) trMap.get("text");
         }catch (Exception e) {
             log.error("TranslateOuterServiceImpl.getTranslateValue has error",e.getMessage());
             return null;

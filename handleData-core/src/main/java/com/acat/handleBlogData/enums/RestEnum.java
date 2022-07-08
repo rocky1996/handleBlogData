@@ -16,6 +16,8 @@ public enum RestEnum {
     MEDIA_SOURCE_ERROR(407, "媒介来源错误"),
     PLEASE_ADD_PARAM(408, "您好,请输入搜索参数,否则结果为空！！！"),
     PARAM_IS_NOT_EMPTY(409, "数据来源或UUID不能为空！！！"),
+    TRAN_VALUE_IS_EMPTY(410, "翻译内容不能为空！！！"),
+    SERVICE_IS_ERROR(411, "服务报错请重试或联系相关人员！！！"),
 //    FORBIDDEN(402, "没有权限"),
 //    SYSTEM_ERROR(402, "系统错误"),
 //    NO_HAVING_DATA(403, "没有搜索到任何相关数据"),

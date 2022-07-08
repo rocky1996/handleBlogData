@@ -7,6 +7,7 @@ import com.acat.handleBlogData.dao.UserDao;
 //import com.acat.handleBlogData.mapper.BlogSystemUserMapper;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
+import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
@@ -23,9 +24,12 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @SpringBootTest
 @Slf4j
@@ -54,6 +58,8 @@ class HandleBlogDataApplicationTests {
 
 //    @Resource
 //    private BlogSystemUserMapper blogSystemUserMapper;
+    @Resource
+    private TranslateOuterServiceImpl translateOuterService;
 
     private static String[] indexArray = new String[]{
             MediaSourceEnum.TWITTER.getEs_index(),
@@ -277,4 +283,17 @@ class HandleBlogDataApplicationTests {
         System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
     }
 
+    @Test
+    public void test07() {
+        String str = "There was nothing casual about this";
+        String result =  translateOuterService.getTranslateValue("en", str);
+        System.out.println(result);
+    }
+
+    @Test
+    public void test08() {
+        String str = "peter%20is%20here";
+        String result = translateOuterService.getLanguageDelectResult(str);
+        System.out.println("result:" + result);
+    }
 }
