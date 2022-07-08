@@ -14,4 +14,6 @@ public class MediaTypeResp {
     private Integer code;
 
     private String desc;
+
+    private Long totalSize;
 }

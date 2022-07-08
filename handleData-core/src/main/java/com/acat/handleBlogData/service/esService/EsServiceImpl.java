@@ -333,6 +333,41 @@ public class EsServiceImpl {
     }
 
     /**
+     * 获取不同索引的数量
+     * @param mediaSourceEnum
+     * @return
+     */
+    public Long getMediaIndexSize(MediaSourceEnum mediaSourceEnum) {
+        try {
+            if (MediaSourceEnum.LINKEDIN_HISTORY == mediaSourceEnum
+                    || MediaSourceEnum.LINKEDIN_IMPL == mediaSourceEnum) {
+                return 0L;
+            }
+
+            SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(QueryBuilders.matchAllQuery())
+                    .trackTotalHits(true);
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+
+            if (MediaSourceEnum.ALL == mediaSourceEnum) {
+                //todo
+                searchRequest.indices(mediaSourceEnum.getEs_index());
+            }else {
+                searchRequest.indices(mediaSourceEnum.getEs_index());
+            }
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            return response == null ? 0L : response.getHits().getTotalHits().value;
+        }catch (Exception e) {
+            log.error("EsServiceImpl.getMediaIndexSize has error:{}",e.getMessage());
+        }
+        return 0L;
+    }
+
+    /**
      * 批量搜索
      * @param searchField
      * @param fieldList

@@ -258,4 +258,23 @@ class HandleBlogDataApplicationTests {
         }
     }
 
+    @Test
+    public void test06() throws Exception{
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .query(QueryBuilders.matchAllQuery())
+                .trackTotalHits(true);
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("twitter");
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        if (response == null) {
+//            log.info("error!!!");
+//        }
+//        System.out.println(response);
+        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
+    }
+
 }

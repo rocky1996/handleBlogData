@@ -60,7 +60,12 @@ public class CommonController {
         try {
             return new RestResult(RestEnum.SUCCESS,
                     Arrays.stream(MediaSourceEnum.values()).map(e ->
-                            MediaTypeResp.builder().code(e.getCode()).desc(e.getDesc()).build())
+                            MediaTypeResp
+                                    .builder()
+                                    .code(e.getCode())
+                                    .desc(e.getDesc())
+                                    .totalSize(esService.getMediaIndexSize(e))
+                                    .build())
                             .collect(Collectors.toList()));
         }catch (Exception e) {
             log.error("CommonController.getMediaTypeList has error:{}",e.getMessage());
