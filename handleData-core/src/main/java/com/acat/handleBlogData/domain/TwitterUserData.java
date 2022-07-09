@@ -145,11 +145,13 @@ public class TwitterUserData{
     /**
      * 博主id        ->   blogger_id
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String user_id;
 
     /**
      * 用户名称    ->   nick_name
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String screen_name;
 
     /**
@@ -182,11 +184,13 @@ public class TwitterUserData{
     /**
      * 国家（样例数据有国家中文名也有英文名；英文的统一治理中文，非标准的 原样存储 检索条件增加字典）
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String country;
 
     /**
      * 地址信息（通过currentLocation值抽取城市名称）   ->      user_addr或者registered_address
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String city;
 
     /**
@@ -227,6 +231,7 @@ public class TwitterUserData{
     /**
      * 用户邮箱（数据部分为空）
      */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String email;
 
     /**
