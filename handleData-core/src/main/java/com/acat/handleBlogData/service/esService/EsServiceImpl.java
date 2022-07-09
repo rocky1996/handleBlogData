@@ -279,7 +279,7 @@ public class EsServiceImpl {
 
             userDetailResp.setGender(
                     hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :
-                            (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
+                            (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
                                     GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc())
             );
 
@@ -296,12 +296,12 @@ public class EsServiceImpl {
 
             userDetailResp.setUserType(
                     hit.getSourceAsMap().get("user_type") == null ? UserTypeEnum.WEI_ZHI.getDesc() :
-                            (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("user_type"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
+                            (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("user_type"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
                                     UserTypeEnum.getUserTypeEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("user_type")))).getDesc())
             );
             userDetailResp.setVerified(
                     hit.getSourceAsMap().get("verified") == null ? VerifiedEnum.WEIZHI.getDesc() :
-                            (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("verified"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
+                            (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("verified"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
                                     VerifiedEnum.getVerifiedEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("verified")))).getDesc())
             );
 
@@ -310,7 +310,7 @@ public class EsServiceImpl {
 
             userDetailResp.setCountry(
                     hit.getSourceAsMap().get("country") == null ? "" :
-                            (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
+                            (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
                                     ReaderFileUtil.countryMap(String.valueOf(hit.getSourceAsMap().get("country"))))
             );
 
@@ -547,7 +547,7 @@ public class EsServiceImpl {
 
                 userData.setCountry(
                         hit.getSourceAsMap().get("country") == null ? "" :
-                                (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
+                                (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
                                         ReaderFileUtil.countryMap(String.valueOf(hit.getSourceAsMap().get("country"))))
                 );
 
@@ -557,7 +557,7 @@ public class EsServiceImpl {
 
                 userData.setGender(
                         hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :
-                                (ReaderFileUtil.isChinese(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
+                                (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
                                         GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc())
                 );
 

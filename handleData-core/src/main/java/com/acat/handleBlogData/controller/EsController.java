@@ -72,7 +72,7 @@ public class EsController {
         }
     }
 
-    @Auth
+    @Auth(required = false)
     @PostMapping("/retrieveUserDetail")
     public RestResult<UserDetailResp> retrieveUserDetail(@RequestBody SearchDetailReq searchDetailReq) {
 

@@ -5,6 +5,8 @@ import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.elasticsearch.common.Numbers;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -127,7 +129,19 @@ public class ReaderFileUtil {
         return pattern.matcher(value).matches();
     }
 
+    public static boolean isNumber(String value) {
+//        if (NumberUtils.isNumber(value)) {
+//            return true;
+//        }
+//        return false;
+        return NumberUtils.isNumber(value) ? true : false;
+    }
+
     public static String countryMap(String countryKey) {
         return countryMap.get(countryKey) == null ? "" : countryMap.get(countryKey);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isNumber("123ed"));
     }
 }
