@@ -97,9 +97,10 @@ public class EsController {
     public RestResult<SearchResp> batchQuery(HttpServletRequest httpServletRequest,
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
-                                             @RequestParam("isParticiple") boolean isParticiple,
-                                             @RequestParam("pageNum") Integer pageNum,
-                                             @RequestParam("pageSize") Integer pageSize) {
+                                             @RequestParam("isParticiple") boolean isParticiple
+//                                             @RequestParam("pageNum") Integer pageNum,
+//                                             @RequestParam("pageSize") Integer pageSize
+    ) {
         try {
             String originalFilename = file.getOriginalFilename();
             String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
@@ -123,7 +124,10 @@ public class EsController {
             if (CollectionUtils.isEmpty(fieldList)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_LIST_EMPTY);
             }
-            return esService.batchQuery(searchField, fieldList, isParticiple, pageNum, pageSize);
+            if (fieldList.size() > 2000) {
+                return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
+            }
+            return esService.batchQuery(searchField, fieldList, isParticiple);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

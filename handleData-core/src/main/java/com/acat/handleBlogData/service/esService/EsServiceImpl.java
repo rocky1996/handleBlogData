@@ -366,11 +366,9 @@ public class EsServiceImpl {
      * @param searchField
      * @param fieldList
      * @param isParticiple
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, boolean isParticiple, Integer pageNum, Integer pageSize) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, boolean isParticiple) {
         try {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
