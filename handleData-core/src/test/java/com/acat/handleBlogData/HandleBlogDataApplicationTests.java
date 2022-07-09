@@ -315,7 +315,7 @@ class HandleBlogDataApplicationTests {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
 //        }
 //        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "빔국"));
+            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "King"));
 //        }
 //        if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
