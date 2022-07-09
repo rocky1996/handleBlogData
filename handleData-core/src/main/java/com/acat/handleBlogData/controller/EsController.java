@@ -72,7 +72,7 @@ public class EsController {
         }
     }
 
-    @Auth(required = false)
+    @Auth
     @PostMapping("/retrieveUserDetail")
     public RestResult<UserDetailResp> retrieveUserDetail(@RequestBody SearchDetailReq searchDetailReq) {
 
@@ -92,7 +92,7 @@ public class EsController {
         }
     }
 
-    @Auth(required = false)
+    @Auth
     @PostMapping("/batchQuery")
     public RestResult<SearchResp> batchQuery(HttpServletRequest httpServletRequest,
                                              @RequestParam("file") MultipartFile file,
