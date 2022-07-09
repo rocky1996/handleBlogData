@@ -293,7 +293,7 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test08() {
-        String str = "peter%20is%20here";
+        String str = "nullただただ呟く";
         String result = translateOuterService.getLanguageDelectResult(str);
         System.out.println("result:" + result);
     }
@@ -315,7 +315,7 @@ class HandleBlogDataApplicationTests {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
 //        }
 //        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "多忙"));
+            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "빔국"));
 //        }
 //        if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
 //            boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
