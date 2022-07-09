@@ -3,8 +3,7 @@ package com.acat.handleBlogData.domain;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;
-
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 /**
  * {
