@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
 //import org.ejml.dense.row.decomposition.qr.QrUpdate_DDRM;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -295,5 +296,60 @@ class HandleBlogDataApplicationTests {
         String str = "peter%20is%20here";
         String result = translateOuterService.getLanguageDelectResult(str);
         System.out.println("result:" + result);
+    }
+
+
+    /**
+     * 分词
+     */
+    @Test
+    public void test09() throws Exception{
+
+        Integer pageNum = 1;
+        Integer pageSize = 10;
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        if (StringUtils.isNotBlank(searchReq.getUserId())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getUserName())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "多忙"));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getEmail())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getCountry())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getCity())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
+//        }
+//        if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
+//        }
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(boolQueryBuilder);
+        sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+        sourceBuilder.trackTotalHits(true);
+        //            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("twitter");
+        searchRequest.types("_doc");
+        searchRequest.source(sourceBuilder);
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        if (response == null) {
+            log.error("");
+        }
+        System.out.println(response);
     }
 }
