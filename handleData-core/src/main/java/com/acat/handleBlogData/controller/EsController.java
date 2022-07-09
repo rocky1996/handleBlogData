@@ -107,9 +107,9 @@ public class EsController {
                 return new RestResult<>(RestEnum.FILE_TYPE_ERROR);
             }
 
-            if (pageNum == null || pageSize == null) {
-                return new RestResult<>(RestEnum.FEN_YE_ERROR);
-            }
+//            if (pageNum == null || pageSize == null) {
+//                return new RestResult<>(RestEnum.FEN_YE_ERROR);
+//            }
 
             if (StringUtils.isBlank(searchField)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
