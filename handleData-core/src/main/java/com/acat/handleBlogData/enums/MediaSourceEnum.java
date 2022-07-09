@@ -54,13 +54,13 @@ public enum MediaSourceEnum {
 //        this.es_index = es_index;
 //    }
 
-    public static Map<Integer, MediaSourceEnum> getEnumMap() {
-        return enumMap;
-    }
-
-    public static void setEnumMap(Map<Integer, MediaSourceEnum> enumMap) {
-        MediaSourceEnum.enumMap = enumMap;
-    }
+//    public static Map<Integer, MediaSourceEnum> getEnumMap() {
+//        return enumMap;
+//    }
+//
+//    public static void setEnumMap(Map<Integer, MediaSourceEnum> enumMap) {
+//        MediaSourceEnum.enumMap = enumMap;
+//    }
 
     private static Map<Integer, MediaSourceEnum> enumMap = new HashMap<>();
     private static Map<String, MediaSourceEnum> indexEnumMap = new HashMap<>();
@@ -78,4 +78,8 @@ public enum MediaSourceEnum {
     public static MediaSourceEnum getMediaSourceEnumByIndex(String index) {
         return indexEnumMap.get(index);
     }
+
+//    public static void main(String[] args) {
+//        System.out.println(MediaSourceEnum.TWITTER.getEs_index());
+//    }
 }
