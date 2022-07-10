@@ -8,7 +8,7 @@ public enum RestEnum {
     BATCH_QUERY_FIELD_EMPTY(303, "批量搜索字段不能为空"),
     BATCH_QUERY_FIELD_LIST_EMPTY(304, "上传文件数据为空,请重新上传"),
     FIELD_NOT_SUPPORT_DIM_SEARCH(305, ""),
-    BATCH_QUERY_FIELD_SIZE_TOO_LARGE(306, "上传文件数量不能超过2000条,请重新上传"),
+    BATCH_QUERY_FIELD_SIZE_TOO_LARGE(306, "上传文件数量不能超过1000条,请重新上传"),
     USERNAME_EMPTY_PARAM(401, "用户名不能为空"),
     PASSWORD_EMPTY_PARAM(402, "密码不能为空"),
     USER_NOT_EXISTS(403, "该用户不存在"),

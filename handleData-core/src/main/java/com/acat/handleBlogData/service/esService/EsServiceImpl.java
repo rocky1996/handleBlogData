@@ -379,7 +379,7 @@ public class EsServiceImpl {
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(bigBuilder)
-//                    .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
+                    .from(0).size(10000)
                     .trackTotalHits(true);
             //搜索
             SearchRequest searchRequest = new SearchRequest();
