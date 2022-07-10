@@ -5,14 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class TranResp {
 
-    /**
-     * 翻译后的内容
-     */
-    private String tranTextValue;
+
+    private Map tranMap;
+
 }

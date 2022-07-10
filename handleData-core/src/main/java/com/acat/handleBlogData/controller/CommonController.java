@@ -3,6 +3,7 @@ package com.acat.handleBlogData.controller;
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
+import com.acat.handleBlogData.controller.req.TranReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
@@ -11,15 +12,16 @@ import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterService
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -100,22 +102,35 @@ public class CommonController {
     }
 
     @Auth(required = false)
-    @GetMapping("/getTranResult")
-    public RestResult<TranResp> getTranResult(String tranValue) {
+//    @GetMapping("/getTranResult")
+    @PostMapping("/getTranResult")
+    public RestResult<TranResp> getTranResult(@RequestBody Map<String, String> tranMap) {
         try {
-            if (StringUtils.isBlank(tranValue)) {
-                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY);
-            }
+            Map<String, Object> tranResultMap = Maps.newHashMap();
+            for (String key : tranMap.keySet()) {
+                String tranValue = tranMap.get(key);
+                if (StringUtils.isBlank(tranValue)) {
+                    //tranList.add(ImmutableMap.of(key, ""));
+                    tranResultMap.put(key, "");
+                    continue;
+                }
 
-            String languageType = translateOuterService.getLanguageDelectResult(tranValue);
-            if (StringUtils.isBlank(languageType)) {
-                return new RestResult<>(RestEnum.SERVICE_IS_ERROR);
-            }
+                String languageType = translateOuterService.getLanguageDelectResult(tranValue);
+                if (StringUtils.isBlank(languageType)) {
+//                    tranList.add(ImmutableMap.of(key, ""));
+                    tranResultMap.put(key, "");
+                    continue;
+                }
 
-            if (ZH.equals(languageType)) {
-                return new RestResult<>(RestEnum.SUCCESS, TranResp.builder().tranTextValue(tranValue).build());
+                if (ZH.equals(languageType)) {
+//                    tranList.add(ImmutableMap.of(key, tranValue));
+                    tranResultMap.put(key, "");
+                    continue;
+                }
+//                tranList.add(ImmutableMap.of(key, translateOuterService.getTranslateValue(languageType, tranValue)));
+                tranResultMap.put(key, translateOuterService.getTranslateValue(languageType, tranValue));
             }
-            return new RestResult(RestEnum.SUCCESS, TranResp.builder().tranTextValue(translateOuterService.getTranslateValue(languageType, tranValue)).build());
+            return new RestResult(RestEnum.SUCCESS, TranResp.builder().tranMap(tranResultMap).build());
         }catch (Exception e) {
             log.error("CommonController.getBatchQueryField has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
