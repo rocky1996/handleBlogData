@@ -102,19 +102,19 @@ public class FqUserHistoryData {
     /**
      * 用户id
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+  //  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String user_id;
 
     /**
      * 昵称（人工标注） ->   user_name
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+   // @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String screen_name;
 
     /**
      * 目前无此属性（通过Firstname和Lastname拼接）      ->      name
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+ //   @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String use_name;
 
     /**
@@ -140,13 +140,13 @@ public class FqUserHistoryData {
     /**
      * 国家编码（示例：TW）   ->    country_code
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+   // @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String country;
 
     /**
      * 城市编码（示例：中山區, 台北市）   ->      home_city
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+   // @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String city;
 
     /**
