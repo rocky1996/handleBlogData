@@ -336,9 +336,14 @@ public class LInkUserHistoryData {
      */
     private String tags;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public LInkUserHistoryData() {}
 
-    public LInkUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String mobile, String email, String works, String location, String description_school_name, String description_school_logo, String description_school_local_logo, String description_company_name, String description_location, String industry_name, String summary, String experiences_job_title, String experiences_company_name, String experiences_company_logo, String experiences_company_location, String experiences_time_period_time, String experiences_description, String certifications_name, String volunteer_experiences_role, String educations_school_name, String educations_school_logo, String educations_diplomaqq, String educations_subjects, String educations_grade, String educations_activity, String educations_time_period_time, String educations_description, String skills_name, String languages_name, String honors_title, String contacts_title, String tags) {
+    public LInkUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String mobile, String email, String works, String location, String description_school_name, String description_school_logo, String description_school_local_logo, String description_company_name, String description_location, String industry_name, String summary, String experiences_job_title, String experiences_company_name, String experiences_company_logo, String experiences_company_location, String experiences_time_period_time, String experiences_description, String certifications_name, String volunteer_experiences_role, String educations_school_name, String educations_school_logo, String educations_diplomaqq, String educations_subjects, String educations_grade, String educations_activity, String educations_time_period_time, String educations_description, String skills_name, String languages_name, String honors_title, String contacts_title, String tags, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -391,5 +396,6 @@ public class LInkUserHistoryData {
         this.honors_title = honors_title;
         this.contacts_title = contacts_title;
         this.tags = tags;
+        this.integrity = integrity;
     }
 }

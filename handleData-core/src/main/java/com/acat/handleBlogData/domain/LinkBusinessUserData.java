@@ -298,9 +298,14 @@ public class LinkBusinessUserData {
      */
     private String media_title;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public LinkBusinessUserData() {}
 
-    public LinkBusinessUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String location, String cover, String local_cover, String staffing_company, String industries, String specialities, String headquarter_post, String headquarter_address, String confirmed_locations_contry, String confirmed_locations_city, String confirmed_locations_post, String confirmed_locations_address, String size, String founded_on, String description, String website, String employees, String keywords, String tags, String timestamp, String source_connection, String person, String media_type_embeded, String media_url, String media_url_name, String media_title) {
+    public LinkBusinessUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String location, String cover, String local_cover, String staffing_company, String industries, String specialities, String headquarter_post, String headquarter_address, String confirmed_locations_contry, String confirmed_locations_city, String confirmed_locations_post, String confirmed_locations_address, String size, String founded_on, String description, String website, String employees, String keywords, String tags, String timestamp, String source_connection, String person, String media_type_embeded, String media_url, String media_url_name, String media_title, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -347,5 +352,6 @@ public class LinkBusinessUserData {
         this.media_url = media_url;
         this.media_url_name = media_url_name;
         this.media_title = media_title;
+        this.integrity = integrity;
     }
 }

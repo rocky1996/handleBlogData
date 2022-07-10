@@ -375,9 +375,14 @@ public class FqUserImplData {
      */
     private String friends;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public FqUserImplData() {}
 
-    public FqUserImplData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_remark, String alg_result, String bio, String checkins_count, String country_region, String first_name, String home_city, String last_name, String lenses, String lists, String lists_count, String local_user_head_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String send, String send_num, String todo, String top_tips, String visibility, String vpers, String w3_fb_url, String source_key, String source_venue, String source_venue_id, String friends) {
+    public FqUserImplData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_remark, String alg_result, String bio, String checkins_count, String country_region, String first_name, String home_city, String last_name, String lenses, String lists, String lists_count, String local_user_head_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String send, String send_num, String todo, String top_tips, String visibility, String vpers, String w3_fb_url, String source_key, String source_venue, String source_venue_id, String friends, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -436,5 +441,6 @@ public class FqUserImplData {
         this.source_venue = source_venue;
         this.source_venue_id = source_venue_id;
         this.friends = friends;
+        this.integrity = integrity;
     }
 }

@@ -229,9 +229,14 @@ public class FbUserHistoryData {
      */
     private String verified_reason;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public FbUserHistoryData() {}
 
-    public FbUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String mobile, String email, String language, String works, String location, String marriage, String home_town, String user_summary, String user_systent_name, String registration_date, String user_birthday, String user_classify, String verified_reason) {
+    public FbUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String mobile, String email, String language, String works, String location, String marriage, String home_town, String user_summary, String user_systent_name, String registration_date, String user_birthday, String user_classify, String verified_reason, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -266,5 +271,6 @@ public class FbUserHistoryData {
         this.user_birthday = user_birthday;
         this.user_classify = user_classify;
         this.verified_reason = verified_reason;
+        this.integrity = integrity;
     }
 }

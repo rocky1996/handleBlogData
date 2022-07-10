@@ -304,9 +304,14 @@ public class TwitterUserData{
      */
     private String extend;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public TwitterUserData() {}
 
-    public TwitterUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String email, String language, String user_web_url, String born_time, String registered_time, String bkgd_url, String user_flag, String listed, String moments, String protect_ed, String tf_effective, String time_zone, String com_from, String diff_time, String extend) {
+    public TwitterUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String email, String language, String user_web_url, String born_time, String registered_time, String bkgd_url, String user_flag, String listed, String moments, String protect_ed, String tf_effective, String time_zone, String com_from, String diff_time, String extend, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -346,5 +351,6 @@ public class TwitterUserData{
         this.com_from = com_from;
         this.diff_time = diff_time;
         this.extend = extend;
+        this.integrity = integrity;
     }
 }

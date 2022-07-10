@@ -290,6 +290,11 @@ public class FqUserHistoryData {
     private String language;
 
     /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
+    /**
      * {
      *     "contact":"{\"twitter\": \"katiebethea\", \"facebook\": \"692622425\"}",
      *     "alg_remark":"junshi "
@@ -329,7 +334,7 @@ public class FqUserHistoryData {
 
     public FqUserHistoryData() {}
 
-    public FqUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_result, String bio, String checkins_count, String first_name, String last_name, String lenses, String lists, String lists_count, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String top_tips, String visibility, String friends, String alg_remark, String like_count, String language) {
+    public FqUserHistoryData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String contact, String alg_result, String bio, String checkins_count, String first_name, String last_name, String lenses, String lists, String lists_count, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String top_tips, String visibility, String friends, String alg_remark, String like_count, String language, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -375,5 +380,6 @@ public class FqUserHistoryData {
         this.alg_remark = alg_remark;
         this.like_count = like_count;
         this.language = language;
+        this.integrity = integrity;
     }
 }

@@ -210,9 +210,14 @@ public class InstagramUserData {
      */
     private String sent_num;
 
+    /**
+     * 字段非空值累加
+     */
+    private Integer integrity;
+
     public InstagramUserData() {}
 
-    public InstagramUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String email, String user_summary, String external_url, String fetch_day, String profile_pic_url_oss, String media_url, String person, String sent_num) {
+    public InstagramUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String email, String user_summary, String external_url, String fetch_day, String profile_pic_url_oss, String media_url, String person, String sent_num, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -244,5 +249,6 @@ public class InstagramUserData {
         this.media_url = media_url;
         this.person = person;
         this.sent_num = sent_num;
+        this.integrity = integrity;
     }
 }
