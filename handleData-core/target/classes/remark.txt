@@ -16,6 +16,15 @@ curl:
     curl -i -X POST -H 'Content-type':'application/json' -d {"username":"wujinfan","password":"wujinfan"} http://20.10.0.5:8081/blogSystem/user/login
     curl -i -X POST -H "Accept: application/json" -H "Content-type: multipart/form-data" -d '{"file":"/data/even/output/TW//imp_1/20220629/TW_i_userprofile_80/zzp-m-00004","mediaSourceCode":0}'  http://20.10.0.5:8081/blogSystem/search/upload
 
+
+    $ curl  -X POST "localhost:9200/${index}/${tpye}/_delete_by_query?pretty" \
+      -H 'Content-Type:application/json' \
+      -d '{
+    "query": {
+    "match_all":{}
+     }
+    }'
+
 221:
     http://39.98.138.221:8504/blogSystem/search/upload
 
