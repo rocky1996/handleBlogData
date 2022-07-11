@@ -23,7 +23,12 @@ public class UserDetailResp {
     private MediaTypeResp mediaSource;
 
     /**
-     * 用户头像
+     * 本地用户图像
+     */
+    private String localPhotoUrl;
+
+    /**
+     * 外网用户头像
      */
     private String userAvatar;
 

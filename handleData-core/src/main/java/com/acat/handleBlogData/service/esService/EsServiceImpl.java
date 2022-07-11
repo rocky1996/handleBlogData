@@ -270,12 +270,13 @@ public class EsServiceImpl {
             userDetailResp.setMediaSource(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
 
             if ("test".equals(env)) {
-                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
             }else if ("pre".equals(env)) {
-                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : PRO_PIC_URL + String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PRO_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
             }else {
-                userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : PROD_PIC_URL + String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PROD_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
             }
+            userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar")));
 
             userDetailResp.setGender(
                     hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :
