@@ -70,7 +70,7 @@ public class EsServiceImpl {
     //标准桶大小
     private static final Integer LIMIT_SIZE = 100;
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
-    private static final String PROD_PIC_URL = "";
+    private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
     private static String[] indexArray = new String[]{
         MediaSourceEnum.TWITTER.getEs_index(),
