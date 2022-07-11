@@ -102,8 +102,12 @@ public class ReaderFileUtil {
                             objList.add(instagramUserData);
                             break;
                         case LINKEDIN_IMPL:
+                            LinkUserImplData linkUserImplData = JacksonUtil.strToBean(textLine, LinkUserImplData.class);
+                            objList.add(linkUserImplData);
                             break;
                         case LINKEDIN_HISTORY:
+                            LInkUserHistoryData lInkUserHistoryData = JacksonUtil.strToBean(textLine, LInkUserHistoryData.class);
+                            objList.add(lInkUserHistoryData);
                             break;
                         case LINKEDIN_BUSINESS:
                             LinkBusinessUserData linkBusinessUserData = JacksonUtil.strToBean(textLine, LinkBusinessUserData.class);
