@@ -15,4 +15,9 @@ public class UrlConstants {
      * common
      */
     public static final String BLOG_SYSTEM_COMMON = "/blogSystem/common";
+
+    /**
+     * 对外接口
+     */
+    public static final String BLOG_SYSTEM_OPEN_API_URL = "/blogSystem/openApi";
 }
