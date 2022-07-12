@@ -43,12 +43,12 @@ spring:
       remove-abandoned-on-maintenance: true
       connection-init-sqls: set names utf8mb4
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy:  org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
+    jpa:
+      hibernate:
+        ddl-auto: none
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      show-sql: true
 
   elasticsearch:
     rest:
