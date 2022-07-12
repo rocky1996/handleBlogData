@@ -9,7 +9,7 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>handleData-emailAlarm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${handle-emailAlarm.version}</version>
 	<packaging>jar</packaging>
 	<name>handleData-emailAlarm</name>
 	<description>handleData-emailAlarm</description>

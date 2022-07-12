@@ -61,6 +61,8 @@ class HandleBlogDataApplicationTests {
 //    private BlogSystemUserMapper blogSystemUserMapper;
     @Resource
     private TranslateOuterServiceImpl translateOuterService;
+//    @Resource
+//    private SendEmailService sendEmailService;
 
     private static String[] indexArray = new String[]{
             MediaSourceEnum.TWITTER.getEs_index(),

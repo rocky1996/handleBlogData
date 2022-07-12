@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@EnableAsync
 @ComponentScan(basePackages = {"com.example.handledata.email.alarm.service"})
 public class HandleDataEmailAlarmApplication {
 	public static void main(String[] args) {

@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>handleData-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${handle-core.version}</version>
     <packaging>jar</packaging>
     <name>handleData-core</name>
     <description>handleData-core</description>
@@ -21,7 +21,7 @@
 <!--        <dependency>-->
 <!--            <groupId>com.acat</groupId>-->
 <!--            <artifactId>handleData-emailAlarm</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--            <version>${handle-emailAlarm.version}</version>-->
 <!--        </dependency>-->
 
         <dependency>
