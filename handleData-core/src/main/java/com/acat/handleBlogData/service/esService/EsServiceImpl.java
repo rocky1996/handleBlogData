@@ -79,6 +79,8 @@ public class EsServiceImpl {
         MediaSourceEnum.FB_HISTORY.getEs_index(),
         MediaSourceEnum.FQ_IMPL.getEs_index(),
         MediaSourceEnum.FQ_HISTORY.getEs_index(),
+        MediaSourceEnum.LINKEDIN_IMPL.getEs_index(),
+        MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
         MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(),
         MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index()
     };
@@ -90,14 +92,14 @@ public class EsServiceImpl {
      * @return
 //     */
 //    @Transactional
-    public boolean insertEsData(MultipartFile file, MediaSourceEnum mediaSourceEnum) {
-        String  lockKey = String.valueOf(System.currentTimeMillis());
-        long time = System.currentTimeMillis() + 1000*10;
+    public synchronized boolean insertEsData(MultipartFile file, MediaSourceEnum mediaSourceEnum) {
+//        String  lockKey = String.valueOf(System.currentTimeMillis());
+//        long time = System.currentTimeMillis() + 1000*10;
         try {
-            boolean isLock = redisLock.getLock(lockKey, time);
-            if (!isLock) {
-                throw new RuntimeException("当前锁拥挤获取锁失败,请重试！！！");
-            }
+//            boolean isLock = redisLock.getLock(lockKey, time);
+//            if (!isLock) {
+//                throw new RuntimeException("当前锁拥挤获取锁失败,请重试！！！");
+//            }
 
             if (file == null) {
                 return false;
@@ -210,9 +212,10 @@ public class EsServiceImpl {
             return true;
         }catch (Exception e) {
             log.error("EsServiceImpl.insertEsData has error:{}",e.getMessage());
-        }finally {
-            redisLock.unLock(lockKey);
         }
+//        finally {
+//            redisLock.unLock(lockKey);
+//        }
         return false;
     }
 

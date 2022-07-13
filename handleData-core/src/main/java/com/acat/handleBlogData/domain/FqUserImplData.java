@@ -77,7 +77,7 @@ public class FqUserImplData {
     /**
      * 用户唯一ID
      */
-    @Id
+//    @Id
     private String uuid;
 
     /**
@@ -119,6 +119,7 @@ public class FqUserImplData {
      * 用户id
      */
   //  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Id
     private String user_id;
 
     /**

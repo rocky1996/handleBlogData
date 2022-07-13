@@ -65,7 +65,7 @@ public class LinkBusinessUserData {
     /**
      * 用户唯一ID
      */
-    @Id
+//    @Id
     private String uuid;
 
     /**
@@ -107,6 +107,7 @@ public class LinkBusinessUserData {
      * 用户id         ->       company_id
      */
   //  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Id
     private String user_id;
 
     /**

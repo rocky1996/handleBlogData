@@ -50,7 +50,7 @@ public class InstagramUserData {
     /**
      * 用户唯一ID
      */
-    @Id
+//    @Id
     private String uuid;
 
     /**
@@ -92,6 +92,7 @@ public class InstagramUserData {
      * 账户id        ->   account_id
      */
   //  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Id
     private String user_id;
 
     /**
