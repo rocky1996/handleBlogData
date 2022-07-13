@@ -68,7 +68,7 @@ public class EsServiceImpl {
     @Value("${spring.profiles.active}")
     private String env;
     //标准桶大小
-    private static final Integer LIMIT_SIZE = 100;
+//    private static final Integer LIMIT_SIZE = 100;
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
@@ -363,17 +363,22 @@ public class EsServiceImpl {
      */
     public Long getMediaIndexSize(MediaSourceEnum mediaSourceEnum) {
         try {
-            if (MediaSourceEnum.LINKEDIN_HISTORY == mediaSourceEnum
-                    || MediaSourceEnum.LINKEDIN_IMPL == mediaSourceEnum) {
-                return 0L;
-            }
+//            if (MediaSourceEnum.LINKEDIN_HISTORY == mediaSourceEnum
+//                    || MediaSourceEnum.LINKEDIN_IMPL == mediaSourceEnum) {
+//                return 0L;
+//            }
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .trackTotalHits(true);
             //搜索
             SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(mediaSourceEnum.getEs_index());
+
+            if (MediaSourceEnum.ALL == mediaSourceEnum) {
+                searchRequest.indices(indexArray);
+            }else {
+                searchRequest.indices(mediaSourceEnum.getEs_index());
+            }
             searchRequest.types("_doc");
             searchRequest.source(builder);
 

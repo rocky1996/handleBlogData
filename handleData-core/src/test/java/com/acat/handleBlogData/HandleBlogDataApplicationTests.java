@@ -1,5 +1,6 @@
 package com.acat.handleBlogData;
 
+import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.dao.UserDao;
 //import com.acat.handleBlogData.domain.BlogSystemUser;
@@ -17,6 +18,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.AcknowledgedResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -24,10 +26,14 @@ import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +67,8 @@ class HandleBlogDataApplicationTests {
 //    private BlogSystemUserMapper blogSystemUserMapper;
     @Resource
     private TranslateOuterServiceImpl translateOuterService;
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 //    @Resource
 //    private SendEmailService sendEmailService;
 
@@ -353,5 +361,10 @@ class HandleBlogDataApplicationTests {
             log.error("");
         }
         System.out.println(response);
+    }
+
+    @Test
+    public void deleteUserIndex() {
+        elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
     }
 }
