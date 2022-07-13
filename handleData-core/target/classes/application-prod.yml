@@ -25,7 +25,7 @@ spring:
   datasource:
     username: lhuser
     password: p3bS94Vk4*my
-    url: jdbc:mysql://127.0.0.1:3306/lh_db?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://172.17.75.6:3306/lh_db?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
     type: org.springframework.jdbc.datasource.DriverManagerDataSource
     dbcp2:
@@ -53,8 +53,6 @@ spring:
   elasticsearch:
     rest:
       uris: 172.17.75.6:9201
-      #多媒体系统地址:47.93.185.66:9400
-      #博客大数据系统地址:39.98.138.221:8510
 
 logging:
   level:
