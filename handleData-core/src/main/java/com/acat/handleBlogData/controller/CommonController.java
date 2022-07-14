@@ -17,6 +17,8 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,6 +36,8 @@ public class CommonController {
     private EsServiceImpl esService;
     @Resource
     private TranslateOuterServiceImpl translateOuterService;
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     private static final String ZH = "zh";
     private static LoginRespVo loginRespVo = null;
@@ -54,6 +58,23 @@ public class CommonController {
                     ImmutableMap.of("token", JwtUtils.sign(loginRespVo), "message", "请获取token后,将token传入请求接口的http请求头里面即可！！！"));
         }catch (Exception e) {
             return new RestResult<>(RestEnum.FAILED.getCode(), "获取token失败,请稍后重试或联系管理员!!!", null);
+        }
+    }
+
+    @Auth(required = false)
+    @GetMapping("/deleteIndex")
+    public RestResult deleteIndex(Integer mediaSourceCode) {
+        try {
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
+            if (MediaSourceEnum.ALL == mediaSourceEnum
+                    || mediaSourceEnum == null) {
+                return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
+            }
+            elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            log.error("CommonController.deleteIndex has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }
 
