@@ -38,6 +38,8 @@ public class ReaderFileUtil {
         countryMap.put("Botswana", "博茨瓦纳");
         countryMap.put("Vietnam", "越南");
         countryMap.put("Bulgaria", "保加利亚");
+        countryMap.put("Germany", "德国");
+        countryMap.put("Greece", "希腊");
     }
 
     /**
