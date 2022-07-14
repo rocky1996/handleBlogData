@@ -10,11 +10,15 @@ import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
 import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
+import com.acat.handleBlogData.util.JacksonUtil;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -25,13 +29,17 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -218,6 +226,80 @@ public class EsServiceImpl {
 //        }
         return false;
     }
+
+
+    public synchronized boolean insertEsData_two(MultipartFile file, MediaSourceEnum mediaSourceEnum) {
+        try {
+
+            List<String> jsonStrList = new ArrayList<>();
+            InputStreamReader isr = new InputStreamReader(file.getInputStream());
+            BufferedReader bf = new BufferedReader(isr);
+            String textLine;
+            while ((textLine = bf.readLine()) != null) {
+                if (StringUtils.isNotBlank(textLine)) {
+                    jsonStrList.add(textLine);
+                }
+            }
+
+//            List<LinkSchoolUserData> linkSchoolUserData = (List<LinkSchoolUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_SCHOOL);
+            BulkRequest request = new BulkRequest();
+//            jsonStrList.forEach(e ->
+//                    request.add(new IndexRequest(mediaSourceEnum.getEs_index()).id(JacksonUtil.strToBean(e, Map.class).get("user_id")).source(e, XContentType.JSON)));
+
+            jsonStrList.forEach(e -> {
+                Map<String, Object> map = JacksonUtil.strToBean(e, Map.class);
+                request.add(new IndexRequest(mediaSourceEnum.getEs_index()).id((String) map.get("user_id")).source(e, XContentType.JSON));
+            });
+
+            BulkResponse bulk = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);
+            return !bulk.hasFailures();
+        }catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 搜索查询

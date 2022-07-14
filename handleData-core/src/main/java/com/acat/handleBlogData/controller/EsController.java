@@ -15,6 +15,7 @@ import com.acat.handleBlogData.util.ReaderFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,13 +41,45 @@ public class EsController {
                             @RequestParam("file") MultipartFile file,
                             Integer mediaSourceCode) {
         try {
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
             if (mediaSourceEnum == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
 
             boolean isOk = esService.insertEsData(file, mediaSourceEnum);
+            stopWatch.stop();
             if (isOk) {
+                log.info("耗时:{}", stopWatch.getTotalTimeMillis());
+                return new RestResult<>(RestEnum.SUCCESS);
+            }else {
+                return new RestResult<>(RestEnum.FAILED);
+            }
+        } catch (Exception e) {
+            log.error("EsController.upload has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @PostMapping("/upload_two")
+    public RestResult upload_two(HttpServletRequest httpServletRequest,
+                             @RequestParam("file") MultipartFile file,
+                             Integer mediaSourceCode) {
+        try {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
+            if (mediaSourceEnum == null) {
+                return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
+            }
+
+            boolean isOk = esService.insertEsData_two(file, mediaSourceEnum);
+            stopWatch.stop();
+            if (isOk) {
+                log.info("耗时:{}", stopWatch.getTotalTimeMillis());
                 return new RestResult<>(RestEnum.SUCCESS);
             }else {
                 return new RestResult<>(RestEnum.FAILED);
