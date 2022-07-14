@@ -18,30 +18,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ReaderFileUtil {
 
-    public static Map<String, String> countryMap = new HashMap<>();
-    static {
-        countryMap.put("TW", "中国");
-        countryMap.put("MX", "墨西哥");
-        countryMap.put("US", "美国");
-        countryMap.put("TH", "泰国");
-        countryMap.put("USA|美国", "美国");
-        countryMap.put("IN", "印度");
-        countryMap.put("Spain", "西班牙");
-        countryMap.put("Panama", "巴拿马");
-        countryMap.put("Philippines", "菲律宾");
-        countryMap.put("Bosnia and Herzegovina", "波斯尼亚和黑塞哥维那");
-        countryMap.put("Malaysla", "马来西亚");
-        countryMap.put("AU", "澳大利亚");
-        countryMap.put("DE", "德国");
-        countryMap.put("CN", "中国");
-        countryMap.put("JP", "日本");
-        countryMap.put("Botswana", "博茨瓦纳");
-        countryMap.put("Vietnam", "越南");
-        countryMap.put("Bulgaria", "保加利亚");
-        countryMap.put("Germany", "德国");
-        countryMap.put("Greece", "希腊");
-    }
-
     /**
      * 读取本地文件
      * @param multipartFile
@@ -145,11 +121,32 @@ public class ReaderFileUtil {
         return NumberUtils.isNumber(value) ? true : false;
     }
 
-    public static String countryMap(String countryKey) {
-        return countryMap.get(countryKey) == null ? "" : countryMap.get(countryKey);
+    /**
+     * 判断均大写
+     * @param word
+     * @return
+     */
+    public static boolean isAcronym(String word, boolean isLarge) {
+        for(int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (isLarge) {
+                if (Character.isLowerCase(c)) {
+                    return false;
+                }
+            }else {
+                if (Character.isUpperCase(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
-        System.out.println(isNumber("123ed"));
+        System.out.println(isAcronym("abc", false));
     }
+
+//    public static void main(String[] args) {
+//        System.out.println(isNumber("123ed"));
+//    }
 }

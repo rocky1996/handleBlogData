@@ -57,7 +57,7 @@ public class EsController {
         }
     }
 
-    @Auth
+//    @Auth
     @PostMapping("/retrieveDataList")
     public RestResult<SearchResp> retrieveDataList(@RequestBody SearchReq searchReq) {
 
@@ -97,7 +97,7 @@ public class EsController {
     public RestResult<SearchResp> batchQuery(HttpServletRequest httpServletRequest,
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
-                                             @RequestParam("isParticiple") boolean isParticiple
+                                             @RequestParam("isParticiple") Integer isParticiple
 //                                             @RequestParam("pageNum") Integer pageNum,
 //                                             @RequestParam("pageSize") Integer pageSize
     ) {
@@ -116,7 +116,7 @@ public class EsController {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
             }
 
-            if (!isParticiple && BatchSearchFieldEnum.mustDimSearchField().contains(searchField)) {
+            if (isParticiple.equals(1) && BatchSearchFieldEnum.mustDimSearchField().contains(searchField)) {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, searchField + "字段不支持精准查询,请改为模糊(分词)查询");
             }
 

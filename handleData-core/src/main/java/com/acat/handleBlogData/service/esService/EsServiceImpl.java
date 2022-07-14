@@ -10,6 +10,7 @@ import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
 import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
+import com.acat.handleBlogData.util.CountryUtil;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,6 @@ import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -231,9 +231,9 @@ public class EsServiceImpl {
 //                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
 //            }
 
-            if(searchReq.isParticiple()) {
-                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "现不支持模糊分词查询,请更换精准匹配!!!");
-            }
+//            if(searchReq.isParticiple()) {
+//                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "现不支持模糊分词查询,请更换精准匹配!!!");
+//            }
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             assembleParam(searchReq, boolQueryBuilder);
@@ -242,7 +242,7 @@ public class EsServiceImpl {
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
             sourceBuilder.trackTotalHits(true);
-            sourceBuilder.sort("integrity.keyword", SortOrder.DESC);
+//            sourceBuilder.sort("integrity.keyword", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
             if (!judgeSearchParamAllEmpty(searchReq)) {
@@ -335,7 +335,7 @@ public class EsServiceImpl {
             userDetailResp.setCountry(
                     hit.getSourceAsMap().get("country") == null ? "" :
                             (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
-                                    ReaderFileUtil.countryMap(String.valueOf(hit.getSourceAsMap().get("country"))))
+                                    CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
             );
 
             userDetailResp.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
@@ -397,12 +397,12 @@ public class EsServiceImpl {
      * @param isParticiple
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, boolean isParticiple) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple) {
         try {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
-                channelQueryBuilder.should(isParticiple ? QueryBuilders.matchQuery(searchField, fieldValue) : QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
+                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.matchQuery(searchField, fieldValue));
             }
             bigBuilder.must(channelQueryBuilder);
 
@@ -434,13 +434,13 @@ public class EsServiceImpl {
     public RestResult<SearchCountryResp> getCountryList() {
 
         try {
-            List<String> countryList = Lists.newArrayList();
             String[] includeFields = new String[]{"country"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
                     .collapse(collapseBuilder)
+                    .from(0).size(10000)
                     .trackTotalHits(true);
 
             //搜索
@@ -456,12 +456,19 @@ public class EsServiceImpl {
 
             SearchHit[] searchHits = response.getHits().getHits();
 //            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> countryList.add(e.getSourceAsMap().get("country").toString()));
-            for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
-                Map<String, Object> map = documentFields.getSourceAsMap();
-                if (map.get("country") != null) {
-                    countryList.add((String) map.get("country"));
-                }
+            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
             }
+
+            List<String> countryList = Arrays.stream(searchHits)
+                    .filter(e -> e.getSourceAsMap().get("country") != null)
+                    .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
+                    .distinct()
+                    .collect(Collectors.toList());
+//                    .stream().map(e ->
+//                ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toLowerCase()
+//                ).distinct();
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -476,13 +483,14 @@ public class EsServiceImpl {
      */
     public RestResult<SearchCityResp> getCityList() {
         try {
-            List<String> cityList = Lists.newArrayList();
             String[] includeFields = new String[]{"city"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("city.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
                     .collapse(collapseBuilder)
+                    //做限制
+                    .from(0).size(1000)
                     .trackTotalHits(true);
 
             //搜索
@@ -497,15 +505,16 @@ public class EsServiceImpl {
             }
 
             SearchHit[] searchHits = response.getHits().getHits();
-//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(
-//                    country -> country.getFields().get("city.keyword").forEach(e -> cityList.add(String.valueOf(e)))
-//            );
-            for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
-                Map<String, Object> map = documentFields.getSourceAsMap();
-                if (map.get("city") != null) {
-                    cityList.add((String) map.get("city"));
-                }
+            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCityResp.builder().cityList(Lists.newArrayList()).build());
             }
+
+            List<String> cityList = Arrays.stream(searchHits)
+                    .filter(e -> e.getSourceAsMap().get("city") != null)
+                    .map(e -> (String) e.getSourceAsMap().get("city"))
+                    .distinct()
+                    .collect(Collectors.toList());
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
@@ -577,7 +586,7 @@ public class EsServiceImpl {
                 userData.setCountry(
                         hit.getSourceAsMap().get("country") == null ? "" :
                                 (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
-                                        ReaderFileUtil.countryMap(String.valueOf(hit.getSourceAsMap().get("country"))))
+                                        CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
                 );
 
                 userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
@@ -620,7 +629,7 @@ public class EsServiceImpl {
      */
     private void assembleParam(SearchReq searchReq, BoolQueryBuilder boolQueryBuilder) {
         //精准查询
-        if (!searchReq.isParticiple()) {
+        if (searchReq.getIsParticiple().equals(1)) {
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
             }
@@ -640,7 +649,18 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+                //均大写
+                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry().toLowerCase()));
+                }
+                //均为小写
+                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry().toUpperCase()));
+                }else {
+                    boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+                }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
@@ -650,7 +670,6 @@ public class EsServiceImpl {
 //            }
         }else {
             //分词查询
-            //todo
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
             }
@@ -670,7 +689,18 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                //均大写
+                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toLowerCase()));
+                }
+                //均小写
+                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toUpperCase()));
+                }else {
+                    boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));

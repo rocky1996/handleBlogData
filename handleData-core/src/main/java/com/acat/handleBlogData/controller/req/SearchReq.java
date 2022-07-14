@@ -75,8 +75,10 @@ public class SearchReq {
 
     /**
      * 是否是分词查询
+     * 0:分词
+     * 1:精准
      */
-    private boolean isParticiple;
+    private Integer isParticiple;
 
     /**
      * 分页
