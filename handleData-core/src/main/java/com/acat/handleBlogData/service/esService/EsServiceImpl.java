@@ -71,6 +71,7 @@ public class EsServiceImpl {
 //    private static final Integer LIMIT_SIZE = 100;
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
+    private static final String _DOC = "_doc";
 
     private static String[] indexArray = new String[]{
         MediaSourceEnum.TWITTER.getEs_index(),
@@ -250,7 +251,7 @@ public class EsServiceImpl {
             }else {
                 searchRequest.indices(getEsIndex(searchReq).stream().toArray(String[]::new));
             }
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(sourceBuilder);
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             if (response == null) {
@@ -275,7 +276,7 @@ public class EsServiceImpl {
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode()).getEs_index());
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(builder);
             // 执行请求
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -379,7 +380,7 @@ public class EsServiceImpl {
             }else {
                 searchRequest.indices(mediaSourceEnum.getEs_index());
             }
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(builder);
 
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -413,7 +414,7 @@ public class EsServiceImpl {
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexArray);
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(builder);
 
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -446,7 +447,7 @@ public class EsServiceImpl {
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexArray);
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(builder);
             // 执行请求
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -496,7 +497,7 @@ public class EsServiceImpl {
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexArray);
-            searchRequest.types("_doc");
+            searchRequest.types(_DOC);
             searchRequest.source(builder);
             // 执行请求
             SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
