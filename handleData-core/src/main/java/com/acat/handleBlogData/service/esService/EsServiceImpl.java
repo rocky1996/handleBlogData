@@ -709,29 +709,21 @@ public class EsServiceImpl {
             if (searchReq.getIntegrity() != null) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("integrity.keyword", searchReq.getCity()));
             }
-//            if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
-//            }
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id", "*"+searchReq.getUserId()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", searchReq.getUserName()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("screen_name", "*"+searchReq.getUserName()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name", "*"+searchReq.getUserQuanName()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before", searchReq.getBeforeName()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before", "*"+searchReq.getNameUserdBefore()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
@@ -747,29 +739,22 @@ public class EsServiceImpl {
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
                 //均大写
                 if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toLowerCase()));
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry()+"*"));
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry().toLowerCase()+"*"));
                 }
                 //均小写
                 else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toUpperCase()));
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry()+"*"));
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry().toUpperCase()+"*"));
                 }else {
-//                    boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry()+"*"));
                 }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("city", "*"+searchReq.getCity()+"*"));
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary", searchReq.getUserSummary()));
             boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_summary", "*"+searchReq.getUserSummary()+"*"));
         }
     }
