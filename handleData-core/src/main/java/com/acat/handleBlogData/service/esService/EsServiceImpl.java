@@ -403,7 +403,7 @@ public class EsServiceImpl {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
-                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.matchQuery(searchField, fieldValue));
+                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.queryStringQuery(fieldValue).field(searchField));
             }
             bigBuilder.must(channelQueryBuilder);
 
@@ -672,43 +672,56 @@ public class EsServiceImpl {
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getUserId()).field("user_id"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", searchReq.getUserName()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", searchReq.getUserName()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getUserName()).field("screen_name"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getUserQuanName()).field("use_name"));
             }
             if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before", searchReq.getBeforeName()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before", searchReq.getBeforeName()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getBeforeName()).field("name_userd_before"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getPhoneNum()).field("mobile"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
+                boolQueryBuilder.must(QueryBuilders.queryStringQuery(searchReq.getEmail()).field("email"));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
                 //均大写
                 if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toLowerCase()));
+//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toLowerCase()));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCountry()).field("country"));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCountry().toLowerCase()).field("country"));
                 }
                 //均小写
                 else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toUpperCase()));
+//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toUpperCase()));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCountry()).field("country"));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCountry().toUpperCase()).field("country"));
                 }else {
-                    boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+//                    boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCountry()).field("country"));
                 }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getCity()).field("city"));
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary", searchReq.getCity()));
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary", searchReq.getCity()));
+            boolQueryBuilder.should(QueryBuilders.queryStringQuery(searchReq.getUserSummary()).field("user_summary"));
         }
     }
 }

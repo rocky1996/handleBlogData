@@ -57,7 +57,7 @@ public class EsController {
         }
     }
 
-    @Auth
+//    @Auth
     @PostMapping("/retrieveDataList")
     public RestResult<SearchResp> retrieveDataList(@RequestBody SearchReq searchReq) {
 
