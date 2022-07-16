@@ -15,6 +15,7 @@ public enum BatchSearchFieldEnum {
     mobile("手机号", "mobile"),
     user_summary("用户简介(仅支持模糊查询)", "user_summary"),
     email("邮箱", "email"),
+    works("工作信息(仅支持模糊查询)", "works"),
     alg_remark("算法标签(仅支持模糊查询)", "alg_remark"),
     skills_name("技能(仅支持模糊查询)", "skills_name"),
     educations_school_name("教育经历(仅支持模糊查询)", "educations_school_name"),
@@ -38,7 +39,8 @@ public enum BatchSearchFieldEnum {
                 BatchSearchFieldEnum.alg_remark.getFieldValue(),
                 BatchSearchFieldEnum.skills_name.getFieldValue(),
                 BatchSearchFieldEnum.educations_school_name.getFieldValue(),
-                BatchSearchFieldEnum.experiences_company_name.getFieldValue()
-                );
+                BatchSearchFieldEnum.experiences_company_name.getFieldValue(),
+                BatchSearchFieldEnum.works.getFieldValue()
+        );
     }
 }
