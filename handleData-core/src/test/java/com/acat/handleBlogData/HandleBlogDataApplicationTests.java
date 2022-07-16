@@ -212,20 +212,26 @@ class HandleBlogDataApplicationTests {
 //        }
 //    }
 
-//    @Test
-//    public void test03() throws Exception{
+    @Test
+    public void test03() throws Exception{
 //        SearchSourceBuilder builder = new SearchSourceBuilder()
 //                .query(QueryBuilders.matchQuery("uuid", "ed8badcc-19a9-4fb1-a8a7-a58fecc7d643"));
-//
-//        //搜索
-//        SearchRequest searchRequest = new SearchRequest();
-//        searchRequest.indices("twitter");
-//        searchRequest.types("_doc");
-//        searchRequest.source(builder);
-//        // 执行请求
-//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-//        System.out.println(response);
-//    }
+
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(QueryBuilders.queryStringQuery("glas").field("use_name"));
+
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .query(QueryBuilders.wildcardQuery("use_name","*glas*"));
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("twitter");
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+        // 执行请求
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        System.out.println(response);
+    }
 
 //    @Test
 //    public void test04() throws Exception{
