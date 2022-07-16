@@ -231,9 +231,10 @@ public class EsServiceImpl {
 //                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
 //            }
 
-//            if(searchReq.isParticiple()) {
-//                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "现不支持模糊分词查询,请更换精准匹配!!!");
-//            }
+            if (searchReq.getIsParticiple().equals(0)
+                && searchReq.getIntegrity() != null) {
+                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "完整度不支持模糊查询,请更换精准匹配!!!");
+            }
             if (searchReq.getIsParticiple() == null) {
                 searchReq.setIsParticiple(1);
             }
@@ -671,6 +672,9 @@ public class EsServiceImpl {
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
+            }
+            if (searchReq.getIntegrity() != null) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity.keyword", searchReq.getCity()));
             }
 //            if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));

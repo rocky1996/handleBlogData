@@ -81,6 +81,11 @@ public class SearchReq {
     private Integer isParticiple;
 
     /**
+     * 完整度
+     */
+    private Integer integrity;
+
+    /**
      * 分页
      */
     private Integer pageNum;
