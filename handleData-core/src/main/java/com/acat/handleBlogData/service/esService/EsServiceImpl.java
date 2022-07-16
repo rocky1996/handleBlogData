@@ -578,6 +578,10 @@ public class EsServiceImpl {
         SearchHit[] searchHits = response.getHits().getHits();
         if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
             for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                if (hit == null) {
+                    continue;
+                }
+
                 SearchResp.UserData userData = new SearchResp.UserData();
                 userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
                 userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
@@ -592,7 +596,7 @@ public class EsServiceImpl {
                                         CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
                 );
 
-                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+//                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
                 userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
                 userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
 

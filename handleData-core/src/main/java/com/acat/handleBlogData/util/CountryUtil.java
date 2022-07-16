@@ -257,9 +257,6 @@ public class CountryUtil {
     }
 
     public static String getCountryName(String countryKey) {
-//        if (StringUtils.isBlank(countryKey)) {
-//            return "";
-//        }
         if (ReaderFileUtil.isChinese(countryKey)) {
             return countryKey;
         }
@@ -273,5 +270,14 @@ public class CountryUtil {
             }
         }
         return "";
+    }
+
+    public static void main(String[] args) {
+        String str = "IL";
+
+        String result = str == null ? "" :
+                (ReaderFileUtil.isNumber(str) ? str :
+                        CountryUtil.getCountryName(str));
+        System.out.println(result);
     }
 }
