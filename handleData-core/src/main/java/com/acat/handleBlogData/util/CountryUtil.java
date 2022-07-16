@@ -17,6 +17,7 @@ public class CountryUtil {
         countryMap.put("IN", "印度");
         countryMap.put("Spain", "西班牙");
         countryMap.put("Panama", "巴拿马");
+        countryMap.put("India", "印度");
         countryMap.put("Philippines", "菲律宾");
         countryMap.put("Bosnia and Herzegovina", "波斯尼亚和黑塞哥维那");
         countryMap.put("Malaysla", "马来西亚");
