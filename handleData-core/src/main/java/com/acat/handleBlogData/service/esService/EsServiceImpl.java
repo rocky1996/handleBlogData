@@ -680,42 +680,6 @@ public class EsServiceImpl {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
 //            }
         }else {
-//            //分词查询
-//            if (StringUtils.isNotBlank(searchReq.getUserId())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getUserName())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name", searchReq.getUserName()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before", searchReq.getBeforeName()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getEmail())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getCountry())) {
-//                //均大写
-//                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toLowerCase()));
-//                }
-//                //均小写
-//                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-//                    boolQueryBuilder.should(QueryBuilders.matchQuery("country", searchReq.getCountry().toUpperCase()));
-//                }else {
-//                    boolQueryBuilder.must(QueryBuilders.matchQuery("country", searchReq.getCountry()));
-//                }
-//            }
-//            if (StringUtils.isNotBlank(searchReq.getCity())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("city", searchReq.getCity()));
-//            }
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id", searchReq.getUserId()));
@@ -738,8 +702,14 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("email", searchReq.getEmail()));
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
+                if (searchReq.getEmail().contains(".")) {
+                    String[] emailArray = searchReq.getEmail().split("\\.");
+                    if (!CollectionUtils.isEmpty(Lists.newArrayList(emailArray))) {
+                        Lists.newArrayList(emailArray).forEach(e -> boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+e+"*")));
+                    }
+                }else {
+                    boolQueryBuilder.must(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
+                }
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
                 //均大写
