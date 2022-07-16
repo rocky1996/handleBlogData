@@ -31,7 +31,7 @@ public class SearchReq {
     /**
      * 曾用名
      */
-    private String beforeName;
+    private String nameUserdBefore;
 
     /**
      * 手机号

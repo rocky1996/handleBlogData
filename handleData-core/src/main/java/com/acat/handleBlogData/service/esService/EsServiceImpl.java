@@ -647,8 +647,8 @@ public class EsServiceImpl {
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("use_name.keyword", searchReq.getUserQuanName()));
             }
-            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
+            if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getNameUserdBefore()));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
@@ -693,9 +693,9 @@ public class EsServiceImpl {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", searchReq.getUserQuanName()));
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name", "*"+searchReq.getUserQuanName()+"*"));
             }
-            if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
+            if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before", searchReq.getBeforeName()));
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before", "*"+searchReq.getBeforeName()+"*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before", "*"+searchReq.getNameUserdBefore()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
 //                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile", searchReq.getPhoneNum()));
