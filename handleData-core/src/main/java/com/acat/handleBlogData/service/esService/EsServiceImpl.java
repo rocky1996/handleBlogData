@@ -337,7 +337,7 @@ public class EsServiceImpl {
 
             userDetailResp.setCountry(
                     hit.getSourceAsMap().get("country") == null ? "" :
-                            (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
+                            (ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
                                     CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
             );
 
@@ -588,7 +588,7 @@ public class EsServiceImpl {
 
                 userData.setCountry(
                         hit.getSourceAsMap().get("country") == null ? "" :
-                                (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
+                                (ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
                                         CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
                 );
 
