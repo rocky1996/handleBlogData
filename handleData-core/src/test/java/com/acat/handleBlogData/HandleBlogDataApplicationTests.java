@@ -9,6 +9,7 @@ import com.acat.handleBlogData.dao.UserDao;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
+import com.acat.handleBlogData.util.CountryUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
@@ -372,5 +373,18 @@ class HandleBlogDataApplicationTests {
     @Test
     public void deleteUserIndex() {
         elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
+    }
+
+    @Test
+    public void test12() {
+        String qName = "Katie Bethea";
+        String languageType = translateOuterService.getLanguageDelectResult(qName);
+        if ("zh".equals(languageType)) {
+            System.out.println(qName.trim());
+        }else if ("en".equals(languageType) || "vi".equals(languageType)) {
+            System.out.println(CountryUtil.handleStr(qName));
+        }else {
+            System.out.println(qName);
+        }
     }
 }

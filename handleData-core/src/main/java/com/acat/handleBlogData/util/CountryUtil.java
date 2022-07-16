@@ -272,12 +272,45 @@ public class CountryUtil {
         return "";
     }
 
-    public static void main(String[] args) {
-        String str = "IL";
+    /**
+     * 处理用户名字符串
+     * @param str
+     * @return
+     */
+    public static String handleStr(String str) {
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
 
-        String result = str == null ? "" :
-                (ReaderFileUtil.isNumber(str) ? str :
-                        CountryUtil.getCountryName(str));
-        System.out.println(result);
+        String string[] = str.split("\\ ");
+        if (string.length == 0) {
+            return "";
+        }
+
+        if (string.length == 1) {
+            return string[0];
+        }
+
+        StringBuffer stringBuffer = new StringBuffer(string[string.length-1]);
+        for (int i=0;i<string.length-1;i++) {
+            stringBuffer.append(" ").append(string[i]);
+        }
+        return stringBuffer.toString();
+    }
+
+    public static void main(String[] args) {
+
+//        String str = "abcde";
+//        String [] arr = str.split("\\ ");
+//
+//        StringBuffer stringBuffer = new StringBuffer(arr[arr.length-1]);
+//        for (int i=0;i<arr.length-1;i++) {
+//            stringBuffer.append(" ").append(arr[i]);
+//        }
+//        System.out.println(stringBuffer.toString());
+
+
+
+
     }
 }

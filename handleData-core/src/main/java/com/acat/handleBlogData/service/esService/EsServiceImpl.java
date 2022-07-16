@@ -6,6 +6,7 @@ import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.domain.*;
 import com.acat.handleBlogData.enums.*;
+import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
@@ -65,6 +66,8 @@ public class EsServiceImpl {
     private RedisLockServiceImpl redisLock;
     @Resource
     private RestHighLevelClient restHighLevelClient;
+//    @Resource
+//    private TranslateOuterServiceImpl translateOuterService;
     @Value("${spring.profiles.active}")
     private String env;
     //标准桶大小
@@ -312,7 +315,22 @@ public class EsServiceImpl {
             );
 
             userDetailResp.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-            userDetailResp.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+
+            if (hit.getSourceAsMap().get("use_name") == null) {
+                userDetailResp.setUserQuanName("");
+            }else {
+                String qName = String.valueOf(hit.getSourceAsMap().get("use_name"));
+//                String languageType = translateOuterService.getLanguageDelectResult(qName);
+                String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
+                if ("zh".equals(languageType)) {
+                    userDetailResp.setUserQuanName(qName.trim());
+                }else if ("en".equals(languageType) || "vi".equals(languageType)) {
+                    userDetailResp.setUserQuanName(CountryUtil.handleStr(qName));
+                }else {
+                    userDetailResp.setUserQuanName(qName);
+                }
+            }
+//            userDetailResp.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
             userDetailResp.setBornTime(hit.getSourceAsMap().get("born_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("born_time")));
             userDetailResp.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("followers_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count"))));
             userDetailResp.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))));
@@ -587,7 +605,22 @@ public class EsServiceImpl {
                 userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
                 userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
                 userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-                userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+
+
+                if (hit.getSourceAsMap().get("use_name") == null) {
+                    userData.setUserQuanName("");
+                }else {
+                    String qName = String.valueOf(hit.getSourceAsMap().get("use_name"));
+                    String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
+                    if ("zh".equals(languageType)) {
+                        userData.setUserQuanName(qName.trim());
+                    }else if ("en".equals(languageType)) {
+                        userData.setUserQuanName(CountryUtil.handleStr(qName));
+                    }else {
+                        userData.setUserQuanName(qName);
+                    }
+                }
+
                 userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
                 userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
 
