@@ -324,9 +324,11 @@ public class EsServiceImpl {
                 String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
                 if ("zh".equals(languageType)) {
                     userDetailResp.setUserQuanName(qName.trim());
-                }else if ("en".equals(languageType) || "vi".equals(languageType)) {
-                    userDetailResp.setUserQuanName(CountryUtil.handleStr(qName));
-                }else {
+                }
+//                else if ("en".equals(languageType) || "vi".equals(languageType)) {
+//                    userDetailResp.setUserQuanName(CountryUtil.handleStr(qName));
+//                }
+                else {
                     userDetailResp.setUserQuanName(qName);
                 }
             }
@@ -512,7 +514,7 @@ public class EsServiceImpl {
                     .fetchSource(includeFields, null)
                     .collapse(collapseBuilder)
                     //做限制
-                    .from(0).size(1000)
+                    .from(0).size(10000)
                     .trackTotalHits(true);
 
             //搜索
@@ -614,9 +616,11 @@ public class EsServiceImpl {
                     String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
                     if ("zh".equals(languageType)) {
                         userData.setUserQuanName(qName.trim());
-                    }else if ("en".equals(languageType)) {
-                        userData.setUserQuanName(CountryUtil.handleStr(qName));
-                    }else {
+                    }
+//                    else if ("en".equals(languageType)) {
+//                        userData.setUserQuanName(CountryUtil.handleStr(qName));
+//                    }
+                    else {
                         userData.setUserQuanName(qName);
                     }
                 }
