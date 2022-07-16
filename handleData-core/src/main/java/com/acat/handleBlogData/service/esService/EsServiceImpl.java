@@ -715,13 +715,16 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id", "*"+searchReq.getUserId()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("screen_name", "*"+searchReq.getUserName()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("screen_name", "*"+searchReq.getUserName()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserName()+"*").field("screen_name"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name", "*"+searchReq.getUserQuanName()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("use_name", "*"+searchReq.getUserQuanName()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserQuanName()+"*").field("use_name"));
             }
             if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before", "*"+searchReq.getNameUserdBefore()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("name_userd_before", "*"+searchReq.getNameUserdBefore()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
                 boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
