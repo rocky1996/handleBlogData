@@ -4,6 +4,7 @@ import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.controller.req.SearchDetailReq;
+import com.acat.handleBlogData.controller.resp.SearchBeforeNameResp;
 import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
@@ -153,6 +154,21 @@ public class EsController {
             return esService.queryCountryOrCity(textValue, fieldName);
         }catch (Exception e) {
             log.error("EsController.queryCountryOrCity has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @PostMapping("/searchBeforeNameInfo")
+    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String name_userd_before) {
+
+        try {
+            if (StringUtils.isBlank(name_userd_before)) {
+                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "曾用名字段不能为空！！！");
+            }
+            return esService.searchBeforeNameInfo(name_userd_before);
+        }catch (Exception e) {
+            log.error("EsController.searchBeforeNameInfo has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }

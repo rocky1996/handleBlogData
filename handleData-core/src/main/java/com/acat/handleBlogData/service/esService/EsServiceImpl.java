@@ -443,8 +443,14 @@ public class EsServiceImpl {
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(bigBuilder)
-                    .from(0).size(10000)
+//                    .from(0).size(10000)
                     .trackTotalHits(true);
+            if ("test".equals(env) || "pre".equals(env)) {
+                builder.from(0).size(10000);
+            }else {
+                builder.from(0).size(900000000);
+            }
+
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexArray);
@@ -483,7 +489,7 @@ public class EsServiceImpl {
             SearchSourceBuilder builder = new SearchSourceBuilder();
             builder.query(boolQueryBuilder);
             builder.trackTotalHits(true);
-            if ("test".equals(env) || "pro".equals(env)) {
+            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
                 builder.from(0).size(900000000);
@@ -522,6 +528,56 @@ public class EsServiceImpl {
         return new RestResult<>(RestEnum.FAILED);
     }
 
+    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String name_userd_before) {
+
+        try {
+            // 创建请求
+            SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(QueryBuilders.termsQuery("name_userd_before.keyword", name_userd_before))
+                    .trackTotalHits(true);
+            if ("test".equals(env) || "pre".equals(env)) {
+                builder.from(0).size(10000);
+            } else {
+                builder.from(0).size(900000000);
+            }
+
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices(indexArray);
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            if (response == null) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+
+            List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
+            SearchHit[] searchHits = response.getHits().getHits();
+            if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+                for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                    if (hit == null) {
+                        continue;
+                    }
+
+                    SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
+                    beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                    beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                    beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+                    beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
+                    MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
+                    beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+                    searchBeforeNameRespList.add(beforeNameInfo);
+                }
+            }
+            return new RestResult<>(RestEnum.SUCCESS,
+                    SearchBeforeNameResp.builder().beforeNameInfoList(searchBeforeNameRespList).build());
+        }catch (Exception e) {
+            log.error("EsServiceImpl.searchBeforeNameInfo has error:{}",e.getMessage());
+        }
+        return new RestResult<>(RestEnum.FAILED);
+    }
+
     /**
      * 获取国家列表
      * @return
@@ -543,7 +599,7 @@ public class EsServiceImpl {
                     .collapse(collapseBuilder)
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pro".equals(env)) {
+            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
                 builder.from(0).size(900000000);
@@ -604,7 +660,7 @@ public class EsServiceImpl {
                     //做限制
 //                    .from(0).size(1000000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pro".equals(env)) {
+            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
                 builder.from(0).size(900000000);
@@ -658,7 +714,7 @@ public class EsServiceImpl {
                     .collapse(collapseBuilder)
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pro".equals(env)) {
+            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
                 builder.from(0).size(900000000);
