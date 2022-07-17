@@ -535,8 +535,12 @@ public class EsServiceImpl {
         try {
             // 创建请求
             BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-            boolQueryBuilder.should(QueryBuilders.termsQuery("screen_id.keyword", userId));
-            boolQueryBuilder.should(QueryBuilders.termsQuery("screen_name.keyword", userName));
+            if (StringUtils.isNotBlank(userId)) {
+                boolQueryBuilder.should(QueryBuilders.termsQuery("screen_id.keyword", userId));
+            }
+            if (StringUtils.isNotBlank(userName)) {
+                boolQueryBuilder.should(QueryBuilders.termsQuery("screen_name.keyword", userName));
+            }
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(boolQueryBuilder)

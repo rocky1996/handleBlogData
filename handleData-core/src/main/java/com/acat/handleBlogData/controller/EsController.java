@@ -159,11 +159,9 @@ public class EsController {
     public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String userId, String userName) {
 
         try {
-            if (StringUtils.isBlank(userId)) {
-                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户Id字段不能为空！！！");
-            }
-            if (StringUtils.isBlank(userName)) {
-                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户名字段不能为空！！！");
+            if (StringUtils.isBlank(userId)
+                    && StringUtils.isBlank(userName)) {
+                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户Id字段和用户名不能都为空！！！");
             }
             return esService.searchBeforeNameInfo(userId, userName);
         }catch (Exception e) {
