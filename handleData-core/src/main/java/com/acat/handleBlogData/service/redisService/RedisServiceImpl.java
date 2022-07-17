@@ -86,7 +86,7 @@ public class RedisServiceImpl {
 
     public void leftPushAll(String key, List<String> list) {
         if (!CollectionUtils.isEmpty(list)) {
-            redisTemplate.opsForList().leftPushAll(key, list, 4, TimeUnit.HOURS);
+            redisTemplate.opsForList().leftPushAll(key, list);
         }
     }
 

@@ -591,11 +591,11 @@ public class EsServiceImpl {
     public RestResult<SearchCountryResp> getCountryList() {
 
         try {
-            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
-            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-                return new RestResult<>(RestEnum.SUCCESS,
-                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-            }
+//            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
+//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+//            }
 
             String[] includeFields = new String[]{"country"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
