@@ -528,12 +528,16 @@ public class EsServiceImpl {
         return new RestResult<>(RestEnum.FAILED);
     }
 
-    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String name_userd_before) {
+    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String userId, String userName) {
 
         try {
             // 创建请求
+            BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+            boolQueryBuilder.should(QueryBuilders.termsQuery("screen_id.keyword", userId));
+            boolQueryBuilder.should(QueryBuilders.termsQuery("screen_name.keyword", userName));
+
             SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(QueryBuilders.termsQuery("name_userd_before.keyword", name_userd_before))
+                    .query(boolQueryBuilder)
                     .trackTotalHits(true);
             if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);

@@ -160,13 +160,16 @@ public class EsController {
 
     @Auth(required = false)
     @PostMapping("/searchBeforeNameInfo")
-    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String name_userd_before) {
+    public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String userId, String userName) {
 
         try {
-            if (StringUtils.isBlank(name_userd_before)) {
-                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "曾用名字段不能为空！！！");
+            if (StringUtils.isBlank(userId)) {
+                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户Id字段不能为空！！！");
             }
-            return esService.searchBeforeNameInfo(name_userd_before);
+            if (StringUtils.isBlank(userName)) {
+                return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户名字段不能为空！！！");
+            }
+            return esService.searchBeforeNameInfo(userId, userName);
         }catch (Exception e) {
             log.error("EsController.searchBeforeNameInfo has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
