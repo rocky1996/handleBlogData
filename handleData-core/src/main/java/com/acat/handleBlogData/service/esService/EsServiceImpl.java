@@ -238,6 +238,11 @@ public class EsServiceImpl {
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
         try {
+            if (StringUtils.isNotBlank(searchReq.getUserSummary())
+                || searchReq.getIsParticiple().equals(1)) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, "用户简介不支持精准查询!!!");
+            }
+
             if (searchReq.getIsParticiple() == null) {
                 searchReq.setIsParticiple(1);
             }
