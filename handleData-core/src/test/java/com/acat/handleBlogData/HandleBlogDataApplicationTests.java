@@ -11,6 +11,7 @@ import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
+import com.acat.handleBlogData.util.JacksonUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.commons.lang3.StringUtils;
@@ -394,9 +395,19 @@ class HandleBlogDataApplicationTests {
     @Test
     public void test13() {
 //        redisService.push("aaa", "111", true);
-        List list = redisService.range("country", 0L, -1L);
-        list.forEach(e-> {
-            System.out.println(e);
-        });
+//        List list = redisService.range("country", 0L, -1L);
+//        list.forEach(e-> {
+//            System.out.println(e);
+//        });
+        String str = "{\n" +
+                "    \"userFacebookUrl\":\"https://www.facebook.com/profile.php?id=100025599426924\",\n" +
+                "    \"userFormerNickname\":\"\",\n" +
+                "    \"userId\":\"100025599426924\",\n" +
+                "    \"userFormerName\":\"PatelRakesh Amrut\",\n" +
+                "    \"userFormerNameDate\":\"2022-04-05 17:34:20\"\n" +
+                "}";
+
+        Map<String, Objects> map = JacksonUtil.strToBean(str, Map.class);
+        System.out.println(map);
     }
 }
