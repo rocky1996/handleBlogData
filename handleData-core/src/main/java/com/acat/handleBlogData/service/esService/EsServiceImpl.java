@@ -608,7 +608,7 @@ public class EsServiceImpl {
 //                .query(boolQueryBuilder)
                 .trackTotalHits(true);
         if (whereValue) {
-            builder.query(QueryBuilders.termsQuery("screen_id.keyword", value));
+            builder.query(QueryBuilders.termsQuery("user_id.keyword", value));
         }else {
             builder.query(QueryBuilders.termsQuery("screen_name.keyword", value));
         }
