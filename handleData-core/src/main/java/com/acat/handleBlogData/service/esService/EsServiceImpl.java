@@ -238,14 +238,6 @@ public class EsServiceImpl {
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
         try {
-//            if (!judgeSearchParamAllEmpty(searchReq)) {
-//                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM);
-//            }
-
-//            if (searchReq.getIsParticiple().equals(0)
-//                && searchReq.getIntegrity() != null) {
-//                return new RestResult<>(RestEnum.PLEASE_ADD_PARAM.getCode(), "完整度不支持模糊查询,请更换精准匹配!!!");
-//            }
             if (searchReq.getIsParticiple() == null) {
                 searchReq.setIsParticiple(1);
             }
