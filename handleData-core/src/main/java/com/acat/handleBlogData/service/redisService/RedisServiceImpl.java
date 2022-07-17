@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -82,6 +83,13 @@ public class RedisServiceImpl {
             redisTemplate.opsForList().rightPush(key, obj);
         }
     }
+
+    public void leftPushAll(String key, List<String> list) {
+        if (!CollectionUtils.isEmpty(list)) {
+            redisTemplate.opsForList().leftPushAll(key, list, 4, TimeUnit.HOURS);
+        }
+    }
+
 
     /**
      * 删除最左(右)/指定过期时间后删除key中最左的一个值

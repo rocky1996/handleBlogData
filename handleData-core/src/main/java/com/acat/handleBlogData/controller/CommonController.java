@@ -103,6 +103,18 @@ public class CommonController {
     }
 
     @Auth(required = false)
+    @GetMapping("/getIntegrityList")
+    public RestResult<SearchIntegrityResp> getIntegrityList() {
+
+        try {
+            return esService.getIntegrityList();
+        }catch (Exception e) {
+            log.error("CommonController.getIntegrityList has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
     @GetMapping("/getMediaTypeList")
     public RestResult<List<MediaTypeResp>> getMediaTypeList() {
 

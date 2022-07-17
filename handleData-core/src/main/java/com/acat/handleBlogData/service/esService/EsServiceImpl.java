@@ -11,6 +11,7 @@ import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
 import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
+import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
@@ -33,6 +34,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +68,8 @@ public class EsServiceImpl {
     private RedisLockServiceImpl redisLock;
     @Resource
     private RestHighLevelClient restHighLevelClient;
+    @Resource
+    private RedisServiceImpl redisService;
 //    @Resource
 //    private TranslateOuterServiceImpl translateOuterService;
     @Value("${spring.profiles.active}")
@@ -74,6 +78,10 @@ public class EsServiceImpl {
 //    private static final Integer LIMIT_SIZE = 100;
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
+
+    //redis->key
+    public static final String COUNTRY_KEY = "country";
+    public static final String CITY_KEY = "city";
 
     private static String[] indexArray = new String[]{
         MediaSourceEnum.TWITTER.getEs_index(),
@@ -387,11 +395,6 @@ public class EsServiceImpl {
      */
     public Long getMediaIndexSize(MediaSourceEnum mediaSourceEnum) {
         try {
-//            if (MediaSourceEnum.LINKEDIN_HISTORY == mediaSourceEnum
-//                    || MediaSourceEnum.LINKEDIN_IMPL == mediaSourceEnum) {
-//                return 0L;
-//            }
-
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .trackTotalHits(true);
@@ -426,7 +429,13 @@ public class EsServiceImpl {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
-                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.wildcardQuery(searchField, "*"+fieldValue+"*"));
+//                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.wildcardQuery(searchField, "*"+fieldValue+"*"));
+                if (isParticiple.equals(1)) {
+                    channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
+                }else {
+                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField, "*"+fieldValue+"*"));
+                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField));
+                }
             }
             bigBuilder.must(channelQueryBuilder);
 
@@ -452,20 +461,91 @@ public class EsServiceImpl {
     }
 
     /**
+     * 城市或国家搜索
+     * @param textValue
+     * @param fieldName
+     * @return
+     */
+    public RestResult<List<String>> queryCountryOrCity(String textValue, String fieldName) {
+
+        try {
+            List<String> list = redisService.range(fieldName, 0L, -1L);
+            if (!CollectionUtils.isEmpty(list)) {
+                return new RestResult<>(RestEnum.SUCCESS, list.stream().filter(e -> e.contains(textValue)).distinct().collect(Collectors.toList()));
+            }
+
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            boolQueryBuilder.should(QueryBuilders.wildcardQuery(fieldName, "*" + textValue + "*"));
+            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*" + textValue + "*").field(fieldName));
+
+            SearchSourceBuilder builder = new SearchSourceBuilder();
+            builder.query(boolQueryBuilder);
+            builder.trackTotalHits(true);
+            if ("test".equals(env) || "pro".equals(env)) {
+                builder.from(0).size(10000);
+            }else {
+                builder.from(0).size(900000000);
+            }
+
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices(indexArray);
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            if (response == null) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+
+            List<String> resultList = Lists.newArrayList();
+            SearchHit[] searchHits = response.getHits().getHits();
+            if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+                for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                    if (hit == null) {
+                        continue;
+                    }
+
+                    if ("country".equals(fieldName)) {
+                        resultList.add(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+                    }else if ("city".equals(fieldName)) {
+                        resultList.add(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
+                    }
+                }
+            }
+            return new RestResult<>(RestEnum.SUCCESS, resultList.stream().distinct().collect(Collectors.toList()));
+        }catch (Exception e) {
+            log.error("EsServiceImpl.queryCountryOrCity has error:{}",e.getMessage());
+        }
+        return new RestResult<>(RestEnum.FAILED);
+    }
+
+    /**
      * 获取国家列表
      * @return
      */
     public RestResult<SearchCountryResp> getCountryList() {
 
         try {
+            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+            }
+
             String[] includeFields = new String[]{"country"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
                     .collapse(collapseBuilder)
-                    .from(0).size(10000)
+//                    .from(0).size(10000)
                     .trackTotalHits(true);
+            if ("test".equals(env) || "pro".equals(env)) {
+                builder.from(0).size(10000);
+            }else {
+                builder.from(0).size(900000000);
+            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -479,7 +559,6 @@ public class EsServiceImpl {
             }
 
             SearchHit[] searchHits = response.getHits().getHits();
-//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> countryList.add(e.getSourceAsMap().get("country").toString()));
             if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
                 return new RestResult<>(RestEnum.SUCCESS,
                         SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
@@ -490,9 +569,10 @@ public class EsServiceImpl {
                     .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
                     .distinct()
                     .collect(Collectors.toList());
-//                    .stream().map(e ->
-//                ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toLowerCase()
-//                ).distinct();
+
+            if(!CollectionUtils.isEmpty(countryList)) {
+                redisService.leftPushAll(COUNTRY_KEY, countryList);
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -507,6 +587,12 @@ public class EsServiceImpl {
      */
     public RestResult<SearchCityResp> getCityList() {
         try {
+            List<String> cityListFromCache = redisService.range(CITY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(cityListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCityResp.builder().cityList(cityListFromCache).build());
+            }
+
             String[] includeFields = new String[]{"city"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("city.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
@@ -514,8 +600,13 @@ public class EsServiceImpl {
                     .fetchSource(includeFields, null)
                     .collapse(collapseBuilder)
                     //做限制
-                    .from(0).size(10000)
+//                    .from(0).size(1000000)
                     .trackTotalHits(true);
+            if ("test".equals(env) || "pro".equals(env)) {
+                builder.from(0).size(10000);
+            }else {
+                builder.from(0).size(900000000);
+            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -539,10 +630,64 @@ public class EsServiceImpl {
                     .map(e -> (String) e.getSourceAsMap().get("city"))
                     .distinct()
                     .collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(cityList)) {
+                redisService.leftPushAll(CITY_KEY, cityList);
+            }
+
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl.SearchCityResp has error:{}",e.getMessage());
+        }
+        return new RestResult<>(RestEnum.FAILED);
+    }
+
+    /**
+     * 获取完整度列表
+     * @return
+     */
+    public RestResult<SearchIntegrityResp> getIntegrityList() {
+        try {
+            String[] includeFields = new String[]{"integrity"};
+            CollapseBuilder collapseBuilder = new CollapseBuilder("integrity.keyword");
+            SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(QueryBuilders.matchAllQuery())
+                    .fetchSource(includeFields, null)
+                    .collapse(collapseBuilder)
+//                    .from(0).size(10000)
+                    .trackTotalHits(true);
+            if ("test".equals(env) || "pro".equals(env)) {
+                builder.from(0).size(10000);
+            }else {
+                builder.from(0).size(900000000);
+            }
+
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices(indexArray);
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+            // 执行请求
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            if (response == null) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+
+            SearchHit[] searchHits = response.getHits().getHits();
+            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchIntegrityResp.builder().integrityList(Lists.newArrayList()).build());
+            }
+
+            List<String> integrityList = Arrays.stream(searchHits)
+                    .filter(e -> e.getSourceAsMap().get("integrity") != null)
+                    .map(e -> (String) e.getSourceAsMap().get("integrity"))
+                    .distinct()
+                    .collect(Collectors.toList());
+            return new RestResult<>(RestEnum.SUCCESS,
+                    SearchIntegrityResp.builder().integrityList(integrityList).build());
+        }catch (Exception e) {
+            log.error("EsServiceImpl.getIntegrityList has error:{}",e.getMessage());
         }
         return new RestResult<>(RestEnum.FAILED);
     }
@@ -762,7 +907,8 @@ public class EsServiceImpl {
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-            boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_summary", "*"+searchReq.getUserSummary()+"*"));
+            boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_summary", "*"+searchReq.getUserSummary()+"*"));
+            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary"));
         }
     }
 }

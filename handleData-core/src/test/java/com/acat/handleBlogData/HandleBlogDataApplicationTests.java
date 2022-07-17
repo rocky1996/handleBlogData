@@ -9,6 +9,7 @@ import com.acat.handleBlogData.dao.UserDao;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
+import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +71,8 @@ class HandleBlogDataApplicationTests {
     private TranslateOuterServiceImpl translateOuterService;
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    @Resource
+    private RedisServiceImpl redisService;
 //    @Resource
 //    private SendEmailService sendEmailService;
 
@@ -386,5 +389,14 @@ class HandleBlogDataApplicationTests {
         }else {
             System.out.println(qName);
         }
+    }
+
+    @Test
+    public void test13() {
+//        redisService.push("aaa", "111", true);
+        List list = redisService.range("country", 0L, -1L);
+        list.forEach(e-> {
+            System.out.println(e);
+        });
     }
 }
