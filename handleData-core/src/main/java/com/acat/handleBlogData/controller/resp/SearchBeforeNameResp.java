@@ -20,6 +20,9 @@ public class SearchBeforeNameResp {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class BeforeNameInfo {
+
+        private String uuid;
+
         /**
          * 数据来源
          */

@@ -534,58 +534,123 @@ public class EsServiceImpl {
 
         try {
             // 创建请求
-            BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+            List<SearchBeforeNameResp.BeforeNameInfo> userIdList = Lists.newArrayList();
+            List<SearchBeforeNameResp.BeforeNameInfo> userNameList = Lists.newArrayList();
             if (StringUtils.isNotBlank(userId)) {
-                boolQueryBuilder.should(QueryBuilders.termsQuery("screen_id.keyword", userId));
+                userIdList = yi_ci_search(true, userId);
             }
             if (StringUtils.isNotBlank(userName)) {
-                boolQueryBuilder.should(QueryBuilders.termsQuery("screen_name.keyword", userName));
+                userNameList = yi_ci_search(false, userName);
             }
 
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(boolQueryBuilder)
-                    .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(10000);
-            } else {
-                builder.from(0).size(900000000);
-            }
+            List<SearchBeforeNameResp.BeforeNameInfo> bigList = Lists.newArrayList();
+            bigList.addAll(userIdList);
+            bigList.addAll(userNameList);
 
-            //搜索
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(indexArray);
-            searchRequest.types("_doc");
-            searchRequest.source(builder);
+            ArrayList<SearchBeforeNameResp.BeforeNameInfo> resultList =
+                    bigList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(SearchBeforeNameResp.BeforeNameInfo::getUuid))), ArrayList::new));
 
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-            if (response == null) {
-                return new RestResult<>(RestEnum.PLEASE_TRY);
-            }
-
-            List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
-            SearchHit[] searchHits = response.getHits().getHits();
-            if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
-                for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
-                    if (hit == null) {
-                        continue;
-                    }
-
-                    SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
-                    beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-                    beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-                    beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
-                    beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
-                    MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
-                    beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
-                    searchBeforeNameRespList.add(beforeNameInfo);
-                }
-            }
+//            SearchSourceBuilder builder = new SearchSourceBuilder()
+//                    .query(boolQueryBuilder)
+//                    .trackTotalHits(true);
+//            if ("test".equals(env) || "pre".equals(env)) {
+//                builder.from(0).size(10000);
+//            } else {
+//                builder.from(0).size(900000000);
+//            }
+//
+//            //搜索
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices(indexArray);
+//            searchRequest.types("_doc");
+//            searchRequest.source(builder);
+//
+//            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//            if (response == null) {
+//                return new RestResult<>(RestEnum.PLEASE_TRY);
+//            }
+//
+//            List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
+//            SearchHit[] searchHits = response.getHits().getHits();
+//            if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+//                for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+//                    if (hit == null) {
+//                        continue;
+//                    }
+//
+//                    SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
+//                    beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+//                    beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+//                    beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+//                    beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
+//                    MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
+//                    beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+//                    searchBeforeNameRespList.add(beforeNameInfo);
+//                }
+//            }
             return new RestResult<>(RestEnum.SUCCESS,
-                    SearchBeforeNameResp.builder().beforeNameInfoList(searchBeforeNameRespList).build());
+                    SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl.searchBeforeNameInfo has error:{}",e.getMessage());
         }
         return new RestResult<>(RestEnum.FAILED);
+    }
+
+    /**
+     * 分别去搜索
+     * @param whereValue
+     * @param value
+     * @return
+     * @throws Exception
+     */
+    private List<SearchBeforeNameResp.BeforeNameInfo> yi_ci_search(boolean whereValue, String value) throws Exception{
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(boolQueryBuilder)
+                .trackTotalHits(true);
+        if (whereValue) {
+            builder.query(QueryBuilders.termsQuery("screen_id.keyword", value));
+        }else {
+            builder.query(QueryBuilders.termsQuery("screen_name.keyword", value));
+        }
+
+        if ("test".equals(env) || "pre".equals(env)) {
+            builder.from(0).size(10000);
+        } else {
+            builder.from(0).size(900000000);
+        }
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(indexArray);
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+
+        List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        if (response == null) {
+            return searchBeforeNameRespList;
+        }
+
+
+        SearchHit[] searchHits = response.getHits().getHits();
+        if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+            for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                if (hit == null) {
+                    continue;
+                }
+
+                SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
+                beforeNameInfo.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
+                beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+                beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
+                MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
+                beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+                searchBeforeNameRespList.add(beforeNameInfo);
+            }
+        }
+        return searchBeforeNameRespList;
     }
 
     /**
