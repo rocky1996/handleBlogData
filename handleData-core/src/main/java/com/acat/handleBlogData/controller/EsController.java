@@ -112,10 +112,6 @@ public class EsController {
                 return new RestResult<>(RestEnum.FILE_TYPE_ERROR);
             }
 
-//            if (pageNum == null || pageSize == null) {
-//                return new RestResult<>(RestEnum.FEN_YE_ERROR);
-//            }
-
             if (StringUtils.isBlank(searchField)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
             }
@@ -158,8 +154,8 @@ public class EsController {
         }
     }
 
-    @Auth(required = false)
-    @PostMapping("/searchBeforeNameInfo")
+    @Auth
+    @GetMapping("/searchBeforeNameInfo")
     public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String userId, String userName) {
 
         try {
