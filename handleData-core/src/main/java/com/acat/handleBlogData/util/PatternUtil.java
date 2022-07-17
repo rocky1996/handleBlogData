@@ -18,12 +18,29 @@ public class PatternUtil {
         if (m.find()) {
             return m.group();
         }else {
+            return str;
+        }
+    }
+
+    public static String checkPhoneAndGet(String str) {
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
+
+        Pattern p = Pattern.compile("1[345678]\\d{9}");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return m.group();
+        }else {
             return "";
         }
     }
 
     public static void main(String[] args) {
-        String str = "debfryfbri,defnrur@ndfjrf.com,defrfr,frrfr,swerfrf,er";
-        System.out.println(checkEmailAndGet(str));
+//        String str = "debfryfbri,defnrur@ndfjrf.com,defrfr,frrfr,swerfrf,er";
+//        System.out.println(checkEmailAndGet(str));
+
+        String strPhone = "张三：13539558064";
+        System.out.println(checkPhoneAndGet(strPhone));
     }
 }
