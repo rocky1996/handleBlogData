@@ -527,7 +527,7 @@ public class EsServiceImpl {
         }catch (Exception e) {
             log.error("EsServiceImpl.queryCountryOrCity has error:{}",e.getMessage());
         }
-        return new RestResult<>(RestEnum.FAILED);
+        return new RestResult<>(RestEnum.FAILED.getCode(), "搜索国家/城市失败");
     }
 
     public RestResult<SearchBeforeNameResp> searchBeforeNameInfo(String userId, String userName) {
@@ -642,7 +642,7 @@ public class EsServiceImpl {
         }catch (Exception e) {
             log.error("EsServiceImpl.getCountryList has error:{}",e.getMessage());
         }
-        return new RestResult<>(RestEnum.FAILED);
+        return new RestResult<>(RestEnum.FAILED, "获取国家列表失败");
     }
 
     /**
@@ -703,7 +703,7 @@ public class EsServiceImpl {
         }catch (Exception e) {
             log.error("EsServiceImpl.SearchCityResp has error:{}",e.getMessage());
         }
-        return new RestResult<>(RestEnum.FAILED);
+        return new RestResult<>(RestEnum.FAILED, "获取城市列表失败");
     }
 
     /**
@@ -753,7 +753,7 @@ public class EsServiceImpl {
         }catch (Exception e) {
             log.error("EsServiceImpl.getIntegrityList has error:{}",e.getMessage());
         }
-        return new RestResult<>(RestEnum.FAILED);
+        return new RestResult<>(RestEnum.FAILED, "获取完整度列表失败");
     }
 
     /**
