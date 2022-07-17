@@ -930,7 +930,8 @@ public class EsServiceImpl {
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id", "*"+searchReq.getUserId()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_id", "*"+searchReq.getUserId()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserId()+"*").field("user_id"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
                 boolQueryBuilder.should(QueryBuilders.wildcardQuery("screen_name", "*"+searchReq.getUserName()+"*"));
@@ -945,7 +946,8 @@ public class EsServiceImpl {
                 boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getPhoneNum()+"*").field("mobile"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
                 if (searchReq.getEmail().contains(".")) {
@@ -954,7 +956,8 @@ public class EsServiceImpl {
                         Lists.newArrayList(emailArray).forEach(e -> boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+e+"*")));
                     }
                 }else {
-                    boolQueryBuilder.must(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
+                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email"));
                 }
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
@@ -969,10 +972,12 @@ public class EsServiceImpl {
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry().toUpperCase()+"*"));
                 }else {
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country", "*"+searchReq.getCountry()+"*"));
+                    boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCountry()+"*").field("country"));
                 }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("city", "*"+searchReq.getCity()+"*"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("city", "*"+searchReq.getCity()+"*"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCity()+"*").field("city"));
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
