@@ -13,6 +13,7 @@ import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
 import com.acat.handleBlogData.util.JacksonUtil;
+import com.acat.handleBlogData.util.PatternUtil;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -237,11 +238,6 @@ public class EsServiceImpl {
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
         try {
-//            if (StringUtils.isNotBlank(searchReq.getUserSummary())
-//                || searchReq.getIsParticiple().equals(1)) {
-//                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, "用户简介不支持精准查询!!!");
-//            }
-
             if (searchReq.getIsParticiple() == null) {
                 searchReq.setIsParticiple(1);
             }
@@ -375,7 +371,13 @@ public class EsServiceImpl {
             userDetailResp.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
             userDetailResp.setUserReligion(hit.getSourceAsMap().get("user_religion") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religion")));
             userDetailResp.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
-            userDetailResp.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
+
+            if (hit.getSourceAsMap().get("email") == null) {
+                userDetailResp.setEmail("");
+            }else {
+                userDetailResp.setEmail(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email"))));
+            }
+
             userDetailResp.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
             userDetailResp.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
             userDetailResp.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
@@ -833,7 +835,12 @@ public class EsServiceImpl {
                 }
 
                 userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
-                userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
+
+                if (hit.getSourceAsMap().get("email") == null) {
+                    userData.setEmail("");
+                }else {
+                    userData.setEmail(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email"))));
+                }
 
                 userData.setCountry(
                         hit.getSourceAsMap().get("country") == null ? "" :
