@@ -782,7 +782,7 @@ public class EsServiceImpl {
     public RestResult<SearchIntegrityResp> getIntegrityList() {
         try {
             String[] includeFields = new String[]{"integrity"};
-            CollapseBuilder collapseBuilder = new CollapseBuilder("integrity.keyword");
+            CollapseBuilder collapseBuilder = new CollapseBuilder("integrity");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(includeFields, null)
@@ -814,7 +814,7 @@ public class EsServiceImpl {
 
             List<String> integrityList = Arrays.stream(searchHits)
                     .filter(e -> e.getSourceAsMap().get("integrity") != null)
-                    .map(e -> (String) e.getSourceAsMap().get("integrity"))
+                    .map(e -> e.getSourceAsMap().get("integrity").toString())
                     .distinct()
                     .collect(Collectors.toList());
             return new RestResult<>(RestEnum.SUCCESS,
