@@ -27,12 +27,12 @@ curl:
 
 221:
     http://39.98.138.221:8504/blogSystem/search/upload
-
-
-
-
-
     curl -XPUT http://172.17.75.6:9201/link_school/_settings -H 'content-Type:application/json' -d '{"index":{'max_result_window':900000000}}'
+
+
+
+
+
 
 
 
