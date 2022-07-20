@@ -1013,8 +1013,17 @@ public class EsServiceImpl {
                         Lists.newArrayList(emailArray).forEach(e -> boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+e+"*")));
                     }
                 }else {
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
-                    boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email"));
+                    if (searchReq.getEmail().contains("@")) {
+                        String[] emailArr = searchReq.getEmail().split("@");
+                        List<String> emList = Lists.newArrayList("@");
+                        if (!CollectionUtils.isEmpty(Lists.newArrayList(emailArr))) {
+                            emList.addAll(Lists.newArrayList(emailArr));
+                        }
+                        emList.forEach(e -> boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+e+"*")));
+                    }else {
+                        boolQueryBuilder.should(QueryBuilders.wildcardQuery("email", "*"+searchReq.getEmail()+"*"));
+                        boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email"));
+                    }
                 }
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
