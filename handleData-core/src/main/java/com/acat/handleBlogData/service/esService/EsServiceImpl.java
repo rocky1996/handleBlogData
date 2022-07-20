@@ -375,7 +375,7 @@ public class EsServiceImpl {
                 userDetailResp.setEmail(PatternUtil.handleStr(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email")))));
             }
 
-            userDetailResp.setWorks(PatternUtil.handleStr(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works"))));
+            userDetailResp.setWorks(PatternUtil.handleStr(PatternUtil.handleWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")))));
             userDetailResp.setPositionMessage(PatternUtil.handleStr(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location"))));
             userDetailResp.setHomeAddress(PatternUtil.handleStr(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town"))));
             userDetailResp.setLanguage(PatternUtil.handleStr(hit.getSourceAsMap().get("language_type") == null ? "" : String.valueOf(hit.getSourceAsMap().get("language_type"))));
@@ -680,7 +680,7 @@ public class EsServiceImpl {
             }
 
             List<String> countryList = Arrays.stream(searchHits)
-                    .filter(e -> e.getSourceAsMap().get("country") != null)
+                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
                     .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
                     .distinct()
                     .collect(Collectors.toList());
@@ -741,7 +741,7 @@ public class EsServiceImpl {
             }
 
             List<String> cityList = Arrays.stream(searchHits)
-                    .filter(e -> e.getSourceAsMap().get("city") != null)
+                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("city"))))
                     .map(e -> (String) e.getSourceAsMap().get("city"))
                     .distinct()
                     .collect(Collectors.toList());
@@ -917,7 +917,7 @@ public class EsServiceImpl {
                 }
 
                 userData.setUserReligion(PatternUtil.handleStr(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio"))));
-                userData.setWorks(PatternUtil.handleStr(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works"))));
+                userData.setWorks(PatternUtil.handleStr(PatternUtil.handleWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")))));
                 userData.setPositionMessage(PatternUtil.handleStr(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location"))));
                 userData.setHomeAddress(PatternUtil.handleStr(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town"))));
 

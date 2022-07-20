@@ -64,6 +64,24 @@ public class PatternUtil {
         }
     }
 
+    public static String handleWorks(String str) {
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
+
+        int strStartIndex = str.indexOf("title:");
+        int strEndIndex = str.indexOf(",details");
+        if (strStartIndex > 0 && strEndIndex < 0) {
+            String s1 = str.substring(strStartIndex, str.length()-1).substring("title:".length());
+            return StringUtils.isBlank(s1) ? "" : s1;
+        }
+        if (strStartIndex > 0 && strEndIndex > 0) {
+            String s2 = str.substring(strStartIndex, strEndIndex).substring("title:".length());
+            return StringUtils.isBlank(s2) ? "" : s2;
+        }
+        return "";
+    }
+
     public static void main(String[] args) {
 //        String str = "debfryfbri,defnrur@ndfjrf.com,defrfr,frrfr,swerfrf,er";
 //        System.out.println(checkEmailAndGet(str));
@@ -71,6 +89,9 @@ public class PatternUtil {
 //        String strPhone = "张三：13539558064";
 //        System.out.println(checkPhoneAndGet(strPhone));
 
-        System.out.println(handleFollowersCount("2.1K followers"));
+//        System.out.println(handleFollowersCount("2.1K followers"));
+        System.out.println(handleWorks("{title:A X設計整合工作室,details: [2010年9月23日 - 现在,]}"));
+        System.out.println(handleWorks("{title:目前就职：PT. Sumber Alfaria Trijaya, Tbk (Alfamart)}"));
+        System.out.println(handleWorks("{title:UOB Bank Singapore - Staff management,details: [2017年3月28日 - 现在,]}|{title:曾在 MD Entertainment 担任 Artist}"));
     }
 }
