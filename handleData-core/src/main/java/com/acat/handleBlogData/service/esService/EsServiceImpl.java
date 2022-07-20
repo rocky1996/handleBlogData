@@ -354,11 +354,7 @@ public class EsServiceImpl {
                 userDetailResp.setNameUserdBefore("");
             }else {
                 Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                if (map == null) {
-                    userDetailResp.setNameUserdBefore("");
-                }else {
-                    userDetailResp.setNameUserdBefore(map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")));
-                }
+                userDetailResp.setNameUserdBefore(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName"))));
             }
 
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
@@ -905,11 +901,7 @@ public class EsServiceImpl {
                     userData.setMaidernName("");
                 }else {
                     Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                    if (map == null) {
-                        userData.setMaidernName("");
-                    }else {
-                        userData.setMaidernName(map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")));
-                    }
+                    userData.setMaidernName(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName"))));
                 }
 
                 userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
