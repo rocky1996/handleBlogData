@@ -445,7 +445,7 @@ public class EsServiceImpl {
      * @param isParticiple
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple, Integer pageNum, Integer pageSize) {
         try {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
@@ -461,13 +461,13 @@ public class EsServiceImpl {
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(bigBuilder)
-//                    .from(0).size(10000)
+                    .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(900000000);
-            }
+//            if ("test".equals(env) || "pre".equals(env)) {
+//                builder.from(0).size(10000);
+//            }else {
+//                builder.from(0).size(900000000);
+//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();

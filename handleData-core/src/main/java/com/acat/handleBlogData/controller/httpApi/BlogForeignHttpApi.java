@@ -188,20 +188,20 @@ public class BlogForeignHttpApi {
     public RestResult<SearchResp> batchQuery(HttpServletRequest httpServletRequest,
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
-                                             @RequestParam("isParticiple") Integer isParticiple
-//                                             @RequestParam("pageNum") Integer pageNum,
-//                                             @RequestParam("pageSize") Integer pageSize
+                                             @RequestParam("isParticiple") Integer isParticiple,
+                                             @RequestParam("pageNum") Integer pageNum,
+                                             @RequestParam("pageSize") Integer pageSize
     ) {
         try {
+            if (pageNum == null || pageSize == null) {
+                return new RestResult<>(RestEnum.FEN_YE_ERROR);
+            }
+
             String originalFilename = file.getOriginalFilename();
             String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
             if (!TXT_EXTENSION.equals(fileType)) {
                 return new RestResult<>(RestEnum.FILE_TYPE_ERROR);
             }
-
-//            if (pageNum == null || pageSize == null) {
-//                return new RestResult<>(RestEnum.FEN_YE_ERROR);
-//            }
 
             if (StringUtils.isBlank(searchField)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_EMPTY);
@@ -218,7 +218,7 @@ public class BlogForeignHttpApi {
             if (fieldList.size() > 1000) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
             }
-            return esService.batchQuery(searchField, fieldList, isParticiple);
+            return esService.batchQuery(searchField, fieldList, isParticiple, pageNum, pageSize);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
