@@ -72,8 +72,10 @@ public class EsServiceImpl {
 //    private TranslateOuterServiceImpl translateOuterService;
     @Value("${spring.profiles.active}")
     private String env;
-    //标准桶大小
+
+//    标准桶大小
 //    private static final Integer LIMIT_SIZE = 100;
+
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
@@ -434,7 +436,6 @@ public class EsServiceImpl {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
-//                channelQueryBuilder.should(isParticiple.equals(1) ? QueryBuilders.matchQuery(searchField + ".keyword", fieldValue) : QueryBuilders.wildcardQuery(searchField, "*"+fieldValue+"*"));
                 if (isParticiple.equals(1)) {
                     channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
                 }else {
@@ -552,7 +553,9 @@ public class EsServiceImpl {
             bigList.addAll(userNameList);
 
             ArrayList<SearchBeforeNameResp.BeforeNameInfo> resultList =
-                    bigList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(SearchBeforeNameResp.BeforeNameInfo::getUuid))), ArrayList::new));
+                    bigList.stream().collect(Collectors.collectingAndThen(
+                            Collectors.toCollection(() -> new TreeSet<>(
+                                    Comparator.comparing(SearchBeforeNameResp.BeforeNameInfo::getUuid))), ArrayList::new));
 
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
@@ -596,7 +599,6 @@ public class EsServiceImpl {
         if (response == null) {
             return searchBeforeNameRespList;
         }
-
 
         SearchHit[] searchHits = response.getHits().getHits();
         if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
@@ -966,9 +968,6 @@ public class EsServiceImpl {
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
             }
-//            if (searchReq.getIntegrity() != null) {
-//                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
-//            }
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
