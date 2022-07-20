@@ -11,10 +11,7 @@ import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
 import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
-import com.acat.handleBlogData.util.CountryUtil;
-import com.acat.handleBlogData.util.JacksonUtil;
-import com.acat.handleBlogData.util.PatternUtil;
-import com.acat.handleBlogData.util.ReaderFileUtil;
+import com.acat.handleBlogData.util.*;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -386,7 +383,12 @@ public class EsServiceImpl {
             userDetailResp.setLanguage(hit.getSourceAsMap().get("language_type") == null ? "" : String.valueOf(hit.getSourceAsMap().get("language_type")));
             userDetailResp.setSourceCreateTime(hit.getSourceAsMap().get("source_create_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_create_time")));
             userDetailResp.setUserSummary(hit.getSourceAsMap().get("user_summary") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_summary")));
-            userDetailResp.setFieldMap(hit.getSourceAsMap());
+
+            /*****处理原始数据*****/
+            Map<String, Object> stringObjectMap = hit.getSourceAsMap();
+            stringObjectMap.remove("_class");
+            userDetailResp.setFieldMap(stringObjectMap);
+
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
         }catch (Exception e) {
             log.error("EsServiceImpl.retrieveUserDetail has error:{}",e.getMessage());
@@ -555,44 +557,6 @@ public class EsServiceImpl {
             ArrayList<SearchBeforeNameResp.BeforeNameInfo> resultList =
                     bigList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(SearchBeforeNameResp.BeforeNameInfo::getUuid))), ArrayList::new));
 
-//            SearchSourceBuilder builder = new SearchSourceBuilder()
-//                    .query(boolQueryBuilder)
-//                    .trackTotalHits(true);
-//            if ("test".equals(env) || "pre".equals(env)) {
-//                builder.from(0).size(10000);
-//            } else {
-//                builder.from(0).size(900000000);
-//            }
-//
-//            //搜索
-//            SearchRequest searchRequest = new SearchRequest();
-//            searchRequest.indices(indexArray);
-//            searchRequest.types("_doc");
-//            searchRequest.source(builder);
-//
-//            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-//            if (response == null) {
-//                return new RestResult<>(RestEnum.PLEASE_TRY);
-//            }
-//
-//            List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
-//            SearchHit[] searchHits = response.getHits().getHits();
-//            if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
-//                for (SearchHit hit : Arrays.stream(searchHits).collect(Collectors.toList())) {
-//                    if (hit == null) {
-//                        continue;
-//                    }
-//
-//                    SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
-//                    beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-//                    beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-//                    beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
-//                    beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
-//                    MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
-//                    beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
-//                    searchBeforeNameRespList.add(beforeNameInfo);
-//                }
-//            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
         }catch (Exception e) {
@@ -665,11 +629,11 @@ public class EsServiceImpl {
     public RestResult<SearchCountryResp> getCountryList() {
 
         try {
-//            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
-//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-//                return new RestResult<>(RestEnum.SUCCESS,
-//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-//            }
+            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+            }
 
             String[] includeFields = new String[]{"country"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
