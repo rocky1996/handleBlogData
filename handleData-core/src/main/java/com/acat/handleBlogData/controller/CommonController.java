@@ -3,7 +3,6 @@ package com.acat.handleBlogData.controller;
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
-import com.acat.handleBlogData.controller.req.TranReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
@@ -12,11 +11,9 @@ import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterService
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.web.bind.annotation.*;
@@ -163,24 +160,20 @@ public class CommonController {
             for (String key : tranMap.keySet()) {
                 String tranValue = tranMap.get(key);
                 if (StringUtils.isBlank(tranValue)) {
-                    //tranList.add(ImmutableMap.of(key, ""));
                     tranResultMap.put(key, "");
                     continue;
                 }
 
                 String languageType = translateOuterService.getLanguageDelectResult(tranValue);
                 if (StringUtils.isBlank(languageType)) {
-//                    tranList.add(ImmutableMap.of(key, ""));
                     tranResultMap.put(key, "");
                     continue;
                 }
 
                 if (ZH.equals(languageType)) {
-//                    tranList.add(ImmutableMap.of(key, tranValue));
                     tranResultMap.put(key, "");
                     continue;
                 }
-//                tranList.add(ImmutableMap.of(key, translateOuterService.getTranslateValue(languageType, tranValue)));
                 tranResultMap.put(key, translateOuterService.getTranslateValue(languageType, tranValue));
             }
             return new RestResult(RestEnum.SUCCESS, TranResp.builder().tranMap(tranResultMap).build());
