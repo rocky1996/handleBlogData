@@ -76,6 +76,9 @@ public class EsServiceImpl {
 //    标准桶大小
 //    private static final Integer LIMIT_SIZE = 100;
 
+    //默认时间
+    private static final String MO_REN_TIME = "2022-07-12 14:12:04";
+
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
@@ -300,110 +303,105 @@ public class EsServiceImpl {
             userDetailResp.setMediaSource(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
 
             if ("test".equals(env)) {
-                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
+                userDetailResp.setLocalPhotoUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("local_photo_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("local_photo_url"))));
             }else if ("pre".equals(env)) {
-                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PRO_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
+                userDetailResp.setLocalPhotoUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PRO_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url"))));
             }else {
-                userDetailResp.setLocalPhotoUrl(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PROD_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url")));
+                userDetailResp.setLocalPhotoUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("local_photo_url") == null ? "" : PROD_PIC_URL + String.valueOf(hit.getSourceAsMap().get("local_photo_url"))));
             }
-            userDetailResp.setUserAvatar(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar")));
+            userDetailResp.setUserAvatar(PatternUtil.handleStr(hit.getSourceAsMap().get("user_avatar") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_avatar"))));
 
-            userDetailResp.setGender(
+            userDetailResp.setGender(PatternUtil.handleStr(
                     hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :
                             (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
-                                    GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc())
+                                    GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc()))
             );
 
-            userDetailResp.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+            userDetailResp.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
 
             if (hit.getSourceAsMap().get("use_name") == null) {
                 userDetailResp.setUserQuanName("");
             }else {
                 String qName = String.valueOf(hit.getSourceAsMap().get("use_name"));
-//                String languageType = translateOuterService.getLanguageDelectResult(qName);
                 String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
                 if ("zh".equals(languageType)) {
-                    userDetailResp.setUserQuanName(qName.trim());
-                }
-//                else if ("en".equals(languageType) || "vi".equals(languageType)) {
-//                    userDetailResp.setUserQuanName(CountryUtil.handleStr(qName));
-//                }
-                else {
-                    userDetailResp.setUserQuanName(qName);
+                    userDetailResp.setUserQuanName(PatternUtil.handleStr(qName.trim()));
+                } else {
+                    userDetailResp.setUserQuanName(PatternUtil.handleStr(qName));
                 }
             }
-            userDetailResp.setBornTime(hit.getSourceAsMap().get("born_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("born_time")));
-            userDetailResp.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("followers_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count"))));
-            userDetailResp.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))));
-            userDetailResp.setPostCount(hit.getSourceAsMap().get("post_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("post_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("post_count"))));
-            userDetailResp.setLikeCount(hit.getSourceAsMap().get("like_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("like_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("like_count"))));
-            userDetailResp.setDataId(hit.getSourceAsMap().get("source_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_id")));
-            userDetailResp.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-            userDetailResp.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
 
-            userDetailResp.setUserType(
+            userDetailResp.setBornTime(PatternUtil.handleStr(hit.getSourceAsMap().get("born_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("born_time"))));
+            userDetailResp.setFollowersCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("followers_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count"))))));
+            userDetailResp.setFriendCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))))));
+            userDetailResp.setPostCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("post_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("post_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("post_count"))))));
+            userDetailResp.setLikeCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("like_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("like_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("like_count"))))));
+            userDetailResp.setDataId(PatternUtil.handleStr(hit.getSourceAsMap().get("source_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_id"))));
+            userDetailResp.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
+            userDetailResp.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url"))));
+
+            userDetailResp.setUserType(PatternUtil.handleStr(
                     hit.getSourceAsMap().get("user_type") == null ? UserTypeEnum.WEI_ZHI.getDesc() :
                             (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("user_type"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
-                                    UserTypeEnum.getUserTypeEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("user_type")))).getDesc())
+                                    UserTypeEnum.getUserTypeEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("user_type")))).getDesc()))
             );
-            userDetailResp.setVerified(
+            userDetailResp.setVerified(PatternUtil.handleStr(
                     hit.getSourceAsMap().get("verified") == null ? VerifiedEnum.WEIZHI.getDesc() :
                             (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("verified"))) ? String.valueOf(hit.getSourceAsMap().get("user_type")) :
-                                    VerifiedEnum.getVerifiedEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("verified")))).getDesc())
+                                    VerifiedEnum.getVerifiedEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("verified")))).getDesc()))
             );
 
             if (hit.getSourceAsMap().get("name_userd_before") == null) {
                 userDetailResp.setNameUserdBefore("");
             }else {
                 Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                userDetailResp.setNameUserdBefore(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName"))));
+                userDetailResp.setNameUserdBefore(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
             }
 
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-            userDetailResp.setCountry(
+            userDetailResp.setCountry(PatternUtil.handleStr(
                     hit.getSourceAsMap().get("country") == null ? "" :
                             (ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
-                                    CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
+                                    CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country")))))
             );
 
-            userDetailResp.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
-            userDetailResp.setUserReligion(hit.getSourceAsMap().get("user_religion") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religion")));
-            userDetailResp.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
+            userDetailResp.setCity(PatternUtil.handleStr(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city"))));
+            userDetailResp.setUserReligion(PatternUtil.handleStr(hit.getSourceAsMap().get("user_religion") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religion"))));
+            userDetailResp.setPhoneNum(PatternUtil.handleStr(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile"))));
 
             if (hit.getSourceAsMap().get("email") == null) {
                 userDetailResp.setEmail("");
             }else {
-                userDetailResp.setEmail(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email"))));
+                userDetailResp.setEmail(PatternUtil.handleStr(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email")))));
             }
 
-            userDetailResp.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
-            userDetailResp.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
-            userDetailResp.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
-            userDetailResp.setLanguage(hit.getSourceAsMap().get("language_type") == null ? "" : String.valueOf(hit.getSourceAsMap().get("language_type")));
-            userDetailResp.setSourceCreateTime(hit.getSourceAsMap().get("source_create_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_create_time")));
-            userDetailResp.setUserSummary(hit.getSourceAsMap().get("user_summary") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_summary")));
+            userDetailResp.setWorks(PatternUtil.handleStr(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works"))));
+            userDetailResp.setPositionMessage(PatternUtil.handleStr(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location"))));
+            userDetailResp.setHomeAddress(PatternUtil.handleStr(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town"))));
+            userDetailResp.setLanguage(PatternUtil.handleStr(hit.getSourceAsMap().get("language_type") == null ? "" : String.valueOf(hit.getSourceAsMap().get("language_type"))));
+            userDetailResp.setUserSummary(PatternUtil.handleStr(hit.getSourceAsMap().get("user_summary") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_summary"))));
+
+            if (hit.getSourceAsMap().get("source_create_time") == null) {
+                userDetailResp.setSourceCreateTime(MO_REN_TIME);
+            }else {
+                if (DateUtils.isDateVail(String.valueOf(hit.getSourceAsMap().get("source_create_time")))) {
+                    userDetailResp.setSourceCreateTime(String.valueOf(hit.getSourceAsMap().get("source_create_time")));
+                }else {
+                    userDetailResp.setSourceCreateTime(MO_REN_TIME);
+                }
+            }
 
             /*****处理原始数据 _____特殊处理 *****/
             Map<String, Object> stringObjectMap = hit.getSourceAsMap();
+            if (!Objects.isNull(stringObjectMap)) {
+                for (String key : stringObjectMap.keySet()) {
+                    if (stringObjectMap.get(key) != null) {
+                        stringObjectMap.put(key, PatternUtil.handleStr(String.valueOf(stringObjectMap.get(key))));
+                    }
+                }
+            }
             stringObjectMap.remove("_class");
-
-            if (stringObjectMap.containsKey("email")) {
-                if (stringObjectMap.get("email") != null) {
-                    if ("{}".equals(String.valueOf(stringObjectMap.get("emial"))) || "[]".equals(String.valueOf(stringObjectMap.get("emial")))) {
-                        stringObjectMap.put("email", "");
-                    }
-                }
-            }
-            if (stringObjectMap.containsKey("business_story")) {
-                if (stringObjectMap.get("business_story") != null) {
-                    if ("{}".equals(String.valueOf(stringObjectMap.get("business_story"))) || "[]".equals(String.valueOf(stringObjectMap.get("business_story")))) {
-                        stringObjectMap.put("business_story", "");
-                    }
-                }
-            }
-
             userDetailResp.setFieldMap(stringObjectMap);
-
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
         }catch (Exception e) {
             log.error("EsServiceImpl.retrieveUserDetail has error:{}",e.getMessage());
@@ -538,9 +536,9 @@ public class EsServiceImpl {
                     }
 
                     if ("country".equals(fieldName)) {
-                        resultList.add(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+                        resultList.add(PatternUtil.handleStr(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country"))));
                     }else if ("city".equals(fieldName)) {
-                        resultList.add(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
+                        resultList.add(PatternUtil.handleStr(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city"))));
                     }
                 }
             }
@@ -624,11 +622,11 @@ public class EsServiceImpl {
                 }
 
                 SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
-                beforeNameInfo.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
-                beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-                beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
-                beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
-                beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
+                beforeNameInfo.setUuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))));
+                beforeNameInfo.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
+                beforeNameInfo.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
+                beforeNameInfo.setUserQuanName(PatternUtil.handleStr(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name"))));
+                beforeNameInfo.setUserUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))));
                 MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
                 beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
                 searchBeforeNameRespList.add(beforeNameInfo);
@@ -867,9 +865,9 @@ public class EsServiceImpl {
                 }
 
                 SearchResp.UserData userData = new SearchResp.UserData();
-                userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
-                userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
-                userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                userData.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
+                userData.setUuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))));
+                userData.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
 
 
                 if (hit.getSourceAsMap().get("use_name") == null) {
@@ -878,54 +876,50 @@ public class EsServiceImpl {
                     String qName = String.valueOf(hit.getSourceAsMap().get("use_name"));
                     String languageType = String.valueOf(hit.getSourceAsMap().get("language_type"));
                     if ("zh".equals(languageType)) {
-                        userData.setUserQuanName(qName.trim());
-                    }
-//                    else if ("en".equals(languageType)) {
-//                        userData.setUserQuanName(CountryUtil.handleStr(qName));
-//                    }
-                    else {
-                        userData.setUserQuanName(qName);
+                        userData.setUserQuanName(PatternUtil.handleStr(qName.trim()));
+                    } else {
+                        userData.setUserQuanName(PatternUtil.handleStr(qName));
                     }
                 }
 
-                userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
+                userData.setPhoneNum(PatternUtil.handleStr(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile"))));
 
                 if (hit.getSourceAsMap().get("email") == null) {
                     userData.setEmail("");
                 }else {
-                    userData.setEmail(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email"))));
+                    userData.setEmail(PatternUtil.handleStr(PatternUtil.checkEmailAndGet(String.valueOf(hit.getSourceAsMap().get("email")))));
                 }
 
-                userData.setCountry(
+                userData.setCountry(PatternUtil.handleStr(
                         hit.getSourceAsMap().get("country") == null ? "" :
                                 (ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("country"))) ? String.valueOf(hit.getSourceAsMap().get("country")) :
-                                        CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country"))))
+                                        CountryUtil.getCountryName(String.valueOf(hit.getSourceAsMap().get("country")))))
                 );
 
-                userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
-                userData.setUserHomePage(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url")));
+                userData.setCity(PatternUtil.handleStr(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city"))));
+                userData.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url"))));
 
-                userData.setGender(
+                userData.setGender(PatternUtil.handleStr(
                         hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :
                                 (!ReaderFileUtil.isNumber(String.valueOf(hit.getSourceAsMap().get("gender"))) ? String.valueOf(hit.getSourceAsMap().get("gender")) :
-                                        GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc())
+                                        GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc()))
                 );
 
-                userData.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "未知" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("followers_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count"))));
-                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))));
+                userData.setMarriage(PatternUtil.handleStr(hit.getSourceAsMap().get("marriage") == null ? "未知" : String.valueOf(hit.getSourceAsMap().get("marriage"))));
+                userData.setFollowersCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("followers_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count"))))));
+                userData.setFriendCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))))));
 
                 if (hit.getSourceAsMap().get("name_userd_before") == null) {
                     userData.setMaidernName("");
                 }else {
                     Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                    userData.setMaidernName(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName"))));
+                    userData.setMaidernName(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
                 }
 
-                userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
-                userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
-                userData.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
-                userData.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
+                userData.setUserReligion(PatternUtil.handleStr(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio"))));
+                userData.setWorks(PatternUtil.handleStr(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works"))));
+                userData.setPositionMessage(PatternUtil.handleStr(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location"))));
+                userData.setHomeAddress(PatternUtil.handleStr(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town"))));
 
                 MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
                 userData.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
