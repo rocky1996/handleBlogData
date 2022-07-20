@@ -233,7 +233,7 @@ public class FbUserHistoryData {
     /**
      * 字段非空值累加
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+//    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private Integer integrity;
 
     public FbUserHistoryData() {}

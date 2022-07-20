@@ -1007,9 +1007,9 @@ public class EsServiceImpl {
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
             }
-            if (searchReq.getIntegrity() != null) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
-            }
+//            if (searchReq.getIntegrity() != null) {
+//                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
+//            }
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
@@ -1066,6 +1066,9 @@ public class EsServiceImpl {
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
             boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_summary", "*"+searchReq.getUserSummary()+"*"));
             boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary"));
+        }
+        if (searchReq.getIntegrity() != null) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
         }
     }
 
