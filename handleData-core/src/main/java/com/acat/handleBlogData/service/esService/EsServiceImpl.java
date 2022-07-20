@@ -383,9 +383,25 @@ public class EsServiceImpl {
             userDetailResp.setSourceCreateTime(hit.getSourceAsMap().get("source_create_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_create_time")));
             userDetailResp.setUserSummary(hit.getSourceAsMap().get("user_summary") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_summary")));
 
-            /*****处理原始数据*****/
+            /*****处理原始数据 _____特殊处理 *****/
             Map<String, Object> stringObjectMap = hit.getSourceAsMap();
             stringObjectMap.remove("_class");
+
+            if (stringObjectMap.containsKey("email")) {
+                if (stringObjectMap.get("email") != null) {
+                    if ("{}".equals(String.valueOf(stringObjectMap.get("emial"))) || "[]".equals(String.valueOf(stringObjectMap.get("emial")))) {
+                        stringObjectMap.put("email", "");
+                    }
+                }
+            }
+            if (stringObjectMap.containsKey("business_story")) {
+                if (stringObjectMap.get("business_story") != null) {
+                    if ("{}".equals(String.valueOf(stringObjectMap.get("business_story"))) || "[]".equals(String.valueOf(stringObjectMap.get("business_story")))) {
+                        stringObjectMap.put("business_story", "");
+                    }
+                }
+            }
+
             userDetailResp.setFieldMap(stringObjectMap);
 
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
