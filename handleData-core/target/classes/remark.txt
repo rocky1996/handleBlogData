@@ -27,7 +27,12 @@ curl:
 
 221:
     http://39.98.138.221:8504/blogSystem/search/upload
+
+    curl -X DELETE "10.101.203.15:9200/twitter?pretty"
+    curl -X GET "127.0.0.1:9200/_cat/indices?v&pretty"
     curl -XPUT http://172.17.75.6:9201/link_school/_settings -H 'content-Type:application/json' -d '{"index":{'max_result_window':900000000}}'
+
+    单点登录地址：http://172.17.75.6:8091/#/?username=baidu-002&token=baihu-002
 
 
 

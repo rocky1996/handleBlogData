@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -259,7 +260,7 @@ public class EsServiceImpl {
             }
             searchRequest.types("_doc");
             searchRequest.source(sourceBuilder);
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -285,7 +286,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
             // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -353,12 +354,13 @@ public class EsServiceImpl {
                                     VerifiedEnum.getVerifiedEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("verified")))).getDesc())
             );
 
-            if (hit.getSourceAsMap().get("name_userd_before") == null) {
-                userDetailResp.setNameUserdBefore("");
-            }else {
-                Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                userDetailResp.setNameUserdBefore(map.get("userFormerName") == null ? "" : (String) map.get("userFormerName"));
-            }
+//            if (hit.getSourceAsMap().get("name_userd_before") == null) {
+//                userDetailResp.setNameUserdBefore("");
+//            }else {
+//                Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
+//                userDetailResp.setNameUserdBefore(map.get("userFormerName") == null ? "" : (String) map.get("userFormerName"));
+//            }
+            userDetailResp.setNameUserdBefore(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
 
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
 
@@ -413,7 +415,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             return response == null ? 0L : response.getHits().getTotalHits().value;
         }catch (Exception e) {
             log.error("EsServiceImpl.getMediaIndexSize has error:{}",e.getMessage());
@@ -459,7 +461,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -506,7 +508,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -629,7 +631,7 @@ public class EsServiceImpl {
         searchRequest.source(builder);
 
         List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
         if (response == null) {
             return searchBeforeNameRespList;
         }
@@ -689,7 +691,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
             // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -750,7 +752,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
             // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -804,7 +806,7 @@ public class EsServiceImpl {
             searchRequest.types("_doc");
             searchRequest.source(builder);
             // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
@@ -819,6 +821,7 @@ public class EsServiceImpl {
                     .filter(e -> e.getSourceAsMap().get("integrity") != null)
                     .map(e -> e.getSourceAsMap().get("integrity").toString())
                     .distinct()
+                    .sorted()
                     .collect(Collectors.toList());
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchIntegrityResp.builder().integrityList(integrityList).build());
@@ -934,12 +937,13 @@ public class EsServiceImpl {
                 userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("friend_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count"))));
 
 
-                if (hit.getSourceAsMap().get("name_userd_before") == null) {
-                    userData.setMaidernName("");
-                }else {
-                    Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                    userData.setMaidernName(map.get("userFormerName") == null ? "" : (String) map.get("userFormerName"));
-                }
+//                if (hit.getSourceAsMap().get("name_userd_before") == null) {
+//                    userData.setMaidernName("");
+//                }else {
+//                    Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
+//                    userData.setMaidernName(map.get("userFormerName") == null ? "" : (String) map.get("userFormerName"));
+//                }
+                userData.setMaidernName(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
 
                 userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
                 userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
@@ -1004,7 +1008,7 @@ public class EsServiceImpl {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
             }
             if (searchReq.getIntegrity() != null) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity.keyword", searchReq.getCity()));
+                boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
             }
         }else {
             //分词查询
@@ -1063,5 +1067,15 @@ public class EsServiceImpl {
             boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_summary", "*"+searchReq.getUserSummary()+"*"));
             boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary"));
         }
+    }
+
+    /**
+     * 自定义build
+     * @return
+     */
+    public RequestOptions toBuilder() {
+        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
+        builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(5000 * 1024 * 1024));
+        return builder.build();
     }
 }
