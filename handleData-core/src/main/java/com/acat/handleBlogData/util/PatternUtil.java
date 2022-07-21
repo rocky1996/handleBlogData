@@ -30,6 +30,13 @@ public class PatternUtil {
         if (m.find()) {
             return m.group();
         }else {
+            if (str.contains("{") || str.contains("}") || str.contains("[") || str.contains("]")) {
+                String tempStr = str.replaceAll(String.valueOf("\\{"), "")
+                        .replaceAll(String.valueOf("\\}"), "")
+                        .replaceAll(String.valueOf("\\["), "")
+                        .replaceAll(String.valueOf("\\]"), "");
+                return tempStr;
+            }
             return str;
         }
     }
@@ -90,8 +97,9 @@ public class PatternUtil {
 //        System.out.println(checkPhoneAndGet(strPhone));
 
 //        System.out.println(handleFollowersCount("2.1K followers"));
-        System.out.println(handleWorks("{title:A X設計整合工作室,details: [2010年9月23日 - 现在,]}"));
-        System.out.println(handleWorks("{title:目前就职：PT. Sumber Alfaria Trijaya, Tbk (Alfamart)}"));
-        System.out.println(handleWorks("{title:UOB Bank Singapore - Staff management,details: [2017年3月28日 - 现在,]}|{title:曾在 MD Entertainment 担任 Artist}"));
+//        System.out.println(handleWorks("{title:A X設計整合工作室,details: [2010年9月23日 - 现在,]}"));
+//        System.out.println(handleWorks("{title:目前就职：PT. Sumber Alfaria Trijaya, Tbk (Alfamart)}"));
+//        System.out.println(handleWorks("{title:UOB Bank Singapore - Staff management,details: [2017年3月28日 - 现在,]}|{title:曾在 MD Entertainment 担任 Artist}"));
+        System.out.println(checkEmailAndGet("{\"Instagram\":\"https://www.instagram.com/qwert9632\"}"));
     }
 }
