@@ -10,6 +10,7 @@ import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.util.JwtUtils;
+import com.acat.handleBlogData.util.LanguageUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -158,7 +159,13 @@ public class CommonController {
         try {
             Map<String, Object> tranResultMap = Maps.newHashMap();
             for (String key : tranMap.keySet()) {
+
                 String tranValue = tranMap.get(key);
+                if ("language".equals(key) && StringUtils.isNotBlank(tranValue)) {
+                    tranResultMap.put(key, LanguageUtil.getLanguageName(tranValue));
+                    continue;
+                }
+
                 if (StringUtils.isBlank(tranValue)) {
                     tranResultMap.put(key, "");
                     continue;
