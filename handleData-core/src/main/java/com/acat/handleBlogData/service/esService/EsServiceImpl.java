@@ -340,7 +340,7 @@ public class EsServiceImpl {
             userDetailResp.setPostCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("post_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("post_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("post_count"))))));
             userDetailResp.setLikeCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("like_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("like_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("like_count"))))));
             userDetailResp.setDataId(PatternUtil.handleStr(hit.getSourceAsMap().get("source_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_id"))));
-            userDetailResp.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url"))));
+            userDetailResp.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))));
 
             userDetailResp.setUserType(PatternUtil.handleStr(
                     hit.getSourceAsMap().get("user_type") == null ? UserTypeEnum.WEI_ZHI.getDesc() :
