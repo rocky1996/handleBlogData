@@ -26,6 +26,7 @@ import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -273,11 +274,11 @@ public class EsServiceImpl {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
 
-            SearchResponseSections searchResponseSections = response.getInternalResponse();
-            if (searchResponseSections.getNumReducePhases() == 1) {
-                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "您好,两个及以上纯数字进行模糊搜索会存在超时风险,暂不支持,正在持续优化ing！！！");
+            SearchHits searchHits = response.getHits();
+            if (searchHits == null || searchHits.getHits() == null) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,
+                        "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
             }
-
             return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.searchData has error:{}",e.getMessage());
