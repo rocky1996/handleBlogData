@@ -21,6 +21,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -1065,8 +1066,8 @@ public class EsServiceImpl {
                 boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("mobile", "?"+searchReq.getPhoneNum()+"?"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("?"+searchReq.getPhoneNum()+"?").field("mobile"));
+//                boolQueryBuilder.must(QueryBuilders.fuzzyQuery("mobile", "*"+searchReq.getPhoneNum()+"*").fuzziness(Fuzziness.AUTO));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
                 if (searchReq.getEmail().contains(".")) {
