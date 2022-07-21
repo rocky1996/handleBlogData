@@ -463,11 +463,6 @@ public class EsServiceImpl {
                     .query(bigBuilder)
                     .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
                     .trackTotalHits(true);
-//            if ("test".equals(env) || "pre".equals(env)) {
-//                builder.from(0).size(10000);
-//            }else {
-//                builder.from(0).size(900000000);
-//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
