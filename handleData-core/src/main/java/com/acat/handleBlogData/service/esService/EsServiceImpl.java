@@ -1065,8 +1065,8 @@ public class EsServiceImpl {
                 boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("mobile", "*"+searchReq.getPhoneNum()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getPhoneNum()+"*").field("mobile"));
+                boolQueryBuilder.should(QueryBuilders.wildcardQuery("mobile", "?"+searchReq.getPhoneNum()+"?"));
+                boolQueryBuilder.should(QueryBuilders.queryStringQuery("?"+searchReq.getPhoneNum()+"?").field("mobile"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
                 if (searchReq.getEmail().contains(".")) {
