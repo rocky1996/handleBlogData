@@ -282,7 +282,7 @@ public class EsServiceImpl {
             return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.searchData has error:{}",e.getMessage());
-            return new RestResult<>(RestEnum.FAILED);
+            return new RestResult<>(RestEnum.FAILED, "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
         }
     }
 
