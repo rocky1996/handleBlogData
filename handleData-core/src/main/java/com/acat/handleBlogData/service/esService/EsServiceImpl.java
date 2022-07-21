@@ -960,7 +960,7 @@ public class EsServiceImpl {
                 );
 
                 userData.setCity(PatternUtil.handleStr(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city"))));
-                userData.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url"))));
+                userData.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))));
 
                 userData.setGender(PatternUtil.handleStr(
                         hit.getSourceAsMap().get("gender") == null ? GenderEnum.WEI_ZHI.getDesc() :

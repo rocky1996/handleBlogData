@@ -16,6 +16,14 @@ public class PatternUtil {
         if ("<>".equals(str) || "()".equals(str) || "[]".equals(str) || "{}".equals(str)) {
             return "";
         }
+
+        if (str.contains("{") || str.contains("}") || str.contains("[") || str.contains("]")) {
+            String tempStr = str.replaceAll(String.valueOf("\\{"), "")
+                    .replaceAll(String.valueOf("\\}"), "")
+                    .replaceAll(String.valueOf("\\["), "")
+                    .replaceAll(String.valueOf("\\]"), "");
+            return tempStr;
+        }
         return str;
     }
 
