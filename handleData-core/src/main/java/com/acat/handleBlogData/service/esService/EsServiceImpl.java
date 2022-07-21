@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchResponseSections;
 import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -246,6 +247,10 @@ public class EsServiceImpl {
                 searchReq.setIsParticiple(1);
             }
 
+            if (searchReq.getIsParticiple().equals(1) && StringUtils.isNotBlank(searchReq.getUserSummary())) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "用户简介不支持精准查询,请改为模糊(分词)查询");
+            }
+
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             assembleParam(searchReq, boolQueryBuilder);
 
@@ -268,9 +273,9 @@ public class EsServiceImpl {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
 
-
-            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                log.info("time:{},response:{}", new Date(), JacksonUtil.beanToStr(response));
+            SearchResponseSections searchResponseSections = response.getInternalResponse();
+            if (searchResponseSections.getNumReducePhases() == 1) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "您好,两个及以上纯数字进行模糊搜索会存在超时风险,暂不支持,正在持续优化ing！！！");
             }
 
             return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
