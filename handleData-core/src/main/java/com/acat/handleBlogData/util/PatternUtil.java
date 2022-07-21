@@ -30,7 +30,7 @@ public class PatternUtil {
         if (m.find()) {
             return m.group();
         }else {
-            return "";
+            return str;
         }
     }
 
