@@ -266,6 +266,12 @@ public class EsServiceImpl {
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
+
+
+            if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+                log.info("time:{},response:{}", new Date(), JacksonUtil.beanToStr(response));
+            }
+
             return new RestResult<>(RestEnum.SUCCESS, assembleParam(response));
         }catch (Exception e) {
             log.error("EsServiceImpl.searchData has error:{}",e.getMessage());
