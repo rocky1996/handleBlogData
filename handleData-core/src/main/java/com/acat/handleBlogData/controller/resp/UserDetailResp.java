@@ -165,6 +165,11 @@ public class UserDetailResp {
     /**
      *
      */
+    private List<BeforeNameInfo> beforeNameInfoList;
+
+    /**
+     *
+     */
     private Map<String, Object> fieldMap = Maps.newHashMap();
 //    private List<Field> fieldList;
 //

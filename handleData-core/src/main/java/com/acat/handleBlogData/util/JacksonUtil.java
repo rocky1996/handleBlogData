@@ -2,6 +2,8 @@ package com.acat.handleBlogData.util;
 
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 
 public class JacksonUtil {
 
@@ -21,7 +23,7 @@ public class JacksonUtil {
      * @return
      * @param <T>
      */
-    public static <T> T strToBean(String str, Class<T> bClass){
+    public static <T> T strToBean(String str, Class<T> bClass) {
         return JSONUtil.toBean(str, bClass);
     }
 
@@ -36,8 +38,19 @@ public class JacksonUtil {
         return JSONUtil.toBean(str, tTypeReference, true);
     }
 
-//    public static void main(String[] args) {
+    public static boolean isJSON2(String str) {
+        boolean result = false;
+        try {
+            Object obj = JSON.parse(str);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
 //        Map map = ImmutableMap.of("k1","v1","k2","v2");
 //        System.out.println(beanToStr(map));
-//    }
+    }
 }

@@ -317,7 +317,10 @@ public class EsServiceImpl {
                                     GenderEnum.getGenderEnum(Integer.parseInt(String.valueOf(hit.getSourceAsMap().get("gender")))).getDesc()))
             );
 
-            userDetailResp.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
+            String userId = PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+            String userName = PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+            userDetailResp.setUserId(userId);
+            userDetailResp.setUserName(userName);
 
             if (hit.getSourceAsMap().get("use_name") == null) {
                 userDetailResp.setUserQuanName("");
@@ -337,7 +340,6 @@ public class EsServiceImpl {
             userDetailResp.setPostCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("post_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("post_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("post_count"))))));
             userDetailResp.setLikeCount(PatternUtil.handleStr(PatternUtil.handleFollowersCount(hit.getSourceAsMap().get("like_count") == null ? "0" : ("null".equals(String.valueOf(hit.getSourceAsMap().get("like_count"))) ? "0" : String.valueOf(hit.getSourceAsMap().get("like_count"))))));
             userDetailResp.setDataId(PatternUtil.handleStr(hit.getSourceAsMap().get("source_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("source_id"))));
-            userDetailResp.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
             userDetailResp.setUserHomePage(PatternUtil.handleStr(hit.getSourceAsMap().get("user_web_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_web_url"))));
 
             userDetailResp.setUserType(PatternUtil.handleStr(
@@ -354,8 +356,13 @@ public class EsServiceImpl {
             if (hit.getSourceAsMap().get("name_userd_before") == null) {
                 userDetailResp.setNameUserdBefore("");
             }else {
-                Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                userDetailResp.setNameUserdBefore(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
+                boolean isJson = JacksonUtil.isJSON2(String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
+                if (isJson) {
+                    Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
+                    userDetailResp.setNameUserdBefore(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
+                }else {
+                    userDetailResp.setNameUserdBefore("");
+                }
             }
 
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
@@ -390,6 +397,25 @@ public class EsServiceImpl {
                     userDetailResp.setSourceCreateTime(MO_REN_TIME);
                 }
             }
+
+            /******新增字段*******/
+            List<BeforeNameInfo> beforeNameInfoList = searchBeforeNameInfoV2(userId, userName);
+            if (!CollectionUtils.isEmpty(beforeNameInfoList)) {
+                userDetailResp.setBeforeNameInfoList(beforeNameInfoList);
+            }else {
+                BeforeNameInfo beforeNameInfo = BeforeNameInfo
+                        .builder()
+                        .userId(userId)
+                        .userName(userName)
+                        .uuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))))
+                        .userQuanName(PatternUtil.handleStr(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name"))))
+                        .mediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build())
+                        .userUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))))
+                        .build();
+                List<BeforeNameInfo> beforeNameList = Lists.newArrayList(beforeNameInfo);
+                userDetailResp.setBeforeNameInfoList(beforeNameList);
+            }
+
 
             /*****处理原始数据 _____特殊处理 *****/
             Map<String, Object> stringObjectMap = hit.getSourceAsMap();
@@ -548,8 +574,8 @@ public class EsServiceImpl {
 
         try {
             // 创建请求
-            List<SearchBeforeNameResp.BeforeNameInfo> userIdList = Lists.newArrayList();
-            List<SearchBeforeNameResp.BeforeNameInfo> userNameList = Lists.newArrayList();
+            List<BeforeNameInfo> userIdList = Lists.newArrayList();
+            List<BeforeNameInfo> userNameList = Lists.newArrayList();
             if (StringUtils.isNotBlank(userId)) {
                 userIdList = yi_ci_search(true, userId);
             }
@@ -557,14 +583,19 @@ public class EsServiceImpl {
                 userNameList = yi_ci_search(false, userName);
             }
 
-            List<SearchBeforeNameResp.BeforeNameInfo> bigList = Lists.newArrayList();
+            List<BeforeNameInfo> bigList = Lists.newArrayList();
             bigList.addAll(userIdList);
             bigList.addAll(userNameList);
 
-            ArrayList<SearchBeforeNameResp.BeforeNameInfo> resultList =
+            if (CollectionUtils.isEmpty(bigList)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchBeforeNameResp.builder().beforeNameInfoList(new ArrayList<>()).build());
+            }
+
+            ArrayList<BeforeNameInfo> resultList =
                     bigList.stream().collect(Collectors.collectingAndThen(
                             Collectors.toCollection(() -> new TreeSet<>(
-                                    Comparator.comparing(SearchBeforeNameResp.BeforeNameInfo::getUuid))), ArrayList::new));
+                                    Comparator.comparing(BeforeNameInfo::getUuid))), ArrayList::new));
 
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
@@ -574,6 +605,37 @@ public class EsServiceImpl {
         return new RestResult<>(RestEnum.FAILED);
     }
 
+    public List<BeforeNameInfo> searchBeforeNameInfoV2(String userId, String userName) {
+        try {
+            // 创建请求
+            List<BeforeNameInfo> userIdList = Lists.newArrayList();
+            List<BeforeNameInfo> userNameList = Lists.newArrayList();
+            if (StringUtils.isNotBlank(userId)) {
+                userIdList = yi_ci_search(true, userId);
+            }
+            if (StringUtils.isNotBlank(userName)) {
+                userNameList = yi_ci_search(false, userName);
+            }
+
+            List<BeforeNameInfo> bigList = Lists.newArrayList();
+            bigList.addAll(userIdList);
+            bigList.addAll(userNameList);
+
+            if (CollectionUtils.isEmpty(bigList)) {
+                return new ArrayList<>();
+            }
+
+            ArrayList<BeforeNameInfo> resultList =
+                    bigList.stream().collect(Collectors.collectingAndThen(
+                            Collectors.toCollection(() -> new TreeSet<>(
+                                    Comparator.comparing(BeforeNameInfo::getUuid))), ArrayList::new));
+            return resultList;
+        }catch (Exception e) {
+            log.error("EsServiceImpl.searchBeforeNameInfoV2 has error:{}",e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 分别去搜索
      * @param whereValue
@@ -581,7 +643,7 @@ public class EsServiceImpl {
      * @return
      * @throws Exception
      */
-    private List<SearchBeforeNameResp.BeforeNameInfo> yi_ci_search(boolean whereValue, String value) throws Exception{
+    private List<BeforeNameInfo> yi_ci_search(boolean whereValue, String value) throws Exception{
         SearchSourceBuilder builder = new SearchSourceBuilder()
 //                .query(boolQueryBuilder)
                 .trackTotalHits(true);
@@ -603,7 +665,7 @@ public class EsServiceImpl {
         searchRequest.types("_doc");
         searchRequest.source(builder);
 
-        List<SearchBeforeNameResp.BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
+        List<BeforeNameInfo> searchBeforeNameRespList = Lists.newArrayList();
         SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
         if (response == null) {
             return searchBeforeNameRespList;
@@ -616,7 +678,7 @@ public class EsServiceImpl {
                     continue;
                 }
 
-                SearchBeforeNameResp.BeforeNameInfo beforeNameInfo = new SearchBeforeNameResp.BeforeNameInfo();
+                BeforeNameInfo beforeNameInfo = new BeforeNameInfo();
                 beforeNameInfo.setUuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))));
                 beforeNameInfo.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
                 beforeNameInfo.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
@@ -907,8 +969,13 @@ public class EsServiceImpl {
                 if (hit.getSourceAsMap().get("name_userd_before") == null) {
                     userData.setMaidernName("");
                 }else {
-                    Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
-                    userData.setMaidernName(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
+                    boolean isJson = JacksonUtil.isJSON2(String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
+                    if (isJson) {
+                        Map<String, Object> map = JacksonUtil.strToBean(String.valueOf(hit.getSourceAsMap().get("name_userd_before")), Map.class);
+                        userData.setMaidernName(PatternUtil.handleStr(map == null ? "" : (map.get("userFormerName") == null ? "" : String.valueOf(map.get("userFormerName")))));
+                    }else {
+                        userData.setMaidernName("");
+                    }
                 }
 
                 userData.setUserReligion(PatternUtil.handleStr(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio"))));
