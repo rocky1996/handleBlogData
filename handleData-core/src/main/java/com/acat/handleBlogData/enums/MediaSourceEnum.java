@@ -6,13 +6,13 @@ import java.util.Map;
 public enum MediaSourceEnum {
 
     TWITTER(0, "TWITTER", "twitter"),
-    FB_IMPL(1, "FaceBook重点",  "fb_impl"),
-    FB_HISTORY(2, "FaceBook历史", "fb_history"),
-    FQ_IMPL(3, "FourceQuare-重点", "fq_impl"),
-    FQ_HISTORY(4, "FourceQuare-历史", "fq_history"),
+    FB_IMPL(1, "FaceBook-完整属性",  "fb_impl"),
+    FB_HISTORY(2, "FaceBook-部分属性", "fb_history"),
+    FQ_IMPL(3, "FourceQuare-完整属性", "fq_impl"),
+    FQ_HISTORY(4, "FourceQuare-部分属性", "fq_history"),
     INSTAGRAM(5, "INSTAGRAM", "instagram"),
-    LINKEDIN_IMPL(6, "领英-重点", "link_impl"),
-    LINKEDIN_HISTORY(7, "领英-历史", "link_history"),
+    LINKEDIN_IMPL(6, "领英-完整属性", "link_impl"),
+    LINKEDIN_HISTORY(7, "领英-部分属性", "link_history"),
     LINKEDIN_BUSINESS(8, "领英-企业", "link_business"),
     LINKEDIN_SCHOOL(9, "领英-学校", "link_school"),
     ALL(10, "全部", "all")
