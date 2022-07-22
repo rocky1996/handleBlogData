@@ -99,7 +99,7 @@ public class EsServiceImpl {
         MediaSourceEnum.LINKEDIN_IMPL.getEs_index(),
         MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
         MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(),
-        MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index()
+        MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index(),
     };
 
     /**
