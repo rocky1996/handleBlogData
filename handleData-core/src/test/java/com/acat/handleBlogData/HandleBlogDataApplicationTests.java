@@ -376,7 +376,10 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void deleteUserIndex() {
-        elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
+        IndexCoordinates indexCoordinates = IndexCoordinates.of("link_school");
+        indexCoordinates.getIndexNames();
+
+        elasticsearchRestTemplate.indexOps(indexCoordinates).delete();
     }
 
     @Test
