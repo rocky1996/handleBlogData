@@ -68,7 +68,7 @@ public class CommonController {
                     || mediaSourceEnum == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
-            elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
+            elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_student")).delete();
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             log.error("CommonController.deleteIndex has error:{}",e.getMessage());

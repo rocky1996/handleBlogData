@@ -59,7 +59,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  */
 @Data
 @Builder
-@Document(indexName = "link_school")
+@Document(indexName = "link_student")
 public class LinkSchoolUserData {
 
     /**

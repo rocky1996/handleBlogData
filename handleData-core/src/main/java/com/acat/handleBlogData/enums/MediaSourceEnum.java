@@ -14,7 +14,7 @@ public enum MediaSourceEnum {
     LINKEDIN_IMPL(6, "LinkedIn-完整属性", "link_impl"),
     LINKEDIN_HISTORY(7, "LinkedIn-部分属性", "link_history"),
     LINKEDIN_BUSINESS(8, "LinkedIn-企业", "link_business"),
-    LINKEDIN_SCHOOL(9, "LinkedIn-学校", "link_school"),
+    LINKEDIN_SCHOOL(9, "LinkedIn-学校", "link_student"),
     ALL(10, "全部", "all"),
     ;
 
