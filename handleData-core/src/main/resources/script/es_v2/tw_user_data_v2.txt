@@ -25,7 +25,15 @@ friend_count   String     可以为空       关注数
 post_count     String     可以为空       发文数
 like_count     String     可以为空       喜欢数
 source_create_time   String   可以为空   数据产生时间，数据产生的时间，如果没有产生时间，则填写入库时间
+mobile         String     可以为空       手机号
 email          String     可以为空       邮箱地址,预留字段
+name_userd_before    String   可以为空   曾用名,预留字段
+user_religion  Strign     可以为空       宗教信仰
+works          String     可以为空       工作信息
+location       String　　　可以为空　　　　 位置信息
+marriage       String     可以为空       婚姻情况
+home_town      String     可以为空       家乡地址
+user_summary   String     可以为空       用户简介
 language       String     可以为空       语言编码
 user_web_url   String     可以为空       个人站点（数据部分为空）
 born_time      String     可以为空       出生日期（数据部分为空）
@@ -69,7 +77,15 @@ extend         String     可以为空        扩展信息（无属性留空）
     "post_count":"",      #发文数       ->      tweets或者article_cnt
     "like_count":"",        #收藏的推文数  ->      like
     "source_create_time":"",  #采集时间   ->    input_time或者crawl_time
+    "mobile":"",      #手机号
     "email":"",       #用户邮箱（数据部分为空）
+    "name_userd_before":"",     #曾用名
+    "user_religion"   #宗教信仰
+    "works":"",       #工作信息
+    "location":"",    #位置信息
+    "marriage":"",    #婚姻情况
+    "home_town":"",   #家乡地址
+    "user_summary":""     #用户简介     ->      userFlag
     "language":"",        #用户语言（数据部分为空）        ->      lang
     "user_web_url":"",        #个人站点（数据部分为空）
     "born_time":"",           #出生日期（数据部分为空）    ->      born_time或者birth_date
