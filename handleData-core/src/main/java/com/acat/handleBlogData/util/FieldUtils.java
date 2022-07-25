@@ -69,6 +69,125 @@ public class FieldUtils {
         /**
          * instagram
          */
+        fieldMap.put("external_url", "社交联系方式");
+        fieldMap.put("fetch_day", "更新日期");
+        fieldMap.put("profile_pic_url_oss", "头像oss地址");
+        fieldMap.put("media_url", "媒介URL");
+        fieldMap.put("person", "人物标签");
+        fieldMap.put("sent_num", "情感度");
+
+        /**
+         * facebook
+         */
+        fieldMap.put("impl_or_history_type", "类型");
+        fieldMap.put("user_political_views", "政治观点");
+        fieldMap.put("user_systent_name", "用户系统名");
+        fieldMap.put("w3_fb_url", "博主地址");
+        fieldMap.put("institution_id", "隶属机构ID");
+        fieldMap.put("is_community_page", "是否社区page页");
+        fieldMap.put("communication_philosophy", "传播理念");
+        fieldMap.put("have_product", "拥有产品,企业账号");
+        fieldMap.put("exchange_number", "交流人数");
+        fieldMap.put("visit_number", "访问人数");
+        fieldMap.put("first_name", "名");
+        fieldMap.put("last_name", "姓");
+        fieldMap.put("teach_message", "教育信息");
+        fieldMap.put("acquisition_time", "采集时间");
+        fieldMap.put("affective_state", "情感状态");
+        fieldMap.put("background_picture_url", "背景图片");
+        fieldMap.put("business_story", "商家故事");
+        fieldMap.put("classify_message", "分类信息");
+        fieldMap.put("com_from", "数据来源");
+        fieldMap.put("dm_tag1", "人物标签-算法");
+        fieldMap.put("company_profile", "公司简介");
+        fieldMap.put("country_region", "地理位置信息");
+        fieldMap.put("country_region_city", "地理位置信息-城市");
+        fieldMap.put("detailed_summary", "详细简介");
+        fieldMap.put("favorite_quotes", "格言信息");
+        fieldMap.put("found", "成立时间");
+        fieldMap.put("gender_orientation", "性取向");
+        fieldMap.put("go_through", "经历,生活纪事");
+        fieldMap.put("like_number_int", "喜欢人数");
+        fieldMap.put("local_profile_pic_background_url", "本地背景图路径");
+        fieldMap.put("media_title", "附件媒体文字");
+        fieldMap.put("media_type_embeded", "媒介类型");
+        fieldMap.put("media_url_name", "文章含有媒介系统生成文件名");
+        fieldMap.put("opening_hours", "运营时间");
+        fieldMap.put("personal_web_url", "个人网址");
+        fieldMap.put("photo_album_url", "相册url地址");
+        fieldMap.put("photo_wall", "照片墙链接");
+        fieldMap.put("position_message", "位置信息");
+        fieldMap.put("register_number","签到数");
+        fieldMap.put("registration_date", "注册日期");
+        fieldMap.put("related_home_page", "相关主页信息");
+        fieldMap.put("shop_content", "商品信息");
+        fieldMap.put("family_and_relation_ships", "家庭成员与感情情况");
+        fieldMap.put("skill", "技能");
+        fieldMap.put("user_birthday", "用户生日");
+        fieldMap.put("user_classify", "用户分类");
+        fieldMap.put("user_description", "用户描述");
+        fieldMap.put("photo_album_collect", "相册信息");
+        fieldMap.put("follower_number_int", "人气数");
+
+        /**
+         * fq
+         */
+        fieldMap.put("contact", "社交联系方式");
+        fieldMap.put("alg_remark", "算法标签");
+        fieldMap.put("alg_result", "预留字段");
+        fieldMap.put("checkins_count", "签到数量");
+        fieldMap.put("country_region", "地理位置信息");
+        fieldMap.put("home_city", "城市编码");
+        fieldMap.put("lenses", "镜头");
+        fieldMap.put("lists", "列表");
+        fieldMap.put("lists_count", "列表数");
+        fieldMap.put("local_user_head_url", "本地头像url");
+        fieldMap.put("photo", "图片源数据");
+        fieldMap.put("photo_prefix", "头像前缀");
+        fieldMap.put("photo_suffix", "头像后缀");
+        fieldMap.put("real_name", "人工维护真实姓名");
+        fieldMap.put("recent_list", "最近列表");
+        fieldMap.put("send_state", "发送状态");
+        fieldMap.put("send", "情感正负面");
+        fieldMap.put("send_num", "情感度");
+        fieldMap.put("todo", "计划内容");
+        fieldMap.put("top_tips", "top评论");
+        fieldMap.put("visibility", "可见性");
+        fieldMap.put("vpers", "人物名称分词");
+        fieldMap.put("source_key", "关键词来源");
+        fieldMap.put("source_venue", "位置来源");
+        fieldMap.put("source_venue_id", "位置id来源");
+        fieldMap.put("friends", "朋友数量");
+
+        /**
+         * link 无
+         */
+
+
+        /**
+         * link_school
+         */
+        fieldMap.put("cover", "背景图片");
+        fieldMap.put("local_cover", "本地背景图片");
+        fieldMap.put("staffing_company", "是否是上市公司");
+        fieldMap.put("industries", "所属行业");
+        fieldMap.put("specialities","专注领域");
+        fieldMap.put("headquarter_post", "总部所在邮编");
+        fieldMap.put("headquarter_address", "总部所在地址");
+        fieldMap.put("confirmed_locations_contry", "办公所在国家");
+        fieldMap.put("confirmed_locations_city", "办公所在城市");
+        fieldMap.put("confirmed_locations_post", "办公所在邮编");
+        fieldMap.put("confirmed_locations_address", "办公所在地址");
+        fieldMap.put("size", "企业规模");
+        fieldMap.put("founded_on", "成立于");
+        fieldMap.put("description", "企业描述（简介）");
+        fieldMap.put("website", "企业官网");
+        fieldMap.put("employees", "员工数量");
+        fieldMap.put("keywords", "关键词");
+        fieldMap.put("tags", "标签");
+        fieldMap.put("profile_score", "信息完成度");
+        fieldMap.put("source_connection", "资料来源");
+
 
     }
 

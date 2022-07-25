@@ -40,10 +40,8 @@ impl_or_history_type   String   可以为空  类别，是impl还是history
 contact        String     可以为空       社交联系方式
 alg_remark     String     可以为空       算法标签
 alg_result     String     可以为空       预留
-bio            String     可以为空       用户简介
 checkins_count    String     可以为空    签到数量
 country_region    String     可以为空    地理位置信息
-create_time       String     可以为空    创建时间
 first_name        String     可以为空    名称前缀
 home_city         String     可以为空    城市编码
 last_name         String     可以为空    名称后缀
@@ -117,7 +115,6 @@ friends           String     可以为空    朋友数量
     "contact":"",     #社交联系方式
     "checkins_count":"",    #签到数量
     "country_region":"",    #地理位置信息
-    "create_time":"",       #创建时间
     "first_name":"",        #名称前缀
     "home_city":"",         #城市编码
     "last_name":"",         #名称后缀
