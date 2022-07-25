@@ -36,6 +36,7 @@ location       String     可以为空       位置信息
 marriage       String     可以为空       婚姻状况,夫妻关系（数据部分为空）
 home_town      String     可以为空       家乡地址,家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）
 user_summary    String     可以为空       用户简介
+impl_or_history_type   String   可以为空  类别，是impl还是history
 user_political_views  String     可以为空       政治观点（数据部分为空）
 user_systent_name     String     可以为空       用户系统名（数据部分为空）
 w3_fb_url      String     可以为空       采集层统一的博主地址（样例数据全部为空，新数据都有值）
@@ -124,6 +125,7 @@ verified_reason          String  可以为空          认证原因（数据部�
     "marriage":"",         #夫妻关系（数据部分为空）   ->       significant_other
     "home_town":"",   #家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）   ->   hometown_message
     "user_summary":"",      #用户简介(个人账户-Intro)（部分有值，例：["目前就职：長距離トラックドライバー","长野市","所在地：Chikuma-shi, Nagano, Japan"]）
+    "impl_or_history_type":"",     #impl还是history
     "user_political_views":"", #政治观点（数据部分为空）
     "user_systent_name":"", #用户系统名（数据部分为空）      ->      nickName
     "w3_fb_url":"",         #采集层统一的博主地址（样例数据全部为空，新数据都有值）

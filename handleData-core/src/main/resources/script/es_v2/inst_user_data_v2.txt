@@ -35,6 +35,7 @@ location       String     可以为空       位置信息
 marriage       String     可以为空       婚姻情况
 home_town      String     可以为空       家乡地址
 user_summary   String     可以为空       用户简介
+impl_or_history_type   String   可以为空  类别，是impl还是history
 name_userd_before   String    可以为空   曾用名
 external_url   String     可以为空       社交联系方式，例如fb账号地址
 fetch_day      String     可以为空       更新日期
@@ -79,6 +80,7 @@ sent_num       String     可以为空       情感度 --算法预留
     "marriage":"",    #婚姻情况
     "home_town":"",   #家乡地址
     "user_summary":"",   #用户简介    ->      biography
+    "impl_or_history_type":"",     #impl还是history
     "name_userd_before", #曾用名
     "external_url":"",   #社交联系方式，例如fb账号地址
     "fetch_day":"",      #更新日期

@@ -36,6 +36,7 @@ location       String     可以为空       位置信息
 marriage       String     可以为空       婚姻状况
 home_town      String     可以为空       家乡地址
 user_summary   String     可以为空       用户简介
+impl_or_history_type   String   可以为空  类别，是impl还是history
 contact        String     可以为空       社交联系方式
 alg_remark     String     可以为空       算法标签
 alg_result     String     可以为空       预留
@@ -110,6 +111,7 @@ friends           String     可以为空    朋友数量
     "marriage":"",          #婚姻状况
     "home_town":"",         #家乡地址
     "user_summary":"",      #用户简介    ->     bio
+    "impl_or_history_type":"",     #impl还是history
     "alg_remark":"",  #算法标签
     "alg_result":"",  #预留
     "contact":"",     #社交联系方式
