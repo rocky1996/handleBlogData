@@ -370,6 +370,11 @@ public class FbUserData_v2 {
     private String user_summary;
 
     /**
+     * impl or history
+     */
+    private String impl_or_history_type;
+
+    /**
      * 用户系统名（数据部分为空）
      */
     private String user_systent_name;
@@ -617,7 +622,7 @@ public class FbUserData_v2 {
 
     public FbUserData_v2() {}
 
-    public FbUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_political_views, String user_summary, String user_systent_name, String w3_fb_url, String institution_id, String is_community_page, String communication_philosophy, String have_product, String exchange_number, String visit_number, String first_name, String last_name, String teach_message, String acquisition_time, String affective_state, String background_picture_url, String business_story, String classify_message, String com_from, String dm_tag1, String company_profile, String country_region, String country_region_city, String detailed_summary, String favorite_quotes, String found, String gender_orientation, String go_through, String like_number_int, String local_profile_pic_background_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String opening_hours, String personal_web_url, String photo_album_url, String photo_wall, String position_message, String register_number, String registration_date, String related_home_page, String shop_content, String family_and_relation_ships, String skill, String user_birthday, String user_classify, String user_description, Integer integrity) {
+    public FbUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_political_views, String user_summary, String impl_or_history_type, String user_systent_name, String w3_fb_url, String institution_id, String is_community_page, String communication_philosophy, String have_product, String exchange_number, String visit_number, String first_name, String last_name, String teach_message, String acquisition_time, String affective_state, String background_picture_url, String business_story, String classify_message, String com_from, String dm_tag1, String company_profile, String country_region, String country_region_city, String detailed_summary, String favorite_quotes, String found, String gender_orientation, String go_through, String like_number_int, String local_profile_pic_background_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String opening_hours, String personal_web_url, String photo_album_url, String photo_wall, String position_message, String register_number, String registration_date, String related_home_page, String shop_content, String family_and_relation_ships, String skill, String user_birthday, String user_classify, String user_description, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -653,6 +658,7 @@ public class FbUserData_v2 {
         this.home_town = home_town;
         this.user_political_views = user_political_views;
         this.user_summary = user_summary;
+        this.impl_or_history_type = impl_or_history_type;
         this.user_systent_name = user_systent_name;
         this.w3_fb_url = w3_fb_url;
         this.institution_id = institution_id;
