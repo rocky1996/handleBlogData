@@ -9,6 +9,10 @@ public class FieldUtils {
 
     public static Map<String, String> fieldMap = Maps.newHashMap();
     static {
+
+        /**
+         * 公共字段
+         */
         fieldMap.put("uuid", "用户唯一ID");
         fieldMap.put("integrity", "完整度");
         fieldMap.put("platform", "来源平台");
@@ -34,7 +38,19 @@ public class FieldUtils {
         fieldMap.put("post_count", "发文数");
         fieldMap.put("like_count", "收藏数");
         fieldMap.put("source_create_time", "采集时间");
+        fieldMap.put("name_userd_before", "曾用名");
+        fieldMap.put("mobile", "手机号");
         fieldMap.put("email", "用户邮箱");
+        fieldMap.put("user_religion", "宗教信仰");
+        fieldMap.put("works", "工作信息");
+        fieldMap.put("location", "位置信息");
+        fieldMap.put("marriage", "婚姻情况");
+        fieldMap.put("home_town", "家乡地址");
+        fieldMap.put("user_summary", "用户简介");
+
+        /**
+         * twitter
+         */
         fieldMap.put("language", "用户语言");
         fieldMap.put("user_web_url", "个人站点");
         fieldMap.put("born_time", "出生日期");
@@ -49,6 +65,11 @@ public class FieldUtils {
         fieldMap.put("com_from", "来源");
         fieldMap.put("diff_time", "注册日期");
         fieldMap.put("extend", "扩展信息");
+
+        /**
+         * instagram
+         */
+
     }
 
     public static String getFieldNameFromZh(String key) {

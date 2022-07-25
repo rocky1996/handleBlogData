@@ -36,6 +36,7 @@ location       String     可以为空       位置信息
 marriage       String　　　可以为空　　　　　婚姻状况
 home_town      String　　　可以为空　　　　　家乡地址
 user_summary   String　　　可以为空　　　　　用户简介
+impl_or_history_type   String   可以为空  类别，是impl还是history
 last_name       String     可以为空       姓氏
 first_name      String     可以为空       名
 maidern_name    String     可以为空       曾用名
@@ -164,6 +165,7 @@ media_title              String  可以为空          ²  文章含有媒介�
     "marriage":"",         #婚姻状况
     "home_town":"",        #家乡地址
     "user_summary":"",     #用户简介   ->     summary
+    "impl_or_history_type":"",     #impl还是history
     "last_name":"",       #姓氏
     "first_name":"",      #名
     "birth_date_date":"", #出生日月
