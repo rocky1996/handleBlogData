@@ -1,4 +1,4 @@
-package com.acat.handleBlogData.domain;
+package com.acat.handleBlogData.domain.esEntityV2;
 
 import lombok.Builder;
 import lombok.Data;
@@ -155,7 +155,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Data
 @Builder
 @Document(indexName = "fq_v2")
-public class FqUserData {
+public class FqUserData_v2 {
 
     /**
      * 用户唯一ID
@@ -511,9 +511,9 @@ public class FqUserData {
 //    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private Integer integrity;
 
-    public FqUserData() {}
+    public FqUserData_v2() {}
 
-    public FqUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_summary, String alg_remark, String alg_result, String contact, String checkins_count, String country_region, String first_name, String home_city, String last_name, String lenses, String lists, String lists_count, String local_user_head_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String send, String send_num, String todo, String top_tips, String visibility, String vpers, String w3_fb_url, String source_key, String source_venue, String source_venue_id, String friends, Integer integrity) {
+    public FqUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_summary, String alg_remark, String alg_result, String contact, String checkins_count, String country_region, String first_name, String home_city, String last_name, String lenses, String lists, String lists_count, String local_user_head_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String person, String photo, String photo_prefix, String photo_suffix, String real_name, String recent_list, String send_state, String send, String send_num, String todo, String top_tips, String visibility, String vpers, String w3_fb_url, String source_key, String source_venue, String source_venue_id, String friends, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;

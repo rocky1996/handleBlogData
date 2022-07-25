@@ -1,17 +1,65 @@
-package com.acat.handleBlogData.domain;
+package com.acat.handleBlogData.domain.esEntityV2;
 
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.io.Serializable;
 
 /**
+ * 字段            类型       是否允许为空       备注
+ * uuid           String     不能为空       系统自动生成ID
+ * integrity      String     不能为空       完整度
+ * platform       String     可以为空       来源平台：FB、FQ、TW、IS、LI
+ * data_source    String     可以为空       数据来源,数据来源文件名
+ * importance     String     可以为空       重要等级,0：普通 （默认）1：关注 2：重要 3：特别重要
+ * remark         String     可以为空       批注
+ * language_type  String     可以为空       语种
+ * source_id      String     不能为空       数据来源id
+ * user_id        String     不能为空       用户唯一标识ID
+ * screen_name    String     可以为空       昵称
+ * use_name       String     可以为空       用户全名
+ * user_url       String     可以为空       用户主页URL
+ * user_avatar    String     可以为空       用户头像
+ * local_photo_url   String    可以为空     用户头像本地路径
+ * gender         String     可以为空       性别: -1：男,1：女, 0：未知
+ * country        String     可以为空       国家
+ * city           String     可以为空       城市
+ * user_type      String     可以为空       用户类型,用户类型：1：个人账号people  0：公众 pages  -1：其他
+ * verified       String     可以为空       用户认证,1：认证，0：非认证
+ * followers_count   String  可以为空       粉丝数
+ * friend_count   String     可以为空       关注数
+ * post_count     String     可以为空       发文数
+ * like_count     String     可以为空       喜欢数
+ * source_create_time   String   可以为空   数据产生时间，数据产生的时间，如果没有产生时间，则填写入库时间
+ * mobile         String     可以为空       手机号
+ * email          String     可以为空       邮箱地址,预留字段
+ * name_userd_before    String   可以为空   曾用名,预留字段
+ * user_religion  Strign     可以为空       宗教信仰
+ * works          String     可以为空       工作信息
+ * location       String　　　可以为空　　　　 位置信息
+ * marriage       String     可以为空       婚姻情况
+ * home_town      String     可以为空       家乡地址
+ * user_summary   String     可以为空       用户简介
+ * language       String     可以为空       语言编码
+ * user_web_url   String     可以为空       个人站点（数据部分为空）
+ * born_time      String     可以为空       出生日期（数据部分为空）
+ * registered_time       String     可以为空       注册时间（示例数据：2019-07-30 01:39:26）
+ * bkgd_url       String     可以为空       背景图片url（示例：https://pbs.twimg.com/profile_banners/1156016417075937281/1564470068）
+ * user_flag      String     可以为空       用户描述（示例：wife, mother, avid gardener.）
+ * listed         String     可以为空       所属公共列表数（数字）
+ * moments        String     可以为空       瞬间（数字）
+ * protected      String     可以为空       是否是锁定账号（1：锁定，0：非锁定）
+ * tf_effective   String     可以为空       是否有博文（0：代表有效，1：代表无效）
+ * time_zone      String     可以为空       用户所在时区（样例数据均为空）
+ * com_from       String     可以为空       来源（样例数据都是 other）
+ * diff_time      String     可以为空        注册日期(示例：2019-07-30 09:39:26.000000 +08:00)
+ * extend         String     可以为空        扩展信息（无属性留空）
+ *
+ *
+ * 入参格式:
  * {
  *     "uuid":"",        #用户唯一ID
+ *     "integrity":"",   #完整度
  *     "platform":"",    #来源平台：FB、FQ、TW、IS、LI
  *     "data_source":"", #数据来源,数据来源文件名
  *     "create_time":"", #数据入库时间
@@ -35,7 +83,15 @@ import java.io.Serializable;
  *     "post_count":"",      #发文数       ->      tweets或者article_cnt
  *     "like_count":"",        #收藏的推文数  ->      like
  *     "source_create_time":"",  #采集时间   ->    input_time或者crawl_time
+ *     "mobile":"",      #手机号
  *     "email":"",       #用户邮箱（数据部分为空）
+ *     "name_userd_before":"",     #曾用名
+ *     "user_religion"   #宗教信仰
+ *     "works":"",       #工作信息
+ *     "location":"",    #位置信息
+ *     "marriage":"",    #婚姻情况
+ *     "home_town":"",   #家乡地址
+ *     "user_summary":""     #用户简介     ->      userFlag
  *     "language":"",        #用户语言（数据部分为空）        ->      lang
  *     "user_web_url":"",        #个人站点（数据部分为空）
  *     "born_time":"",           #出生日期（数据部分为空）    ->      born_time或者birth_date
@@ -51,54 +107,12 @@ import java.io.Serializable;
  *     "diff_time":"",           #注册日期(示例：2019-07-30 09:39:26.000000 +08:00)
  *     "extend":""               #扩展信息（无属性留空）
  * }
- *
- * even文件的字段:
- * {
- * "user_web_url":"https://linktr.ee/MamamooCharts",
- * "born_time":"",
- * "registered_time":"2018-06-04 03:24:48",
- * "bkgd_url":"https://pbs.twimg.com/profile_banners/1003477642786541569/1605602083",
- * "user_flag":"Your best source of charts, analytics \u0026 stats for @RBW_MAMAMOO | ENG+한국어+中文 | Not affiliated with MAMAMOO",
- * "listed":"119",
- * "moments":"4126",
- * "protect_ed":"0",
- * "tf_effective":"0",
- * "time_zone":"",
- * "com_from":"forwardingrelationship",
- * "diff_time":"4/6/2018 11:24:48+08",
- * "extend":"",
- * "uuid":"4ec16b89-56f9-475b-9a6f-f904e6994159",
- * "platform":"TW",
- * "data_source":"TW_i_userprofile_69.json.tran_72121.json",
- * "create_time":"17:03:04.432",
- * "importance":"0",
- * "remark":"",
- * "language_type":"en",
- * "source_id":"2460f2b8048b6b706235ae24d3399b48",
- * "user_id":"1003477642786541569",
- * "screen_name":"MamamooCharts",
- * "use_name":"MAMAMOO Charts :tooth:",
- * "user_url":"https://twitter.com/MamamooCharts",
- * "user_avatar":"https://pbs.twimg.com/profile_images/1313845931524059136/Q8yOLjTs_normal.jpg",
- * "local_photo_url":"tw_Info_1003477642786541569_photo.jpg",
- * "gender":"0",
- * "country":"美国",
- * "city":"LINKS ➡️",
- * "user_type":"-1",
- * "verified":"0",
- * "followers_count":"23260",
- * "friend_count":"58",
- * "post_count":"15330",
- * "like_count":"5004",
- * "source_create_time":"7/12/2020 14:07:10+08",
- * "email":"",
- * "language":"en"
- * }
  */
-@Document(indexName = "twitter")
+
+@Document(indexName = "twitter_v2")
 @Data
 @Builder
-public class TwitterUserData{
+public class TwitterUserData_v2{
 
     /**
      * 用户唯一ID
@@ -230,10 +244,50 @@ public class TwitterUserData{
     private String source_create_time;
 
     /**
+     * 手机号
+     */
+    private String mobile;
+
+    /**
+     * 宗教信仰
+     */
+    private String user_religion;
+
+    /**
+     * 工作信息
+     */
+    private String works;
+
+    /**
+     * 位置信息
+     */
+    private String location;
+
+    /**
+     * 婚姻情况
+     */
+    private String marriage;
+
+    /**
+     * 家乡地址
+     */
+    private String home_town;
+
+    /**
      * 用户邮箱（数据部分为空）
      */
     //   @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String email;
+
+    /**
+     * 曾用名
+     */
+    private String name_userd_before;
+
+    /**
+     * 用户简介     ->      userFlag
+     */
+    private String user_summary;
 
     /**
      * 用户语言（数据部分为空）        ->      lang
@@ -311,9 +365,9 @@ public class TwitterUserData{
 //    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private Integer integrity;
 
-    public TwitterUserData() {}
+    public TwitterUserData_v2() {}
 
-    public TwitterUserData(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String email, String language, String user_web_url, String born_time, String registered_time, String bkgd_url, String user_flag, String listed, String moments, String protect_ed, String tf_effective, String time_zone, String com_from, String diff_time, String extend, Integer integrity) {
+    public TwitterUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String mobile, String user_religion, String works, String location, String marriage, String home_town, String email, String name_userd_before, String user_summary, String language, String user_web_url, String born_time, String registered_time, String bkgd_url, String user_flag, String listed, String moments, String protect_ed, String tf_effective, String time_zone, String com_from, String diff_time, String extend, Integer integrity) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -338,7 +392,15 @@ public class TwitterUserData{
         this.post_count = post_count;
         this.like_count = like_count;
         this.source_create_time = source_create_time;
+        this.mobile = mobile;
+        this.user_religion = user_religion;
+        this.works = works;
+        this.location = location;
+        this.marriage = marriage;
+        this.home_town = home_town;
         this.email = email;
+        this.name_userd_before = name_userd_before;
+        this.user_summary = user_summary;
         this.language = language;
         this.user_web_url = user_web_url;
         this.born_time = born_time;
@@ -356,3 +418,4 @@ public class TwitterUserData{
         this.integrity = integrity;
     }
 }
+
