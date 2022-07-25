@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * integrity      String     不能为空       完整度
  * platform       String     可以为空       来源平台：FB、FQ、TW、IS、LI
  * data_source    String     可以为空       数据来源,数据来源文件名
+ * create_time    String　　　可以为空　　　　数据入库时间
  * importance     String     可以为空       重要等级,0：普通 （默认）1：关注 2：重要 3：特别重要
  * remark         String     可以为空       批注
  * language_type  String     可以为空       语种
@@ -41,6 +42,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * marriage       String     可以为空       婚姻状况,夫妻关系（数据部分为空）
  * home_town      String     可以为空       家乡地址,家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）
  * user_summary    String     可以为空       用户简介
+ * impl_or_history_type   String   可以为空  类别，是impl还是history
  * user_political_views  String     可以为空       政治观点（数据部分为空）
  * user_systent_name     String     可以为空       用户系统名（数据部分为空）
  * w3_fb_url      String     可以为空       采集层统一的博主地址（样例数据全部为空，新数据都有值）
@@ -88,8 +90,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * user_birthday            String  可以为空          用户生日（部分有值，例：10月29日）
  * user_classify            String  可以为空          用户分类（示例：["政府机构"]）
  * user_description         String  可以为空          用户描述（部分有值，示例见备注）
- * user_facebook_url        String  可以为空          用户主页地址，带名称的URL（部分有值，例：https://www.facebook.com/travelGoC/）
- * verified_reason          String  可以为空          认证原因（数据部分为空）
+ * photo_album_collect      String  可以为空          相册信息
+ * follower_number_int      String  可以为空          人气数
  *
  *
  * 入参格式:
@@ -129,6 +131,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  *     "marriage":"",         #夫妻关系（数据部分为空）   ->       significant_other
  *     "home_town":"",   #家乡信息、生活过的地方（部分有值，例：来自：Carolina Beach, North Carolina）   ->   hometown_message
  *     "user_summary":"",      #用户简介(个人账户-Intro)（部分有值，例：["目前就职：長距離トラックドライバー","长野市","所在地：Chikuma-shi, Nagano, Japan"]）
+ *     "impl_or_history_type":"",     #impl还是history
  *     "user_political_views":"", #政治观点（数据部分为空）
  *     "user_systent_name":"", #用户系统名（数据部分为空）      ->      nickName
  *     "w3_fb_url":"",         #采集层统一的博主地址（样例数据全部为空，新数据都有值）
@@ -176,6 +179,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
  *     "user_birthday":"",        #用户生日（部分有值，例：10月29日）
  *     "user_classify":"",        #用户分类（示例：["政府机构"]）
  *     "user_description":"",     #用户描述（部分有值，示例见备注）
+ *     "photo_album_collect":"",  #相册信息
+ *     "follower_number_int":"",  #人气数
  * }
  */
 @Data
@@ -620,9 +625,19 @@ public class FbUserData_v2 {
 //    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private Integer integrity;
 
+    /**
+     * 相册信息
+     */
+    private String photo_album_collect;
+
+    /**
+     * 人气数
+     */
+    private String follower_number_int;
+
     public FbUserData_v2() {}
 
-    public FbUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_political_views, String user_summary, String impl_or_history_type, String user_systent_name, String w3_fb_url, String institution_id, String is_community_page, String communication_philosophy, String have_product, String exchange_number, String visit_number, String first_name, String last_name, String teach_message, String acquisition_time, String affective_state, String background_picture_url, String business_story, String classify_message, String com_from, String dm_tag1, String company_profile, String country_region, String country_region_city, String detailed_summary, String favorite_quotes, String found, String gender_orientation, String go_through, String like_number_int, String local_profile_pic_background_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String opening_hours, String personal_web_url, String photo_album_url, String photo_wall, String position_message, String register_number, String registration_date, String related_home_page, String shop_content, String family_and_relation_ships, String skill, String user_birthday, String user_classify, String user_description, Integer integrity) {
+    public FbUserData_v2(String uuid, String platform, String data_source, String create_time, String importance, String remark, String language_type, String source_id, String user_id, String screen_name, String use_name, String user_url, String user_avatar, String local_photo_url, String gender, String country, String city, String user_type, String verified, String followers_count, String friend_count, String post_count, String like_count, String source_create_time, String mobile, String email, String name_userd_before, String language, String user_religion, String works, String location, String marriage, String home_town, String user_political_views, String user_summary, String impl_or_history_type, String user_systent_name, String w3_fb_url, String institution_id, String is_community_page, String communication_philosophy, String have_product, String exchange_number, String visit_number, String first_name, String last_name, String teach_message, String acquisition_time, String affective_state, String background_picture_url, String business_story, String classify_message, String com_from, String dm_tag1, String company_profile, String country_region, String country_region_city, String detailed_summary, String favorite_quotes, String found, String gender_orientation, String go_through, String like_number_int, String local_profile_pic_background_url, String media_title, String media_type_embeded, String media_url, String media_url_name, String opening_hours, String personal_web_url, String photo_album_url, String photo_wall, String position_message, String register_number, String registration_date, String related_home_page, String shop_content, String family_and_relation_ships, String skill, String user_birthday, String user_classify, String user_description, Integer integrity, String photo_album_collect, String follower_number_int) {
         this.uuid = uuid;
         this.platform = platform;
         this.data_source = data_source;
@@ -706,5 +721,7 @@ public class FbUserData_v2 {
         this.user_classify = user_classify;
         this.user_description = user_description;
         this.integrity = integrity;
+        this.photo_album_collect = photo_album_collect;
+        this.follower_number_int = follower_number_int;
     }
 }
