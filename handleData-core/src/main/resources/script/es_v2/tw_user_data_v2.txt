@@ -63,7 +63,7 @@ extend         String     可以为空        扩展信息（无属性留空）
     "language_type":"",  #语种
     "source_id":"",      #社交源idMd5   ->   md5_id或者data_id
     "user_id":"",  #博主id        ->   blogger_id
-    "screen_name":"", #用户名称    ->   nick_name
+    "screen_name":"", #用户名称    ->   screen_name
     "use_name":"",   #博主全名,      ->      full_name或者user_name
     "user_url":"",    #博主url（若为空需要拼接，格式如下：https://www.facebook.com/profile.php?id=100068526609915)
     "user_avatar":"",    #用户头像链接
