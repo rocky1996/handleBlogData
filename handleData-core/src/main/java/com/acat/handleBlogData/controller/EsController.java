@@ -16,6 +16,8 @@ import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.elasticsearch.common.Numbers;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,14 +44,20 @@ public class EsController {
     @PostMapping("/upload")
     public RestResult upload(HttpServletRequest httpServletRequest,
                             @RequestParam("file") MultipartFile file,
-                            Integer mediaSourceCode) {
+                            Integer mediaSourceCode,
+                            String preGovernanceNum,
+                            boolean isNewVersion) {
         try {
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaSourceCode);
             if (mediaSourceEnum == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
 
-            boolean isOk = esService.insertEsData(file, mediaSourceEnum);
+            if (!NumberUtils.isNumber(preGovernanceNum)) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, "治理前数字格式不正确！！！");
+            }
+
+            boolean isOk = esService.insertEsData(file, mediaSourceEnum, preGovernanceNum, isNewVersion);
             if (isOk) {
                 return new RestResult<>(RestEnum.SUCCESS);
             }else {

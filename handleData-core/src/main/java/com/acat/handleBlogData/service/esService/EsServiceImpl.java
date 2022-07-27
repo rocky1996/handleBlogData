@@ -1,14 +1,17 @@
 package com.acat.handleBlogData.service.esService;
 
+import com.acat.handleBlogData.constants.RedisKeyConstants;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.controller.req.SearchDetailReq;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.domain.*;
+import com.acat.handleBlogData.domain.esEntityV2.*;
 import com.acat.handleBlogData.enums.*;
 import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
 import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
 import com.acat.handleBlogData.service.esService.repository.*;
+import com.acat.handleBlogData.service.esService.repository.v2.*;
 import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.*;
@@ -64,6 +67,20 @@ public class EsServiceImpl {
     @Resource
     private LinkBusinessRepository linkBusinessRepository;
     @Resource
+    private TwitterV2Repository twitterV2Repository;
+    @Resource
+    private InstagramV2Repository instagramV2Repository;
+    @Resource
+    private FbV2Repository fbV2Repository;
+    @Resource
+    private FqV2Repository fqV2Repository;
+    @Resource
+    private LinkV2Repository linkV2Repository;
+    @Resource
+    private LinkSchoolV2Repository linkSchoolV2Repository;
+    @Resource
+    private LinkBusinessV2Repository linkBusinessV2Repository;
+    @Resource
     private SendEmailServiceImpl sendEmailService;
     @Resource
     private RedisLockServiceImpl redisLock;
@@ -89,27 +106,44 @@ public class EsServiceImpl {
     public static final String COUNTRY_KEY = "country";
     public static final String CITY_KEY = "city";
 
+    /**
+     * 旧索引
+     */
     private static String[] indexArray = new String[]{
-        MediaSourceEnum.TWITTER.getEs_index(),
-        MediaSourceEnum.INSTAGRAM.getEs_index(),
-        MediaSourceEnum.FB_IMPL.getEs_index(),
-        MediaSourceEnum.FB_HISTORY.getEs_index(),
-        MediaSourceEnum.FQ_IMPL.getEs_index(),
-        MediaSourceEnum.FQ_HISTORY.getEs_index(),
-        MediaSourceEnum.LINKEDIN_IMPL.getEs_index(),
-        MediaSourceEnum.LINKEDIN_HISTORY.getEs_index(),
-        MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index(),
-        MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index(),
+        MediaSourceEnum.TWITTER.getEs_index_v1(),
+        MediaSourceEnum.INSTAGRAM.getEs_index_v1(),
+        MediaSourceEnum.FB_IMPL.getEs_index_v1(),
+        MediaSourceEnum.FB_HISTORY.getEs_index_v1(),
+        MediaSourceEnum.FQ_IMPL.getEs_index_v1(),
+        MediaSourceEnum.FQ_HISTORY.getEs_index_v1(),
+        MediaSourceEnum.LINKEDIN_IMPL.getEs_index_v1(),
+        MediaSourceEnum.LINKEDIN_HISTORY.getEs_index_v1(),
+        MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index_v1(),
+        MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v1(),
+    };
+
+    /**
+     * 新的索引
+     */
+    private static String[] indexArray_v2 = new String[]{
+            MediaSourceEnum.TWITTER.getEs_index_v2(),
+            MediaSourceEnum.INSTAGRAM.getEs_index_v2(),
+            MediaSourceEnum.FB_IMPL.getEs_index_v2(),
+            MediaSourceEnum.FQ_IMPL.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_IMPL.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v2(),
     };
 
     /**
      *
      * @param file
      * @param mediaSourceEnum
+     * @param preGovernanceNum
      * @return
 //     */
 //    @Transactional
-    public synchronized boolean insertEsData(MultipartFile file, MediaSourceEnum mediaSourceEnum) {
+    public synchronized boolean insertEsData(MultipartFile file, MediaSourceEnum mediaSourceEnum, String preGovernanceNum, boolean isNewVersion) {
 //        String  lockKey = String.valueOf(System.currentTimeMillis());
 //        long time = System.currentTimeMillis() + 1000*10;
         try {
@@ -124,102 +158,280 @@ public class EsServiceImpl {
 
             switch (mediaSourceEnum) {
                 case TWITTER:
-                    List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER);
-                    if (!CollectionUtils.isEmpty(twitterUserDataList)) {
-                        List<TwitterUserData> dataList = (List<TwitterUserData>) twitterRepository.saveAll(twitterUserDataList);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.TWITTER));
-                            return false;
+                    if (isNewVersion) {
+                        List<TwitterUserData_v2> twitterUserData_v2List = (List<TwitterUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER, true);
+                        if (!CollectionUtils.isEmpty(twitterUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.TWITTER_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<TwitterUserData_v2> dataList = (List<TwitterUserData_v2>) twitterV2Repository.saveAll(twitterUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.TWITTER));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<TwitterUserData> twitterUserDataList = (List<TwitterUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.TWITTER, false);
+                        if (!CollectionUtils.isEmpty(twitterUserDataList)) {
+                            List<TwitterUserData> dataList = (List<TwitterUserData>) twitterRepository.saveAll(twitterUserDataList);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.TWITTER));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case INSTAGRAM:
-                    List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.INSTAGRAM);
-                    if (!CollectionUtils.isEmpty(instagramUserDataList)) {
-                        List<InstagramUserData> dataList = (List<InstagramUserData>) instagramRepository.saveAll(instagramUserDataList);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.INSTAGRAM));
-                            return false;
+                    if (isNewVersion) {
+                        List<InstagramUserData_v2> instagramUserData_v2List = (List<InstagramUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.INSTAGRAM, true);
+                        if (!CollectionUtils.isEmpty(instagramUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.INSTAGRAM_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<InstagramUserData_v2> dataList = (List<InstagramUserData_v2>) instagramV2Repository.saveAll(instagramUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.INSTAGRAM));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<InstagramUserData> instagramUserDataList = (List<InstagramUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.INSTAGRAM, false);
+                        if (!CollectionUtils.isEmpty(instagramUserDataList)) {
+                            List<InstagramUserData> dataList = (List<InstagramUserData>) instagramRepository.saveAll(instagramUserDataList);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.INSTAGRAM));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case FB_IMPL:
-                    List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL);
-                    if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
-                        List<FbUserImplData> dataList = (List<FbUserImplData>) fbImplRepository.saveAll(fbUserImplDataList);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_IMPL));
-                            return false;
+                    if (isNewVersion) {
+                        List<FbUserData_v2> fbUserData_v2List = (List<FbUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL, true);
+                        if (!CollectionUtils.isEmpty(fbUserData_v2List)) {
+
+//                            Set<String> userIdImplSet = fbUserData_v2List.stream().filter(e -> "imp".equals(e.getImpl_or_history_type())).map(e -> e.getUser_id()).collect(Collectors.toSet());
+//                            if (!CollectionUtils.isEmpty(userIdImplSet)) {
+//                                redisService.addAll(RedisKeyConstants.FB_IMPL_USER_ID_NUM_KEY, userIdImplSet);
+//                            }
+
+//                            Set<String> userIdHistorySet = fbUserData_v2List.stream().filter(e -> "history".equals(e.getImpl_or_history_type())).map(e -> e.getUser_id()).collect(Collectors.toSet());
+//                            if (!CollectionUtils.isEmpty(userIdHistorySet)) {
+//
+//                                List<String> cfList = Lists.newArrayList();
+//                                Set<String> implUserIdSet = redisService.members(RedisKeyConstants.FB_IMPL_USER_ID_NUM_KEY);
+//                                if (!CollectionUtils.isEmpty(implUserIdSet)) {
+//                                    for (String userId : userIdHistorySet) {
+//                                        if (implUserIdSet.contains(userId)) {
+//                                            cfList.add(userId);
+//                                        }
+//                                    }
+//                                }
+//
+//                                if (!CollectionUtils.isEmpty(cfList)) {
+//                                    List cfSearchList = batchQueryFromUserId(MediaSourceEnum.FB_IMPL.getEs_index_v2(), cfList);
+//                                    if (!CollectionUtils.isEmpty(cfSearchList)) {
+//
+//                                    }
+//                                }
+//
+//                            }
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.FB_PRO_GOV_NUM_KEY, preGovernanceNum);
+
+                            List<FbUserData_v2> dataList = (List<FbUserData_v2>) fbV2Repository.saveAll(fbUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_IMPL));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<FbUserImplData> fbUserImplDataList = (List<FbUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_IMPL, false);
+                        if (!CollectionUtils.isEmpty(fbUserImplDataList)) {
+                            List<FbUserImplData> dataList = (List<FbUserImplData>) fbImplRepository.saveAll(fbUserImplDataList);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_IMPL));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case FB_HISTORY:
-                    List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY);
-                    if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
-                        List<FbUserHistoryData> dataList = (List<FbUserHistoryData>) fbHistoryRepository.saveAll(fbUserHistoryDataList);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_HISTORY));
-                            return false;
+                    if (isNewVersion) {
+                        List<FbUserData_v2> fbUserData_v2List = (List<FbUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY, true);
+                        if (!CollectionUtils.isEmpty(fbUserData_v2List)) {
+
+//                            Set<String> userIdImplSet = fbUserData_v2List.stream().filter(e -> "imp".equals(e.getImpl_or_history_type())).map(e -> e.getUser_id()).collect(Collectors.toSet());
+//                            if (!CollectionUtils.isEmpty(userIdImplSet)) {
+//                                redisService.addAll(RedisKeyConstants.FB_IMPL_USER_ID_NUM_KEY, userIdImplSet);
+//                            }
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.FB_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<FbUserData_v2> dataList = (List<FbUserData_v2>) fbV2Repository.saveAll(fbUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_HISTORY));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<FbUserHistoryData> fbUserHistoryDataList = (List<FbUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FB_HISTORY, false);
+                        if (!CollectionUtils.isEmpty(fbUserHistoryDataList)) {
+                            List<FbUserHistoryData> dataList = (List<FbUserHistoryData>) fbHistoryRepository.saveAll(fbUserHistoryDataList);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FB_HISTORY));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case FQ_IMPL:
-                    List<FqUserImplData> fqUserImplDataList = (List<FqUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_IMPL);
-                    if (!CollectionUtils.isEmpty(fqUserImplDataList)) {
-                        List<FqUserImplData> dataList = (List<FqUserImplData>) fqImplRepository.saveAll(fqUserImplDataList);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_IMPL));
-                            return false;
+                    if (isNewVersion) {
+                        List<FqUserData_v2> fqUserData_v2List = (List<FqUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_IMPL, true);
+                        if (!CollectionUtils.isEmpty(fqUserData_v2List)) {
+
+//                            Set<String> userIdImplSet = fbUserData_v2List.stream().filter(e -> "imp".equals(e.getImpl_or_history_type())).map(e -> e.getUser_id()).collect(Collectors.toSet());
+//                            if (!CollectionUtils.isEmpty(userIdImplSet)) {
+//                                redisService.addAll(RedisKeyConstants.FB_IMPL_USER_ID_NUM_KEY, userIdImplSet);
+//                            }
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.FQ_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<FqUserData_v2> dataList = (List<FqUserData_v2>) fqV2Repository.saveAll(fqUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_IMPL));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<FqUserImplData> fqUserImplDataList = (List<FqUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_IMPL,false);
+                        if (!CollectionUtils.isEmpty(fqUserImplDataList)) {
+                            List<FqUserImplData> dataList = (List<FqUserImplData>) fqImplRepository.saveAll(fqUserImplDataList);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_IMPL));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case FQ_HISTORY:
-                    List<FqUserHistoryData> fqUserHistoryData = (List<FqUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_HISTORY);
-                    if (!CollectionUtils.isEmpty(fqUserHistoryData)) {
-                        List<FqUserHistoryData> dataList = (List<FqUserHistoryData>) fqHistoryRepository.saveAll(fqUserHistoryData);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_HISTORY));
-                            return false;
+                    if (isNewVersion) {
+                        List<FqUserData_v2> fqUserData_v2List = (List<FqUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_IMPL, true);
+                        if (!CollectionUtils.isEmpty(fqUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.FQ_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<FqUserData_v2> dataList = (List<FqUserData_v2>) fqV2Repository.saveAll(fqUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_IMPL));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<FqUserHistoryData> fqUserHistoryData = (List<FqUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.FQ_HISTORY, false);
+                        if (!CollectionUtils.isEmpty(fqUserHistoryData)) {
+                            List<FqUserHistoryData> dataList = (List<FqUserHistoryData>) fqHistoryRepository.saveAll(fqUserHistoryData);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.FQ_HISTORY));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case LINKEDIN_IMPL:
-                    List<LinkUserImplData> linkUserImplData = (List<LinkUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_IMPL);
-                    if (!CollectionUtils.isEmpty(linkUserImplData)) {
-                        List<LinkUserImplData> dataList = (List<LinkUserImplData>) linkImplRepository.saveAll(linkUserImplData);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_IMPL));
-                            return false;
+                    if (isNewVersion) {
+                        List<LinkUserData_v2> linkUserData_v2List = (List<LinkUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_IMPL, true);
+                        if (!CollectionUtils.isEmpty(linkUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.LINK_PRO_GOV_NUM_KEY, preGovernanceNum);
+//                            List<LinkUserData_v2> dataList = (List<LinkUserData_v2>) linkV2Repository.saveAll(linkUserData_v2List);
+                            Lists.partition(linkUserData_v2List, 1000).forEach(e -> linkV2Repository.saveAll(e));
+//                            if (CollectionUtils.isEmpty(dataList)) {
+//                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_IMPL));
+//                                return false;
+//                            }
+                        }
+                    }else {
+                        List<LinkUserImplData> linkUserImplData = (List<LinkUserImplData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_IMPL, false);
+                        if (!CollectionUtils.isEmpty(linkUserImplData)) {
+                            List<LinkUserImplData> dataList = (List<LinkUserImplData>) linkImplRepository.saveAll(linkUserImplData);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_IMPL));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case LINKEDIN_HISTORY:
-                    List<LInkUserHistoryData> lInkUserHistoryData = (List<LInkUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_HISTORY);
-                    if (!CollectionUtils.isEmpty(lInkUserHistoryData)) {
-                        List<LInkUserHistoryData> dataList = (List<LInkUserHistoryData>) linkHistoryRepository.saveAll(lInkUserHistoryData);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_HISTORY));
-                            return false;
+                    if (isNewVersion) {
+                        List<LinkUserData_v2> linkUserData_v2List = (List<LinkUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_IMPL, true);
+                        if (!CollectionUtils.isEmpty(linkUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.LINK_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<LinkUserData_v2> dataList = (List<LinkUserData_v2>) linkV2Repository.saveAll(linkUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_IMPL));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<LInkUserHistoryData> lInkUserHistoryData = (List<LInkUserHistoryData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_HISTORY, false);
+                        if (!CollectionUtils.isEmpty(lInkUserHistoryData)) {
+                            List<LInkUserHistoryData> dataList = (List<LInkUserHistoryData>) linkHistoryRepository.saveAll(lInkUserHistoryData);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_HISTORY));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case LINKEDIN_BUSINESS:
-                    List<LinkBusinessUserData> linkBusinessUserData = (List<LinkBusinessUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_BUSINESS);
-                    if (!CollectionUtils.isEmpty(linkBusinessUserData)) {
-                        List<LinkBusinessUserData> dataList = (List<LinkBusinessUserData>) linkBusinessRepository.saveAll(linkBusinessUserData);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_BUSINESS));
-                            return false;
+                    if (isNewVersion) {
+                        List<LinkBusinessUserData_v2> linkBusinessUserData_v2List = (List<LinkBusinessUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_BUSINESS, true);
+                        if (!CollectionUtils.isEmpty(linkBusinessUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.LINK_BUSINESS_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<LinkBusinessUserData_v2> dataList = (List<LinkBusinessUserData_v2>) linkBusinessV2Repository.saveAll(linkBusinessUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_BUSINESS));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<LinkBusinessUserData> linkBusinessUserData = (List<LinkBusinessUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_BUSINESS, false);
+                        if (!CollectionUtils.isEmpty(linkBusinessUserData)) {
+                            List<LinkBusinessUserData> dataList = (List<LinkBusinessUserData>) linkBusinessRepository.saveAll(linkBusinessUserData);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_BUSINESS));
+                                return false;
+                            }
                         }
                     }
                     break;
                 case LINKEDIN_SCHOOL:
-                    List<LinkSchoolUserData> linkSchoolUserData = (List<LinkSchoolUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_SCHOOL);
-                    if (!CollectionUtils.isEmpty(linkSchoolUserData)) {
-                        List<LinkSchoolUserData> dataList = (List<LinkSchoolUserData>) linkSchoolRepository.saveAll(linkSchoolUserData);
-                        if (CollectionUtils.isEmpty(dataList)) {
-                            sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_SCHOOL));
-                            return false;
+                    if (isNewVersion) {
+                        List<LinkSchoolUserData_v2> linkSchoolUserData_v2List = (List<LinkSchoolUserData_v2>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_SCHOOL, true);
+                        if (!CollectionUtils.isEmpty(linkSchoolUserData_v2List)) {
+
+                            //统计治理前数量
+                            addCacheFromRedis(RedisKeyConstants.LINK_SCHOOL_PRO_GOV_NUM_KEY, preGovernanceNum);
+                            List<LinkSchoolUserData_v2> dataList = (List<LinkSchoolUserData_v2>) linkSchoolV2Repository.saveAll(linkSchoolUserData_v2List);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_SCHOOL));
+                                return false;
+                            }
+                        }
+                    }else {
+                        List<LinkSchoolUserData> linkSchoolUserData = (List<LinkSchoolUserData>) ReaderFileUtil.readMultipartFileFile(file, MediaSourceEnum.LINKEDIN_SCHOOL, false);
+                        if (!CollectionUtils.isEmpty(linkSchoolUserData)) {
+                            List<LinkSchoolUserData> dataList = (List<LinkSchoolUserData>) linkSchoolRepository.saveAll(linkSchoolUserData);
+                            if (CollectionUtils.isEmpty(dataList)) {
+                                sendEmailService.sendSimpleEmail(covBean(MediaSourceEnum.LINKEDIN_SCHOOL));
+                                return false;
+                            }
                         }
                     }
                     break;
@@ -297,7 +509,7 @@ public class EsServiceImpl {
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode()).getEs_index());
+            searchRequest.indices(MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode()).getEs_index_v1());
             searchRequest.types("_doc");
             searchRequest.source(builder);
             // 执行请求
@@ -464,7 +676,7 @@ public class EsServiceImpl {
             if (MediaSourceEnum.ALL == mediaSourceEnum) {
                 searchRequest.indices(indexArray);
             }else {
-                searchRequest.indices(mediaSourceEnum.getEs_index());
+                searchRequest.indices(mediaSourceEnum.getEs_index_v1());
             }
             searchRequest.types("_doc");
             searchRequest.source(builder);
@@ -519,6 +731,49 @@ public class EsServiceImpl {
             return new RestResult<>(RestEnum.FAILED);
         }
     }
+
+//    /**
+//     * 批量搜索
+//     * @param index
+//     * @param userIdList
+//     * @return
+//     */
+//    public List batchQueryFromUserId(String index, List<String> userIdList) {
+//        try {
+//            if (CollectionUtils.isEmpty(userIdList)) {
+//                return Lists.newArrayList();
+//            }
+//
+//            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+//            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+//            for(String userId: userIdList){
+//                channelQueryBuilder.should(QueryBuilders.matchQuery( "user_id.keyword", userId));
+//            }
+//            bigBuilder.must(channelQueryBuilder);
+//
+//            SearchSourceBuilder builder = new SearchSourceBuilder()
+//                    .query(bigBuilder)
+//                    .trackTotalHits(true);
+//
+//            //搜索
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices(index);
+//            searchRequest.types("_doc");
+//            searchRequest.source(builder);
+//
+//            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//            if (response == null) {
+//                return null;
+//            }
+//            SearchHit[] searchHits = response.getHits().getHits();
+//            List searchList = Arrays.stream(searchHits).collect(Collectors.toList());
+//            return CollectionUtils.isEmpty(searchList) ? Lists.newArrayList() : searchList;
+//        }catch (Exception e) {
+//            log.error("EsServiceImpl.batchQueryFromUserId has error:{}",e.getMessage());
+//            return Lists.newArrayList();
+//        }
+//    }
+
 
     /**
      * 城市或国家搜索
@@ -903,7 +1158,7 @@ public class EsServiceImpl {
             || null == sourceEnum) {
             return Arrays.stream(indexArray).collect(Collectors.toList());
         }else {
-            return Lists.newArrayList(sourceEnum.getEs_index());
+            return Lists.newArrayList(sourceEnum.getEs_index_v1());
         }
     }
 
@@ -1132,5 +1387,22 @@ public class EsServiceImpl {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
         builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(5000 * 1024 * 1024));
         return builder.build();
+    }
+
+    /**
+     * 统计治理前数据
+     * @param key
+     * @param preGovernanceNum
+     */
+    public void addCacheFromRedis(String key, String preGovernanceNum) {
+        if (StringUtils.isBlank(key)) {
+            return;
+        }
+
+        boolean isKey = redisService.hasKey(key);
+        if (isKey) {
+            return;
+        }
+        redisService.set(key, preGovernanceNum, null, null, false);
     }
 }

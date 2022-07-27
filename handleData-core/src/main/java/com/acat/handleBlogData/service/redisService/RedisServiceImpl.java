@@ -21,6 +21,16 @@ public class RedisServiceImpl {
     /**string***********************
      * https://blog.csdn.net/weixin_43658899/article/details/121062760
      * *****************************/
+
+    /**
+     * 判断key
+     * @param key
+     * @return
+     */
+    public boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
     /**
      * set
      * @param key
@@ -207,6 +217,15 @@ public class RedisServiceImpl {
      */
     public void add(String key, Objects...values) {
         redisTemplate.opsForSet().add(key, values);
+    }
+
+    /**
+     *
+     * @param key
+     * @param sets
+     */
+    public void addAll(String key, Set<String> sets) {
+        redisTemplate.opsForSet().add(key, sets.toArray());
     }
 
     /**

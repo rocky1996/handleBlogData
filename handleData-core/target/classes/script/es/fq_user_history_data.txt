@@ -2,6 +2,7 @@ FourceQuare历史表
 
 字段            类型       是否允许为空       备注
 uuid           String     不能为空       系统自动生成ID
+integrity      String     不能为空       完整度
 platform       String     可以为空       来源平台：FB、FQ、TW、IS、LI
 data_source    String     可以为空       数据来源,数据来源文件名
 importance     String     可以为空       重要等级,0：普通 （默认）1：关注 2：重要 3：特别重要
@@ -46,6 +47,7 @@ friends           String     可以为空    朋友数量
 入参格式:
 {
     "uuid":"",        #用户唯一ID
+    "integrity":"",   #完整度
     "platform":"",    #来源平台：FB、FQ、TW、IS、LI
     "data_source":"", #数据来源,数据来源文件名
     "create_time":"", #数据入库时间

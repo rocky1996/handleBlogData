@@ -1,11 +1,13 @@
 package com.acat.handleBlogData;
 
 import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
+import com.acat.handleBlogData.constants.RedisKeyConstants;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.dao.UserDao;
 //import com.acat.handleBlogData.domain.BlogSystemUser;
 //import com.acat.handleBlogData.domain.BlogSystemUserExample;
 //import com.acat.handleBlogData.mapper.BlogSystemUserMapper;
+import com.acat.handleBlogData.domain.esEntityV2.FbUserData_v2;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
@@ -77,14 +79,35 @@ class HandleBlogDataApplicationTests {
 //    @Resource
 //    private SendEmailService sendEmailService;
 
-    private static String[] indexArray = new String[]{
-            MediaSourceEnum.TWITTER.getEs_index(),
-            MediaSourceEnum.INSTAGRAM.getEs_index(),
-            MediaSourceEnum.FB_IMPL.getEs_index(),
-            MediaSourceEnum.FB_HISTORY.getEs_index(),
-            MediaSourceEnum.FQ_IMPL.getEs_index(),
-            MediaSourceEnum.FQ_HISTORY.getEs_index()
+//    /**
+//     * 旧索引
+//     */
+//    private static String[] indexArray = new String[]{
+//            MediaSourceEnum.TWITTER.getEs_index_v1(),
+//            MediaSourceEnum.INSTAGRAM.getEs_index_v1(),
+//            MediaSourceEnum.FB_IMPL.getEs_index_v1(),
+//            MediaSourceEnum.FB_HISTORY.getEs_index_v1(),
+//            MediaSourceEnum.FQ_IMPL.getEs_index_v1(),
+//            MediaSourceEnum.FQ_HISTORY.getEs_index_v1(),
+//            MediaSourceEnum.LINKEDIN_IMPL.getEs_index_v1(),
+//            MediaSourceEnum.LINKEDIN_HISTORY.getEs_index_v1(),
+//            MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index_v1(),
+//            MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v1(),
+//    };
+
+    /**
+     * 新的索引
+     */
+    private static String[] indexArray_v2 = new String[]{
+            MediaSourceEnum.TWITTER.getEs_index_v2(),
+            MediaSourceEnum.INSTAGRAM.getEs_index_v2(),
+            MediaSourceEnum.FB_IMPL.getEs_index_v2(),
+            MediaSourceEnum.FQ_IMPL.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_IMPL.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index_v2(),
+            MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v2(),
     };
+
 
 //    @Override
 //    public BlogSystemUser userLogin(String userName, String password) {
@@ -260,50 +283,50 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(response);
 //    }
 
-    @Test
-    public void test05() throws Exception{
-        BoolQueryBuilder builder = QueryBuilders.boolQuery();
-        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-        List<String> list = Lists.newArrayList("ideolo", "astro", "Joe");
-        for(String channel: list){
-            channelQueryBuilder.should(QueryBuilders.matchPhraseQuery("use_name",channel));
-        }
-        builder.must(channelQueryBuilder);
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(builder);
-
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(indexArray);
-        searchRequest.types("_doc");
-        searchRequest.source(sourceBuilder);
-
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        if (response == null) {
-            log.info("");
-        }
-    }
-
-    @Test
-    public void test06() throws Exception{
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(QueryBuilders.matchAllQuery())
-                .trackTotalHits(true);
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter");
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-//        if (response == null) {
-//            log.info("error!!!");
+//    @Test
+//    public void test05() throws Exception{
+//        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+//        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+//        List<String> list = Lists.newArrayList("ideolo", "astro", "Joe");
+//        for(String channel: list){
+//            channelQueryBuilder.should(QueryBuilders.matchPhraseQuery("use_name",channel));
 //        }
-//        System.out.println(response);
-        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
-    }
+//        builder.must(channelQueryBuilder);
+//
+//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//        sourceBuilder.query(builder);
+//
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices(indexArray);
+//        searchRequest.types("_doc");
+//        searchRequest.source(sourceBuilder);
+//
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        if (response == null) {
+//            log.info("");
+//        }
+//    }
+
+//    @Test
+//    public void test06() throws Exception{
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(QueryBuilders.matchAllQuery())
+//                .trackTotalHits(true);
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter");
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+////        if (response == null) {
+////            log.info("error!!!");
+////        }
+////        System.out.println(response);
+//        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
+//    }
 
     @Test
     public void test07() {
@@ -323,64 +346,63 @@ class HandleBlogDataApplicationTests {
     /**
      * 分词
      */
-    @Test
-    public void test09() throws Exception{
+//    @Test
+//    public void test09() throws Exception{
+//
+//        Integer pageNum = 1;
+//        Integer pageSize = 10;
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+////        if (StringUtils.isNotBlank(searchReq.getUserId())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getUserName())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
+//            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "King"));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getEmail())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getCountry())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getCity())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
+////        }
+////        if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
+////            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
+////        }
+//
+//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//        sourceBuilder.query(boolQueryBuilder);
+//        sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+//        sourceBuilder.trackTotalHits(true);
+//        //            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
+//
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter");
+//        searchRequest.types("_doc");
+//        searchRequest.source(sourceBuilder);
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        if (response == null) {
+//            log.error("");
+//        }
+//        System.out.println(response);
+//    }
 
-        Integer pageNum = 1;
-        Integer pageSize = 10;
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        if (StringUtils.isNotBlank(searchReq.getUserId())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getUserName())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery("use_name", "King"));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getBeforeName())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getBeforeName()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getEmail())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getCountry())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getCity())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
-//        }
-//        if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-//            boolQueryBuilder.must(QueryBuilders.matchQuery("user_summary.keyword", searchReq.getCity()));
-//        }
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(boolQueryBuilder);
-        sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
-        sourceBuilder.trackTotalHits(true);
-        //            sourceBuilder.sort("registered_time.keyword", SortOrder.DESC);
-
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter");
-        searchRequest.types("_doc");
-        searchRequest.source(sourceBuilder);
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        if (response == null) {
-            log.error("");
-        }
-        System.out.println(response);
-    }
-
-    @Test
-    public void deleteUserIndex() {
-        IndexCoordinates indexCoordinates = IndexCoordinates.of("link_school");
-        indexCoordinates.getIndexNames();
-
-        elasticsearchRestTemplate.indexOps(indexCoordinates).delete();
-    }
+//    @Test
+//    public void deleteUserIndex() {
+//        IndexCoordinates indexCoordinates = IndexCoordinates.of("link_v2");
+//        indexCoordinates.getIndexNames();
+//        elasticsearchRestTemplate.indexOps(indexCoordinates).delete();
+//    }
 
     @Test
     public void test12() {
@@ -412,5 +434,16 @@ class HandleBlogDataApplicationTests {
 
         Map<String, Objects> map = JacksonUtil.strToBean(str, Map.class);
         System.out.println(map);
+    }
+
+    @Test
+    public void test14() {
+//        System.out.println(redisService.getValue(RedisKeyConstants.TWITTER_PRO_GOV_NUM_KEY));
+        String str = "{\"user_political_views\":\"\",\"user_systent_name\":\"\",\"w3_fb_url\":\"\",\"institution_id\":\"\",\"is_community_page\":\"\",\"communication_philosophy\":\"\",\"have_product\":\"\",\"exchange_number\":\"\",\"visit_number\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"teach_message\":\"\",\"acquisition_time\":\"2022-03-05 18:54:01\",\"affective_state\":\"\",\"background_picture_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"business_story\":\"\",\"classify_message\":\"\",\"com_from\":\"blogger\",\"company_profile\":\"\",\"country_region\":\"China|中国\",\"country_region_city\":\"\",\"detailed_summary\":\"\",\"favorite_quotes\":\"\",\"found\":\"2010年5月21日\",\"gender_orientation\":\"\",\"go_through\":\"\",\"like_number_int\":\"\",\"local_profile_pic_background_url\":\"\",\"media_title\":\"头像|背景图\",\"media_type_embeded\":\"P|P\",\"media_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F|https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"media_url_name\":\"fb_info_100064738204514_photo_0_.jpg|fb_info_100064738204514_banner_0_.jpg\",\"opening_hours\":\"\",\"personal_web_url\":\"http://www.MurrietaCA.gov/\",\"photo_album_url\":\"\",\"photo_wall\":\"\",\"position_message\":\"\",\"register_number\":\"\",\"registration_date\":\"\",\"related_home_page\":\"\",\"shop_content\":\"\",\"family_and_relation_ships\":\"\",\"skill\":\"\",\"user_birthday\":\"\",\"user_classify\":\"政府机构\",\"user_description\":\"\",\"follower_number_int\":\"\",\"uuid\":\"b97cb952-8f5a-48cb-a2a3-c4e4ae01626b\",\"platform\":\"FB\",\"data_source\":\"fb_20220726120408_00\",\"create_time\":\"2022-07-26 12:04:09\",\"importance\":\"0\",\"remark\":\"\",\"language_type\":\"en\",\"source_id\":\"56858\",\"user_id\":\"100064738204514\",\"screen_name\":\"CityofMurrieta\",\"use_name\":\"City of Murrieta - City Government\",\"user_url\":\"https://www.facebook.com/profile.php?id\\u003d100064738204514\",\"user_avatar\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F\",\"local_photo_url\":\"fb_Info_100064738204514_photo.jpg\",\"gender\":\"未知\",\"country\":\"China|中国\",\"city\":\"\",\"user_type\":\"个人账号\",\"verified\":\"非认证\",\"followers_count\":\"0\",\"friend_count\":\"0\",\"post_count\":\"0\",\"like_count\":\"0\",\"source_create_time\":\"2022-07-26 12:04:09\",\"mobile\":\"\",\"email\":\"\",\"name_userd_before\":\"\",\"language\":\"en\",\"user_religion\":\"\",\"works\":\"\",\"location\":\"\",\"marriage\":\"\",\"home_town\":\"\",\"user_summary\":\"\",\"integrity\":23,\"impl_or_history_type\":\"imp\"}";
+        FbUserData_v2 fbUserData_v2 = JacksonUtil.strToBean(str, FbUserData_v2.class);
+        System.out.println(fbUserData_v2);
+
+
+
     }
 }

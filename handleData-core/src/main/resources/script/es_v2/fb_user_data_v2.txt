@@ -64,7 +64,6 @@ favorite_quotes          String  可以为空          格言信息（数据部�
 found           String    可以为空        成立时间（数据部分为空）
 gender_orientation       String  可以为空          性取向（部分有值，例：女性）
 go_through      String           可以为空          经历 生活纪事（部分有值，例：2021年:長野県 上田市出身）
-like_number_int String           可以为空          喜欢人数（转化为数字）（样例数据全部为0）
 local_profile_pic_background_url    String    可以为空       本地背景图路径（数据部分为空）
 media_title              String  可以为空          媒体文字 ²文章含有媒介时，多个之间用’|’隔开。（部分有值，例：头像|背景图）
 media_type_embeded       String  可以为空          媒介类型 媒介类型 ‘P’:  图片； ‘M’:  音频； ‘V’:  视频； ‘X’:  附件(文章) （部分有值，例：P|P）
@@ -85,7 +84,6 @@ user_birthday            String  可以为空          用户生日（部分有�
 user_classify            String  可以为空          用户分类（示例：["政府机构"]）
 user_description         String  可以为空          用户描述（部分有值，示例见备注）
 photo_album_collect      String  可以为空          相册信息
-follower_number_int      String  可以为空          人气数
 
 
 入参格式:
@@ -153,7 +151,6 @@ follower_number_int      String  可以为空          人气数
     "found":"",                #成立时间（数据部分为空）
     "gender_orientation":"",   #性取向（部分有值，例：女性）
     "go_through":"",           #经历 生活纪事（部分有值，例：2021年:長野県 上田市出身）
-    "like_number_int":"",      #喜欢人数（转化为数字）（样例数据全部为0）
     "local_profile_pic_background_url":"",  #本地背景图路径（数据部分为空）
     "media_title":"",          #媒体文字 ²文章含有媒介时，多个之间用’|’隔开。（部分有值，例：头像|背景图）
     "media_type_embeded":"",   #媒介类型 媒介类型 ‘P’:  图片； ‘M’:  音频； ‘V’:  视频； ‘X’:  附件(文章) （部分有值，例：P|P）
@@ -174,5 +171,4 @@ follower_number_int      String  可以为空          人气数
     "user_classify":"",        #用户分类（示例：["政府机构"]）
     "user_description":"",     #用户描述（部分有值，示例见备注）
     "photo_album_collect":"",  #相册信息
-    "follower_number_int":"",  #人气数
 }
