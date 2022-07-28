@@ -16,6 +16,7 @@ import com.acat.handleBlogData.service.redisService.RedisLockServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.*;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
@@ -642,17 +643,21 @@ public class EsServiceImpl {
             }
 
 
-            /*****处理原始数据 _____特殊处理 *****/
+            /*****处理原始数据 *****/
+            Map<String, Object> newObjectMap = Maps.newHashMap();
             Map<String, Object> stringObjectMap = hit.getSourceAsMap();
             if (!Objects.isNull(stringObjectMap)) {
                 for (String key : stringObjectMap.keySet()) {
-                    if (stringObjectMap.get(key) != null) {
-                        stringObjectMap.put(key, PatternUtil.handleStr(String.valueOf(stringObjectMap.get(key))));
+                    if (StringUtils.isBlank(key)) {
+                        continue;
                     }
+                    if ("_class".equals(key)) {
+                        continue;
+                    }
+                    newObjectMap.put(FieldUtils.getFieldNameFromZh(key) != null ? FieldUtils.getFieldNameFromZh(key) : key, stringObjectMap.get(key));
                 }
             }
-            stringObjectMap.remove("_class");
-            userDetailResp.setFieldMap(stringObjectMap);
+            userDetailResp.setFieldMap(newObjectMap);
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
         }catch (Exception e) {
             log.error("EsServiceImpl.retrieveUserDetail has error:{}",e.getMessage());
