@@ -14,33 +14,33 @@ public class FieldUtils {
          * 公共字段
          */
         fieldMap.put("uuid", "用户唯一ID");
-        fieldMap.put("integrity", "完整度");
+        fieldMap.put("integrity", "数据完整度");
         fieldMap.put("platform", "来源平台");
         fieldMap.put("data_source", "数据来源");
         fieldMap.put("create_time", "数据入库时间");
         fieldMap.put("importance", "重要等级");
         fieldMap.put("remark", "扩展字段,对重要数据手动编辑的批注信息");
         fieldMap.put("language_type", "语种");
-        fieldMap.put("source_id", "社交源id");
-        fieldMap.put("user_id", "博主id");
+        fieldMap.put("source_id", "数据原始ID");
+        fieldMap.put("user_id", "用户唯一标识ID");
         fieldMap.put("screen_name", "用户名");
         fieldMap.put("use_name", "用户全名");
-        fieldMap.put("user_url", "博主url");
-        fieldMap.put("user_avatar", "用户头像链接");
+        fieldMap.put("user_url", "用户主页URL");
+        fieldMap.put("user_avatar", "用户头像");
         fieldMap.put("local_photo_url", "用户头像本地路径");
         fieldMap.put("gender", "用户性别");
         fieldMap.put("country", "国家");
         fieldMap.put("city", "城市");
         fieldMap.put("user_type", "用户类型");
-        fieldMap.put("verified", "是否认证");
+        fieldMap.put("verified", "用户认证");
         fieldMap.put("followers_count", "粉丝数");
         fieldMap.put("friend_count", "关注数");
         fieldMap.put("post_count", "发文数");
-        fieldMap.put("like_count", "收藏数");
-        fieldMap.put("source_create_time", "采集时间");
+        fieldMap.put("like_count", "喜欢数");
+        fieldMap.put("source_create_time", "数据产生时间");
         fieldMap.put("name_userd_before", "曾用名");
         fieldMap.put("mobile", "手机号");
-        fieldMap.put("email", "用户邮箱");
+        fieldMap.put("email", "邮箱地址");
         fieldMap.put("user_religion", "宗教信仰");
         fieldMap.put("works", "工作信息");
         fieldMap.put("location", "位置信息");
@@ -157,7 +157,7 @@ public class FieldUtils {
         fieldMap.put("source_key", "关键词来源");
         fieldMap.put("source_venue", "位置来源");
         fieldMap.put("source_venue_id", "位置id来源");
-        fieldMap.put("friends", "朋友数量");
+        fieldMap.put("friends", "好友数");
 
         /**
          * link 无
