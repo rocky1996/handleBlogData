@@ -160,9 +160,87 @@ public class FieldUtils {
         fieldMap.put("friends", "好友数");
 
         /**
-         * link 无
+         * link impl or history
          */
-
+        fieldMap.put("birth_date_date", "出生日期");
+        fieldMap.put("description_job_title", "当前职业名称");
+        fieldMap.put("description_school_id", "毕业院校");
+        fieldMap.put("description_school_name", "毕业学校名");
+        fieldMap.put("description_school_logo", "毕业学校logo");
+        fieldMap.put("description_school_local_logo", "毕业学校本地logo");
+        fieldMap.put("description_company_id", "当前就职企业id");
+        fieldMap.put("description_company_name", "当前就职企业名");
+        fieldMap.put("description_company_logo", "当前就职企业logo");
+        fieldMap.put("description_company_local_logo", "当前就职企业本地logo");
+        fieldMap.put("description_location", "居住地址");
+        fieldMap.put("industry_name", "所属行业");
+        fieldMap.put("summary", "用户简介");
+        fieldMap.put("experiences_job_title", "工作经历");
+        fieldMap.put("experiences_company_id", "工作经历");
+        fieldMap.put("experiences_company_name", "工作经历");
+        fieldMap.put("experiences_company_logo", "工作经历");
+        fieldMap.put("experiences_company_local_logo", "工作经历");
+        fieldMap.put("experiences_company_location", "工作经历");
+        fieldMap.put("experiences_time_period_time", "工作经历");
+        fieldMap.put("experiences_description", "工作经历");
+        fieldMap.put("certifications_name", "资格认证");
+        fieldMap.put("certifications_authority", "资格认证");
+        fieldMap.put("certifications_license", "资格认证");
+        fieldMap.put("certifications_time_period_time", "资格认证");
+        fieldMap.put("cerfitications_url", "资格认证");
+        fieldMap.put("volunteer_experiences_role", "志愿者角色");
+        fieldMap.put("volunteer_experiences_company_name", "志愿者单位名");
+        fieldMap.put("volunteer_experiences_cause", "志愿原因");
+        fieldMap.put("volunteer_experiences_time_period_time", "志愿时间段");
+        fieldMap.put("volunteer_experiences_description", "志愿描述");
+        fieldMap.put("educations_school_id", "教育经历");
+        fieldMap.put("educations_school_name", "教育经历");
+        fieldMap.put("educations_school_logo", "教育经历");
+        fieldMap.put("educations_school_local_logo", "教育经历");
+        fieldMap.put("educations_diplomaqq", "教育经历");
+        fieldMap.put("educations_subjects", "教育经历");
+        fieldMap.put("educations_grade", "教育经历");
+        fieldMap.put("educations_activity", "教育经历");
+        fieldMap.put("educations_time_period_time", "教育经历");
+        fieldMap.put("educations_description", "教育经历");
+        fieldMap.put("skills_name", "技能认可");
+        fieldMap.put("skills_endorsement_count", "技能认可");
+        fieldMap.put("languages_name", "语言名");
+        fieldMap.put("languages_proficiency", "精通");
+        fieldMap.put("honors_title", "荣誉");
+        fieldMap.put("honors_issuer", "荣誉");
+        fieldMap.put("honors_time", "荣誉");
+        fieldMap.put("honors_description", "荣誉");
+        fieldMap.put("organizations_name", "组织名");
+        fieldMap.put("organizations_time_period_time", "时间段");
+        fieldMap.put("organizations_description", "组织描述");
+        fieldMap.put("organizations_location", "组织所在地");
+        fieldMap.put("patents_title", "专利名");
+        fieldMap.put("patents_serial_no", "专利号");
+        fieldMap.put("patents_issuer_country_name", "发行国家");
+        fieldMap.put("patents_time", "时间");
+        fieldMap.put("patents_issuer", "发行人");
+        fieldMap.put("patents_url", "专利链接");
+        fieldMap.put("patents_description", "专利描述");
+        fieldMap.put("projects_name", "项目名");
+        fieldMap.put("projects_url", "项目链接");
+        fieldMap.put("projects_time_period_time", "项目时间");
+        fieldMap.put("projects_description", "项目描述");
+        fieldMap.put("publications_title", "出版物标题");
+        fieldMap.put("publications_issuer", "发行人");
+        fieldMap.put("publications_url", "发行链接");
+        fieldMap.put("publications_time", "发行时间");
+        fieldMap.put("contacts_title", "联系方式");
+        fieldMap.put("contacts_name", "联系方式");
+        fieldMap.put("contacts_url", "联系方式");
+        fieldMap.put("tags", "博主标签");
+        fieldMap.put("profile_score", "信息完成度");
+        fieldMap.put("coureses_name", "课程名称");
+        fieldMap.put("coureses_number", "课程数量");
+        fieldMap.put("tests_description", "描述");
+        fieldMap.put("tests_name", "名称");
+        fieldMap.put("tests_score", "得分");
+        fieldMap.put("tests_time_period", "时间");
 
         /**
          * link_school
