@@ -47,6 +47,8 @@ public class FieldUtils {
         fieldMap.put("marriage", "婚姻情况");
         fieldMap.put("home_town", "家乡地址");
         fieldMap.put("user_summary", "用户简介");
+        fieldMap.put("original_mailbox", "原始邮箱");
+        fieldMap.put("original_contact", "原始联系方式");
 
         /**
          * twitter
@@ -148,8 +150,8 @@ public class FieldUtils {
         fieldMap.put("real_name", "人工维护真实姓名");
         fieldMap.put("recent_list", "最近列表");
         fieldMap.put("send_state", "发送状态");
-        fieldMap.put("send", "情感正负面");
-        fieldMap.put("send_num", "情感度");
+        fieldMap.put("sent", "情感正负面");
+        fieldMap.put("sent_num", "情感度");
         fieldMap.put("todo", "计划内容");
         fieldMap.put("top_tips", "top评论");
         fieldMap.put("visibility", "可见性");
