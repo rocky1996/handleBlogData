@@ -18,8 +18,8 @@ public class DateUtils {
      * @param date
      * @return str
      */
-    public static String DateToStr(Date date, String fmt) {
-        SimpleDateFormat format = new SimpleDateFormat(fmt, Locale.CHINESE);
+    public static String dateToStr(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         return format.format(date);
     }
 
@@ -57,8 +57,8 @@ public class DateUtils {
         return flag;
     }
 
-//    public static void main(String[] args) {
-//        String str = "2022-07-10";
-//        System.out.println(isDateVail(str));
-//    }
+    public static void main(String[] args) {
+        String str = "2022-07-10";
+        System.out.println(dateToStr(new Date()));
+    }
 }

@@ -259,7 +259,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "批量查询接口", ImmutableMap.of("fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
+            sendEmailService.sendSimpleEmail(assemblingBean(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
             return new RestResult<>(RestEnum.FAILED);
         }
     }
@@ -877,7 +877,7 @@ public class EsServiceV2Impl {
         return SendEmailReq
                 .builder()
                 .subject("系统报错通知")
-                .content("当前时间" + new Date() + interFaceName + "报错," + "报错信息:" + e.getMessage() + "," + "入参为:" + JacksonUtil.beanToStr(object))
+                .content("当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错," + "报错信息:" + e.getMessage() + "," + "入参为:" + JacksonUtil.beanToStr(object))
                 .build();
     }
 }
