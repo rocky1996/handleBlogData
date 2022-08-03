@@ -61,7 +61,7 @@ public class FieldUtils {
         fieldMap.put("user_flag", "用户描述");
         fieldMap.put("listed", "所属公共列表数(数字)");
         fieldMap.put("moments", "瞬间(数字)");
-        fieldMap.put("protected", "是否是锁定账号");
+        fieldMap.put("protect_ed", "是否是锁定账号");
         fieldMap.put("tf_effective", "是否有博文");
         fieldMap.put("time_zone", "用户所在时区");
         fieldMap.put("com_from", "来源");
@@ -91,7 +91,7 @@ public class FieldUtils {
         fieldMap.put("have_product", "拥有产品,企业账号");
         fieldMap.put("exchange_number", "交流人数");
         fieldMap.put("visit_number", "访问人数");
-        fieldMap.put("first_name", "名");
+        fieldMap.put("first_name", "名字");
         fieldMap.put("last_name", "姓");
         fieldMap.put("teach_message", "教育信息");
         fieldMap.put("acquisition_time", "采集时间");
