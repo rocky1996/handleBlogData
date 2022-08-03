@@ -9,6 +9,7 @@ import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
+import com.acat.handleBlogData.service.esService.EsServiceV2Impl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.acat.handleBlogData.util.LanguageUtil;
 import com.google.common.collect.ImmutableMap;
@@ -30,8 +31,10 @@ import java.util.stream.Collectors;
 @RequestMapping(UrlConstants.BLOG_SYSTEM_COMMON)
 public class CommonController {
 
+//    @Resource
+//    private EsServiceImpl esService;
     @Resource
-    private EsServiceImpl esService;
+    private EsServiceV2Impl esServiceV2;
     @Resource
     private TranslateOuterServiceImpl translateOuterService;
     @Resource
@@ -68,7 +71,7 @@ public class CommonController {
                     || mediaSourceEnum == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
-            elasticsearchRestTemplate.indexOps(IndexCoordinates.of("link_school")).delete();
+            elasticsearchRestTemplate.indexOps(IndexCoordinates.of(mediaSourceEnum.getEs_index_v2())).delete();
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             log.error("CommonController.deleteIndex has error:{}",e.getMessage());
@@ -81,7 +84,7 @@ public class CommonController {
     public RestResult<SearchCountryResp> getCountryList() {
 
         try {
-            return esService.getCountryList();
+            return esServiceV2.getCountryList();
         }catch (Exception e) {
             log.error("CommonController.getCountryList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -93,7 +96,7 @@ public class CommonController {
     public RestResult<SearchCityResp> getCityList() {
 
         try {
-            return esService.getCityList();
+            return esServiceV2.getCityList();
         }catch (Exception e) {
             log.error("CommonController.getCityList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -105,7 +108,7 @@ public class CommonController {
     public RestResult<SearchIntegrityResp> getIntegrityList() {
 
         try {
-            return esService.getIntegrityList();
+            return esServiceV2.getIntegrityList();
         }catch (Exception e) {
             log.error("CommonController.getIntegrityList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -123,7 +126,7 @@ public class CommonController {
                                     .builder()
                                     .code(e.getCode())
                                     .desc(e.getDesc())
-                                    .totalSize(esService.getMediaIndexSize(e))
+                                    .totalSize(esServiceV2.getMediaIndexSize(e))
                                     .build())
                             .collect(Collectors.toList()));
         }catch (Exception e) {

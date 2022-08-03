@@ -12,12 +12,12 @@ import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.SearchResp;
 import com.acat.handleBlogData.controller.resp.UserDetailResp;
+import com.acat.handleBlogData.service.esService.EsServiceV2Impl;
 import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.elasticsearch.common.Numbers;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +35,8 @@ public class EsController {
 
     @Resource
     private EsServiceImpl esService;
+    @Resource
+    private EsServiceV2Impl esServiceV2;
 
     public static final String TXT_EXTENSION = ".txt";
 
@@ -77,7 +79,7 @@ public class EsController {
             if (searchReq.getPageNum() == null || searchReq.getPageSize() == null) {
                 return new RestResult<>(RestEnum.FEN_YE_ERROR);
             }
-            return esService.searchData(searchReq);
+            return esServiceV2.searchData(searchReq);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -97,7 +99,7 @@ public class EsController {
             if (MediaSourceEnum.getMediaSourceEnum(searchDetailReq.getMediaCode()) == null) {
                 return new RestResult<>(RestEnum.MEDIA_SOURCE_ERROR);
             }
-            return esService.retrieveUserDetail(searchDetailReq);
+            return esServiceV2.retrieveUserDetail(searchDetailReq);
         }catch (Exception e) {
             log.error("EsController.retrieveUserDetail has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -139,7 +141,7 @@ public class EsController {
             if (fieldList.size() > 1000) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
             }
-            return esService.batchQuery(searchField, fieldList, isParticiple, pageNum, pageSize);
+            return esServiceV2.batchQuery(searchField, fieldList, isParticiple, pageNum, pageSize);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -159,7 +161,7 @@ public class EsController {
             || !statList.contains(fieldName)) {
                 return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "国家或城市字段搜索错误！！！");
             }
-            return esService.queryCountryOrCity(textValue, fieldName);
+            return esServiceV2.queryCountryOrCity(textValue, fieldName);
         }catch (Exception e) {
             log.error("EsController.queryCountryOrCity has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
@@ -175,7 +177,7 @@ public class EsController {
                     && StringUtils.isBlank(userName)) {
                 return new RestResult<>(RestEnum.TRAN_VALUE_IS_EMPTY.getCode(), "用户Id字段和用户名不能都为空！！！");
             }
-            return esService.searchBeforeNameInfo(userId, userName);
+            return esServiceV2.searchBeforeNameInfo(userId, userName);
         }catch (Exception e) {
             log.error("EsController.searchBeforeNameInfo has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
