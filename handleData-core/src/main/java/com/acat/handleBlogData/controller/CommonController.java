@@ -13,6 +13,7 @@ import com.acat.handleBlogData.service.esService.EsServiceV2Impl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.acat.handleBlogData.util.LanguageUtil;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +50,9 @@ public class CommonController {
         loginRespVo.setPassWord("xuanwu-004");
         loginRespVo.setUserNickname("玄武");
     }
+
+    //需要过滤的
+    private static List<MediaSourceEnum> mediaSourceEnumList = Lists.newArrayList(MediaSourceEnum.FB_HISTORY, MediaSourceEnum.FQ_HISTORY, MediaSourceEnum.LINKEDIN_HISTORY);
 
     @Auth(required = false)
     @GetMapping("/getBlogSystemInterfaceToken")
@@ -121,7 +125,9 @@ public class CommonController {
 
         try {
             return new RestResult(RestEnum.SUCCESS,
-                    Arrays.stream(MediaSourceEnum.values()).map(e ->
+                    Arrays.stream(MediaSourceEnum.values())
+                            .filter(e -> !mediaSourceEnumList.contains(e))
+                            .map(e ->
                             MediaTypeResp
                                     .builder()
                                     .code(e.getCode())
