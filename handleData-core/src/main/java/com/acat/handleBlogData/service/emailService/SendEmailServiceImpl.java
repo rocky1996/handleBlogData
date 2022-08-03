@@ -31,9 +31,9 @@ public class SendEmailServiceImpl {
 
     @Async
     public void sendSimpleEmail(SendEmailReq emailReq) {
-        if (!"prod".equals(env)) {
-            return;
-        }
+//        if (!"prod".equals(env)) {
+//            return;
+//        }
 
         if (StringUtils.isBlank(emailReq.getSubject())
                 || StringUtils.isBlank(emailReq.getContent())) {
