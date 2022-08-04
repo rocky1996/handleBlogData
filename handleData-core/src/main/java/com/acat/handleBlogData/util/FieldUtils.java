@@ -15,7 +15,7 @@ public class FieldUtils {
          */
         fieldMap.put("uuid", "用户唯一ID");
         fieldMap.put("integrity", "数据完整度");
-        fieldMap.put("platform", "数据源");
+        fieldMap.put("platform", "来源平台");
         fieldMap.put("data_source", "数据来源");
         fieldMap.put("create_time", "数据入库时间");
         fieldMap.put("importance", "重要等级");
