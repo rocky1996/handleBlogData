@@ -84,7 +84,7 @@ public class EsServiceV2Impl {
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
             sourceBuilder.trackTotalHits(true);
-            sourceBuilder.sort("integrity.keyword", SortOrder.DESC);
+            sourceBuilder.sort("integrity", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
             if (!judgeSearchParamAllEmpty(searchReq)) {
