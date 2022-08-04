@@ -25,6 +25,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -83,7 +84,7 @@ public class EsServiceV2Impl {
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
             sourceBuilder.trackTotalHits(true);
-//            sourceBuilder.sort("integrity.keyword", SortOrder.DESC);
+            sourceBuilder.sort("integrity.keyword", SortOrder.DESC);
 
             SearchRequest searchRequest = new SearchRequest();
             if (!judgeSearchParamAllEmpty(searchReq)) {
@@ -208,7 +209,10 @@ public class EsServiceV2Impl {
                     if ("_class".equals(key)) {
                         continue;
                     }
-                    newObjectMap.put(FieldUtils.getFieldNameFromZh(key) != null ? FieldUtils.getFieldNameFromZh(key) : key, stringObjectMap.get(key));
+                    newObjectMap.put(
+                            FieldUtils.getFieldNameFromZh(key) != null ? FieldUtils.getFieldNameFromZh(key) : key,
+                            "impl_or_history_type".equals(key) ? ("imp".equals(stringObjectMap.get(key)) ? "完整属性" : "部分属性") : stringObjectMap.get(key)
+                    );
                 }
             }
             userDetailResp.setFieldMap(newObjectMap);

@@ -22,7 +22,7 @@ public class FieldUtils {
         fieldMap.put("remark", "扩展字段,对重要数据手动编辑的批注信息");
         fieldMap.put("language_type", "语种");
         fieldMap.put("source_id", "数据原始ID");
-        fieldMap.put("user_id", "用户唯一标识ID");
+        fieldMap.put("user_id", "用户唯一ID");
         fieldMap.put("screen_name", "用户名");
         fieldMap.put("use_name", "用户全名");
         fieldMap.put("user_url", "用户主页URL");
