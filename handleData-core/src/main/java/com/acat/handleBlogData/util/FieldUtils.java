@@ -22,7 +22,7 @@ public class FieldUtils {
         fieldMap.put("remark", "扩展字段,对重要数据手动编辑的批注信息");
         fieldMap.put("language_type", "语种");
         fieldMap.put("source_id", "数据原始ID");
-        fieldMap.put("user_id", "用户唯一ID");
+        fieldMap.put("user_id", "用户唯一标识ID");
         fieldMap.put("screen_name", "用户名");
         fieldMap.put("use_name", "用户全名");
         fieldMap.put("user_url", "用户主页URL");
@@ -65,7 +65,7 @@ public class FieldUtils {
         fieldMap.put("tf_effective", "是否有博文");
         fieldMap.put("time_zone", "时区");
         fieldMap.put("com_from", "来源");
-        fieldMap.put("diff_time", "注册日期");
+        fieldMap.put("diff_time", "治理后的注册日期");
         fieldMap.put("extend", "扩展信息");
 
         /**
