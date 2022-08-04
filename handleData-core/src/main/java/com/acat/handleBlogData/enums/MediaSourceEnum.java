@@ -13,8 +13,8 @@ public enum MediaSourceEnum {
     INSTAGRAM(5, "Instagram", "instagram", "instagram_v2"),
     LINKEDIN_IMPL(6, "LinkedIn", "link_impl", "link_v2"),
     LINKEDIN_HISTORY(7, "LinkedIn", "link_history", "link_v2"),
-    LINKEDIN_BUSINESS(8, "LinkedIn-企业", "link_business", "link_school_v2"),
-    LINKEDIN_SCHOOL(9, "LinkedIn-学校", "link_school", "link_business_v2"),
+    LINKEDIN_BUSINESS(8, "LinkedIn-企业", "link_business", "link_business_v2"),
+    LINKEDIN_SCHOOL(9, "LinkedIn-学校", "link_school", "link_school_v2"),
     ALL(10, "全部", "all", "all"),
     ;
 
