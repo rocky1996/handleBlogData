@@ -267,7 +267,8 @@ public class FieldUtils {
         fieldMap.put("tags", "标签");
         fieldMap.put("profile_score", "信息完成度");
         fieldMap.put("source_connection", "资料来源");
-
+        fieldMap.put("source", "资源类别");
+        fieldMap.put("timestamp", "时间戳");
 
     }
 
