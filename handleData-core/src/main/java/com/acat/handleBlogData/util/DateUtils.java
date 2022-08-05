@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 public class DateUtils {
 
+    public static final long TIMEZONE = 8*60*60*1000;
     private static String DATE_REGEX = "^([1-9]\\d{3}-)(([0]{0,1}[1-9]-)|([1][0-2]-))(([0-3]{0,1}[0-9]))$";
 
     /**
@@ -57,8 +58,19 @@ public class DateUtils {
         return flag;
     }
 
+    public static Date date8(Date date){
+        return new Date(date.getTime() - TIMEZONE);
+    }
+
+
     public static void main(String[] args) {
-        String str = "2022-07-10";
-        System.out.println(dateToStr(new Date()));
+//        String str = "2022-07-10";
+//        System.out.println(dateToStr(new Date()));
+
+        Date begin = date8(new Date());
+        Date end = date8(new Date());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(begin));
     }
 }

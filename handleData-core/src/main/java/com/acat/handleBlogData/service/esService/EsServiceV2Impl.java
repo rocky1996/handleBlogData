@@ -781,6 +781,9 @@ public class EsServiceV2Impl {
         if (searchReq.getIntegrity() != null) {
             boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", searchReq.getIntegrity()));
         }
+        if (StringUtils.isNotBlank(searchReq.getStartTime()) && StringUtils.isNotBlank(searchReq.getEndTime())) {
+            boolQueryBuilder.should(QueryBuilders.rangeQuery("source_create_time.keyword").gte(searchReq.getStartTime()).lte(searchReq.getEndTime()).format("yyyy-MM-dd HH:mm:ss"));
+        }
     }
 
     /**
@@ -881,7 +884,13 @@ public class EsServiceV2Impl {
         return SendEmailReq
                 .builder()
                 .subject("系统报错通知")
-                .content("当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错," + "报错信息:" + e.getMessage() + "," + "入参为:" + JacksonUtil.beanToStr(object))
+                .content("当前时间" + DateUtils.dateToStr(new Date())
+                        + interFaceName + "报错,"
+                        + "报错信息:"
+                        + e.getMessage()
+                        + ","
+                        + "入参为:"
+                        + JacksonUtil.beanToStr(object))
                 .build();
     }
 }

@@ -66,12 +66,12 @@ public class SearchReq {
     /**
      * 开始时间
      */
-    private Date startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
      * 是否是分词查询
