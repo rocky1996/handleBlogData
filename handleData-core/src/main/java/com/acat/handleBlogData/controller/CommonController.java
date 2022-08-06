@@ -153,6 +153,7 @@ public class CommonController {
                                                     .builder()
                                                     .fieldName(e.getFieldName())
                                                     .fieldValue(e.getFieldValue())
+                                                    .isFuzzy(e.isFuzzy())
                                                     .build())
                                     .collect(Collectors.toList()))
                     .build());

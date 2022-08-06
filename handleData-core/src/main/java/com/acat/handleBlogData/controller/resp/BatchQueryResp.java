@@ -22,5 +22,6 @@ public class BatchQueryResp {
     public static class Field{
         private String fieldName;
         private String fieldValue;
+        private boolean isFuzzy;
     }
 }

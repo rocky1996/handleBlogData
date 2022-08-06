@@ -10,20 +10,21 @@ import java.util.List;
 @AllArgsConstructor
 public enum BatchSearchFieldEnum {
 
-    screen_name("用户名", "screen_name"),
-    name_userd_before("曾用名", "name_userd_before"),
-    mobile("手机号", "mobile"),
-    email("邮箱", "email"),
-    user_summary("用户简介(仅支持模糊查询)", "user_summary"),
-    works("工作信息(仅支持模糊查询)", "works"),
-    alg_remark("算法标签(仅支持模糊查询)", "alg_remark"),
-    skills_name("技能(仅支持模糊查询)", "skills_name"),
-    educations_school_name("教育经历(仅支持模糊查询)", "educations_school_name"),
-    experiences_company_name("工作经历(仅支持模糊查询)", "experiences_company_name"),
+    screen_name("用户名", "screen_name", false),
+    name_userd_before("曾用名", "name_userd_before", false),
+    mobile("手机号", "mobile", false),
+    email("邮箱", "email", false),
+    user_summary("用户简介(仅支持模糊查询)", "user_summary", true),
+    works("工作信息(仅支持模糊查询)", "works", true),
+    alg_remark("算法标签(仅支持模糊查询)", "alg_remark", true),
+    skills_name("技能(仅支持模糊查询)", "skills_name", true),
+    educations_school_name("教育经历(仅支持模糊查询)", "educations_school_name", true),
+    experiences_company_name("工作经历(仅支持模糊查询)", "experiences_company_name", true),
     ;
 
     private String fieldName;
     private String fieldValue;
+    private boolean isFuzzy;
 
     public String getFieldName() {
         return fieldName;
@@ -31,6 +32,10 @@ public enum BatchSearchFieldEnum {
 
     public String getFieldValue() {
         return fieldValue;
+    }
+
+    public boolean isFuzzy() {
+        return isFuzzy;
     }
 
     public static List<String> mustDimSearchField() {
