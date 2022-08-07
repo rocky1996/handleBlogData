@@ -199,4 +199,26 @@ public class CommonController {
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }
+
+    @Auth(required = false)
+    @GetMapping("/getIndexTargetNum")
+    public RestResult<List<IndexTargetResp>> getIndexTargetNum() {
+
+        try {
+            return new RestResult(RestEnum.SUCCESS, Lists.newArrayList());
+//                    Arrays.stream(MediaSourceEnum.values())
+//                            .filter(e -> !mediaSourceEnumList.contains(e))
+//                            .map(e ->
+//                                    MediaTypeResp
+//                                            .builder()
+//                                            .code(e.getCode())
+//                                            .desc(e.getDesc())
+//                                            .totalSize(esServiceV2.getMediaIndexSize(e))
+//                                            .build())
+//                            .collect(Collectors.toList()));
+        }catch (Exception e) {
+            log.error("CommonController.getIndexTargetNum has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
 }

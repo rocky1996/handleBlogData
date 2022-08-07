@@ -256,6 +256,6 @@ public class LanguageUtil {
                 return lowerName;
             }
         }
-        return "";
+        return LangName;
     }
 }
