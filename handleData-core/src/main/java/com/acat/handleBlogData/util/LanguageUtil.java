@@ -228,6 +228,7 @@ public class LanguageUtil {
         languageMap.put("ky", "吉尔吉斯语");
         languageMap.put("rw", "卢旺达语");
         languageMap.put("zh", "汉语");
+        languageMap.put("zh-cn", "汉语");
 
         languageMap.put("fi", "芬兰语");
         languageMap.put("la", "拉丁语");

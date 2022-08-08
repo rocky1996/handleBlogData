@@ -4,12 +4,15 @@ import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
 import com.acat.handleBlogData.controller.resp.*;
+import com.acat.handleBlogData.domain.entity.BlogSystemIndexTargetDataEntity;
 import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
+import com.acat.handleBlogData.service.IndexTargetService;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.service.esService.EsServiceV2Impl;
+import com.acat.handleBlogData.service.impl.IndexTargetServiceImpl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.acat.handleBlogData.util.LanguageUtil;
 import com.google.common.collect.ImmutableMap;
@@ -19,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -40,6 +44,8 @@ public class CommonController {
     private TranslateOuterServiceImpl translateOuterService;
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    @Resource
+    private IndexTargetService indexTargetService;
 
     private static final String ZH = "zh";
     private static LoginRespVo loginRespVo = null;
@@ -205,17 +211,29 @@ public class CommonController {
     public RestResult<List<IndexTargetResp>> getIndexTargetNum() {
 
         try {
-            return new RestResult(RestEnum.SUCCESS, Lists.newArrayList());
-//                    Arrays.stream(MediaSourceEnum.values())
-//                            .filter(e -> !mediaSourceEnumList.contains(e))
-//                            .map(e ->
-//                                    MediaTypeResp
-//                                            .builder()
-//                                            .code(e.getCode())
-//                                            .desc(e.getDesc())
-//                                            .totalSize(esServiceV2.getMediaIndexSize(e))
-//                                            .build())
-//                            .collect(Collectors.toList()));
+            List<BlogSystemIndexTargetDataEntity> blogSystemIndexTargetDataEntityList = indexTargetService.getAll();
+
+            List<IndexTargetResp> indexTargetRespList = Lists.newArrayList();
+            if (CollectionUtils.isEmpty(blogSystemIndexTargetDataEntityList)) {
+                return new RestResult(RestEnum.SUCCESS, indexTargetRespList);
+            }
+
+            blogSystemIndexTargetDataEntityList.forEach(e -> {
+                indexTargetRespList.add(
+                        IndexTargetResp
+                                .builder()
+                                .index(e.getIndex())
+                                .indexChineseName(e.getIndexChineseName())
+                                .beforeTreatment(e.getBeforeTreatment())
+                                .afterTreatment(e.getAfterTreatment())
+                                .governanceFailure(e.getGovernanceFailure())
+                                .warehousingSucceeded(e.getWarehousingSucceeded())
+                                .warehousingFailed(e.getWarehousingFailed())
+                                .removalQuantity(e.getRemovalQuantity())
+                                .build()
+                );
+            });
+            return new RestResult(RestEnum.SUCCESS, indexTargetRespList);
         }catch (Exception e) {
             log.error("CommonController.getIndexTargetNum has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
