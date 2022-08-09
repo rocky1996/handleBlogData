@@ -3,8 +3,12 @@ package com.acat.handleBlogData.outerService.outerInterface;
 import com.acat.handleBlogData.outerService.outerConstants.OutUrlConstants;
 import com.acat.handleBlogData.outerService.outerResp.WxTokenResp;
 import com.acat.handleBlogData.util.JacksonUtil;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -14,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 @Service
 @Slf4j
@@ -46,8 +50,42 @@ public class WxNoticeServiceImpl {
                 return StringUtils.isBlank(wxTokenResp.getAccess_token()) ? "" : wxTokenResp.getAccess_token();
             }
         }catch (Exception e) {
-            log.error("KnowledgeOuterServiceImpl.getKnowLedgeInfo has error",e.getMessage());
+            log.error("WxNoticeServiceImpl.getWxNoticeToken has error",e.getMessage());
         }
         return null;
+    }
+
+    public void sendWxMsg(String token, String msg) {
+        try {
+            if (StringUtils.isBlank(token) || StringUtils.isBlank(msg)) {
+                return;
+            }
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            HttpHeaders httpHeader = new HttpHeaders();
+            httpHeader.setContentType(MediaType.APPLICATION_JSON);
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("access_token", token);
+
+            HashMap map = new HashMap();
+            map.put("touser", "@all");
+            map.put("msgtype", "text");
+            map.put("agentid", 1000005);
+            map.put("safe", 0);
+
+            HashMap textMap = Maps.newHashMap();
+            textMap.put("content", msg);
+            map.put("text", textMap);
+            paramMap.put("send_msg", map);
+
+            HttpEntity<HashMap<String, Object>> requestParam = new HttpEntity<>(paramMap, httpHeader);
+            ResponseEntity<String> outResp = restTemplate.postForEntity(OutUrlConstants.WX_SEND_MSG, requestParam, String.class);
+            stopWatch.stop();
+
+            System.out.println(JacksonUtil.beanToStr(outResp));
+        }catch (Exception e) {
+            log.error("WxNoticeServiceImpl.sendWxMsg has error",e.getMessage());
+        }
     }
 }

@@ -17,5 +17,5 @@ public class OutUrlConstants {
      * 企业微信通知
      */
     public static String WX_GET_TOKEN = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={corpid}&corpsecret={corpsecret}";
-    public static String WX_SEND_MSG = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}";
+    public static String WX_SEND_MSG = "https://qyapi.weixin.qq.com/cgi-bin/message/send";
 }

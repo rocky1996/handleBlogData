@@ -13,6 +13,7 @@ import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
 import com.acat.handleBlogData.outerService.outerInterface.WxNoticeServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
+import com.acat.handleBlogData.service.wxService.WxServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
 import com.acat.handleBlogData.util.JacksonUtil;
 import com.google.common.collect.Lists;
@@ -79,7 +80,7 @@ class HandleBlogDataApplicationTests {
     @Resource
     private RedisServiceImpl redisService;
     @Resource
-    private WxNoticeServiceImpl wxNoticeService;
+    private WxServiceImpl wxService;
 //    @Resource
 //    private SendEmailService sendEmailService;
 
@@ -477,9 +478,13 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test16() {
-        String token = wxNoticeService.getWxNoticeToken();
-        System.out.println(token);
+        wxService.sendWxMsg("hello");
     }
+
+//    @Test
+//    public void test17() {
+//        wxNoticeService.sendWxMsg();
+//    }
 
     private RequestOptions toBuilder() {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();

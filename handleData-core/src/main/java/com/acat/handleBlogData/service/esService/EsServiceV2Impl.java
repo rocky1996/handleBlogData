@@ -5,8 +5,7 @@ import com.acat.handleBlogData.controller.req.SearchDetailReq;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.enums.*;
-import com.acat.handleBlogData.service.emailService.SendEmailServiceImpl;
-import com.acat.handleBlogData.service.emailService.vo.SendEmailReq;
+import com.acat.handleBlogData.service.wxService.WxServiceImpl;
 import com.acat.handleBlogData.util.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -40,8 +39,10 @@ public class EsServiceV2Impl {
 
     @Resource
     private RestHighLevelClient restHighLevelClient;
+//    @Resource
+//    private SendEmailServiceImpl sendEmailService;
     @Resource
-    private SendEmailServiceImpl sendEmailService;
+    private WxServiceImpl wxService;
     @Value("${spring.profiles.active}")
     private String env;
 
@@ -107,7 +108,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.searchData has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "搜索查询接口", searchReq));
+            wxService.sendWxMsg(assemblingStr(e, "搜索查询接口", searchReq));
             return new RestResult<>(RestEnum.FAILED, "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
         }
     }
@@ -224,7 +225,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
         }catch (Exception e) {
             log.error("EsServiceV2Impl.retrieveUserDetail has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "查询详情接口", searchDetailReq));
+            wxService.sendWxMsg(assemblingStr(e, "查询详情接口", searchDetailReq));
         }
         return new RestResult<>(RestEnum.FAILED);
     }
@@ -268,7 +269,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
+            wxService.sendWxMsg(assemblingStr(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
             return new RestResult<>(RestEnum.FAILED);
         }
     }
@@ -296,7 +297,7 @@ public class EsServiceV2Impl {
             return response == null ? 0L : response.getHits().getTotalHits().value;
         }catch (Exception e) {
             log.error("EsServiceV2Impl.getMediaIndexSize has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "查询索引数量接口", mediaSourceEnum));
+            wxService.sendWxMsg(assemblingStr(e, "查询索引数量接口", mediaSourceEnum));
         }
         return 0L;
     }
@@ -358,7 +359,7 @@ public class EsServiceV2Impl {
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getCountryList has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "查询国家列表接口", ""));
+            wxService.sendWxMsg(assemblingStr(e, "查询国家列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取国家列表失败");
     }
@@ -420,7 +421,7 @@ public class EsServiceV2Impl {
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getCityList has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "查询城市列表接口", ""));
+            wxService.sendWxMsg(assemblingStr(e, "查询城市列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取城市列表失败");
     }
@@ -473,7 +474,7 @@ public class EsServiceV2Impl {
                     SearchIntegrityResp.builder().integrityList(integrityList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getIntegrityList has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "查询数据完整度列表接口", ""));
+            wxService.sendWxMsg(assemblingStr(e, "查询数据完整度列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取完整度列表失败");
     }
@@ -538,7 +539,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, resultList.stream().distinct().collect(Collectors.toList()));
         }catch (Exception e) {
             log.error("EsServiceImpl2.queryCountryOrCity has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "搜索国家/城市接口", ImmutableMap.of("textValue",textValue,"fieldName",fieldName)));
+            wxService.sendWxMsg(assemblingStr(e, "搜索国家/城市接口", ImmutableMap.of("textValue",textValue,"fieldName",fieldName)));
         }
         return new RestResult<>(RestEnum.FAILED.getCode(), "搜索国家/城市失败");
     }
@@ -575,7 +576,7 @@ public class EsServiceV2Impl {
                     SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl.searchBeforeNameInfo has error:{}",e.getMessage());
-            sendEmailService.sendSimpleEmail(assemblingBean(e, "搜索曾用名接口", ImmutableMap.of("userId",userId,"userName",userName)));
+            wxService.sendWxMsg(assemblingStr(e, "搜索曾用名接口", ImmutableMap.of("userId",userId,"userName",userName)));
         }
         return new RestResult<>(RestEnum.FAILED);
     }
@@ -878,6 +879,27 @@ public class EsServiceV2Impl {
         return builder.build();
     }
 
+//    /**
+//     * 组装
+//     * @param e
+//     * @p interFaceName
+//     * @param object
+//     * @return
+//     */
+//    private SendEmailReq assemblingBean(Exception e, String interFaceName, Object object) {
+//        return SendEmailReq
+//                .builder()
+//                .subject("系统报错通知")
+//                .content("当前时间" + DateUtils.dateToStr(new Date())
+//                        + interFaceName + "报错,"
+//                        + "报错信息:"
+//                        + e.getMessage()
+//                        + ","
+//                        + "入参为:"
+//                        + JacksonUtil.beanToStr(object))
+//                .build();
+//    }
+
     /**
      * 组装
      * @param e
@@ -885,17 +907,11 @@ public class EsServiceV2Impl {
      * @param object
      * @return
      */
-    private SendEmailReq assemblingBean(Exception e, String interFaceName, Object object) {
-        return SendEmailReq
-                .builder()
-                .subject("系统报错通知")
-                .content("当前时间" + DateUtils.dateToStr(new Date())
-                        + interFaceName + "报错,"
-                        + "报错信息:"
-                        + e.getMessage()
-                        + ","
-                        + "入参为:"
-                        + JacksonUtil.beanToStr(object))
-                .build();
+    private String assemblingStr(Exception e, String interFaceName, Object object) {
+        return "落河系统报错通知: 当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错,报错信息: " + e.getMessage() + ", 入参为: " + JacksonUtil.beanToStr(object);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("test");
     }
 }
