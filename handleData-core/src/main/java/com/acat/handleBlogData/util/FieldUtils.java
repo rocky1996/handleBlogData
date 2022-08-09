@@ -258,10 +258,10 @@ public class FieldUtils {
         fieldMap.put("confirmed_locations_city", "办公所在城市");
         fieldMap.put("confirmed_locations_post", "办公所在邮编");
         fieldMap.put("confirmed_locations_address", "办公所在地址");
-        fieldMap.put("size", "企业规模");
+        fieldMap.put("size", "学校规模");
         fieldMap.put("founded_on", "成立于");
         fieldMap.put("description", "企业描述（简介）");
-        fieldMap.put("website", "企业官网");
+        fieldMap.put("website", "学校官网");
         fieldMap.put("employees", "员工数量");
         fieldMap.put("keywords", "关键词");
         fieldMap.put("tags", "标签");
