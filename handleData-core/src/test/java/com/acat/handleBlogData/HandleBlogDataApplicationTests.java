@@ -11,6 +11,7 @@ import com.acat.handleBlogData.domain.esEntityV2.FbUserData_v2;
 import com.acat.handleBlogData.enums.MediaSourceEnum;
 import com.acat.handleBlogData.enums.RestEnum;
 import com.acat.handleBlogData.outerService.outerInterface.TranslateOuterServiceImpl;
+import com.acat.handleBlogData.outerService.outerInterface.WxNoticeServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.CountryUtil;
 import com.acat.handleBlogData.util.JacksonUtil;
@@ -77,6 +78,8 @@ class HandleBlogDataApplicationTests {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Resource
     private RedisServiceImpl redisService;
+    @Resource
+    private WxNoticeServiceImpl wxNoticeService;
 //    @Resource
 //    private SendEmailService sendEmailService;
 
@@ -470,6 +473,12 @@ class HandleBlogDataApplicationTests {
         if (response == null) {
             System.out.println();
         }
+    }
+
+    @Test
+    public void test16() {
+        String token = wxNoticeService.getWxNoticeToken();
+        System.out.println(token);
     }
 
     private RequestOptions toBuilder() {
