@@ -42,8 +42,8 @@ public class EsServiceV2Impl {
     private RestHighLevelClient restHighLevelClient;
 //    @Resource
 //    private SendEmailServiceImpl sendEmailService;
-    @Autowired
-    private WxNoticeServiceImpl wxNoticeService;
+//    @Autowired
+//    private WxNoticeServiceImpl wxNoticeService;
     @Value("${spring.profiles.active}")
     private String env;
 
@@ -109,7 +109,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.searchData has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索查询接口", searchReq));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索查询接口", searchReq));
             return new RestResult<>(RestEnum.FAILED, "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
         }
     }
@@ -226,7 +226,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, userDetailResp);
         }catch (Exception e) {
             log.error("EsServiceV2Impl.retrieveUserDetail has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "查询详情接口", searchDetailReq));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "查询详情接口", searchDetailReq));
         }
         return new RestResult<>(RestEnum.FAILED);
     }
@@ -270,7 +270,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
             return new RestResult<>(RestEnum.FAILED);
         }
     }
@@ -298,7 +298,7 @@ public class EsServiceV2Impl {
             return response == null ? 0L : response.getHits().getTotalHits().value;
         }catch (Exception e) {
             log.error("EsServiceV2Impl.getMediaIndexSize has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "查询索引数量接口", mediaSourceEnum));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "查询索引数量接口", mediaSourceEnum));
         }
         return 0L;
     }
@@ -360,7 +360,7 @@ public class EsServiceV2Impl {
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getCountryList has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "查询国家列表接口", ""));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "查询国家列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取国家列表失败");
     }
@@ -422,7 +422,7 @@ public class EsServiceV2Impl {
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getCityList has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "查询城市列表接口", ""));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "查询城市列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取城市列表失败");
     }
@@ -475,7 +475,7 @@ public class EsServiceV2Impl {
                     SearchIntegrityResp.builder().integrityList(integrityList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl2.getIntegrityList has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "查询数据完整度列表接口", ""));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "查询数据完整度列表接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED, "获取完整度列表失败");
     }
@@ -540,7 +540,7 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, resultList.stream().distinct().collect(Collectors.toList()));
         }catch (Exception e) {
             log.error("EsServiceImpl2.queryCountryOrCity has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索国家/城市接口", ImmutableMap.of("textValue",textValue,"fieldName",fieldName)));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索国家/城市接口", ImmutableMap.of("textValue",textValue,"fieldName",fieldName)));
         }
         return new RestResult<>(RestEnum.FAILED.getCode(), "搜索国家/城市失败");
     }
@@ -577,7 +577,7 @@ public class EsServiceV2Impl {
                     SearchBeforeNameResp.builder().beforeNameInfoList(resultList).build());
         }catch (Exception e) {
             log.error("EsServiceImpl.searchBeforeNameInfo has error:{}",e.getMessage());
-            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索曾用名接口", ImmutableMap.of("userId",userId,"userName",userName)));
+//            wxNoticeService.sendWxMsg(assemblingStr(e, "搜索曾用名接口", ImmutableMap.of("userId",userId,"userName",userName)));
         }
         return new RestResult<>(RestEnum.FAILED);
     }
@@ -703,18 +703,7 @@ public class EsServiceV2Impl {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail()));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                //均大写
-                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry().toLowerCase()));
-                }
-                //均为小写
-                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry().toUpperCase()));
-                }else {
-                    boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
-                }
+                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry()));
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity()));
