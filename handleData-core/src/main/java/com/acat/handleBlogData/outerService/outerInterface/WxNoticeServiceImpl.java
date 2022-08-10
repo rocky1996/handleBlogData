@@ -31,6 +31,7 @@ public class WxNoticeServiceImpl {
     private static final String CORP_ID = "ww31b32c7bd27bbf9e";
     private static final String SECRET = "mrnTvOcCneu9q-Nh5tKWKhfpocp06OvdejJxmAqsuIs";
 
+    private static final String token = "Ccm471W0nzt_ltYJrdrjdpcPM7C3eWUCIHN-A9b15V7mQoamow1jcKJME4USgCZsyFvoZcVatoHi640MH8gICaJq64JI3199CAGiCu3krl6Nk6c_MXX5NBnudGXC3fl8gJYjqNODdqBHL7VFE3G8RJt6yQzH1JsUjq6KaQq9Al5-BWDUR37ztK3wypBEW7bul7PPrSMZK5oZAJc9gP937Q";
     /**
      * 获取企业微信token
      * @return
@@ -55,9 +56,9 @@ public class WxNoticeServiceImpl {
         return null;
     }
 
-    public void sendWxMsg(String token, String msg) {
+    public void sendWxMsg(String msg) {
         try {
-            if (StringUtils.isBlank(token) || StringUtils.isBlank(msg)) {
+            if (StringUtils.isBlank(msg)) {
                 return;
             }
 
@@ -82,7 +83,7 @@ public class WxNoticeServiceImpl {
             HttpEntity<HashMap<String, Object>> requestParam = new HttpEntity<>(paramMap, httpHeader);
             ResponseEntity<String> outResp = restTemplate.postForEntity(OutUrlConstants.WX_SEND_MSG, requestParam, String.class);
             stopWatch.stop();
-
+            log.info("发送企业微信,paramMap:{},outerResp:{},time:{}", JacksonUtil.beanToStr(paramMap), JacksonUtil.beanToStr(outResp), stopWatch.getTotalTimeMillis());
             System.out.println(JacksonUtil.beanToStr(outResp));
         }catch (Exception e) {
             log.error("WxNoticeServiceImpl.sendWxMsg has error",e.getMessage());
