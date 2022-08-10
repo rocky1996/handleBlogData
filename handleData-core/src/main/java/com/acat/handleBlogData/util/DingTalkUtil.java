@@ -26,7 +26,6 @@ public class DingTalkUtil {
         json.put("text",text);
         //发送post请求
         String response = SendHttps.sendPostByMap(DING_DING_TOKEN, json);
-        log.error("项目告警发送钉钉，响应结果：{}",response);
     }
 
     public static void main(String[] args) throws Exception{
