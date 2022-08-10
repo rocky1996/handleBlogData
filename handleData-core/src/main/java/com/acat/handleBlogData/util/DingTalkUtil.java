@@ -28,7 +28,7 @@ public class DingTalkUtil {
         String response = SendHttps.sendPostByMap(DING_DING_TOKEN, json);
     }
 
-    public static void main(String[] args) throws Exception{
-        sendDdMessage("Hello");
-    }
+//    public static void main(String[] args) throws Exception{
+//        sendDdMessage("Hello");
+//    }
 }
