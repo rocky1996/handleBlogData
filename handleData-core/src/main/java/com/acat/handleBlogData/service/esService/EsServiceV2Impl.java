@@ -25,7 +25,6 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -40,8 +39,6 @@ public class EsServiceV2Impl {
 
     @Resource
     private RestHighLevelClient restHighLevelClient;
-//    @Resource
-//    private SendEmailServiceImpl sendEmailService;
 //    @Autowired
 //    private WxNoticeServiceImpl wxNoticeService;
     @Value("${spring.profiles.active}")
@@ -868,27 +865,6 @@ public class EsServiceV2Impl {
         builder.setHttpAsyncResponseConsumerFactory(new HttpAsyncResponseConsumerFactory.HeapBufferedResponseConsumerFactory(5000 * 1024 * 1024));
         return builder.build();
     }
-
-//    /**
-//     * 组装
-//     * @param e
-//     * @p interFaceName
-//     * @param object
-//     * @return
-//     */
-//    private SendEmailReq assemblingBean(Exception e, String interFaceName, Object object) {
-//        return SendEmailReq
-//                .builder()
-//                .subject("系统报错通知")
-//                .content("当前时间" + DateUtils.dateToStr(new Date())
-//                        + interFaceName + "报错,"
-//                        + "报错信息:"
-//                        + e.getMessage()
-//                        + ","
-//                        + "入参为:"
-//                        + JacksonUtil.beanToStr(object))
-//                .build();
-//    }
 
     /**
      * 组装
