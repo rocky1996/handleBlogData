@@ -12,7 +12,7 @@ public class UtfConfig {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setForceEncoding(true);
-        characterEncodingFilter.setEncoding("utf-8");
+        characterEncodingFilter.setEncoding("UTF-8");
         registrationBean.setFilter(characterEncodingFilter);
         return registrationBean;
     }
