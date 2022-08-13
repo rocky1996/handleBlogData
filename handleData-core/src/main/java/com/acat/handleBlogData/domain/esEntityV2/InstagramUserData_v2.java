@@ -95,7 +95,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  */
 @Data
 @Builder
-@Document(indexName = "instagram_v2")
+@Document(indexName = "instagram_v4")
 public class InstagramUserData_v2 {
 
     /**

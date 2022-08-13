@@ -109,7 +109,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * }
  */
 
-@Document(indexName = "twitter_v2")
+@Document(indexName = "twitter_v4")
 @Data
 @Builder
 public class TwitterUserData_v2{

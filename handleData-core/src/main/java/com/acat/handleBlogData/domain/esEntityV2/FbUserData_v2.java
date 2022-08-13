@@ -185,7 +185,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  */
 @Data
 @Builder
-@Document(indexName = "fb_v2")
+@Document(indexName = "fb_v4")
 public class FbUserData_v2 {
 
     /**
