@@ -14,6 +14,7 @@ public enum BatchSearchFieldEnum {
     name_userd_before("曾用名", "name_userd_before", false),
     mobile("手机号", "mobile", false),
     email("邮箱", "email", false),
+    use_name("用户全名", "use_name", false),
     user_summary("用户简介(仅支持模糊查询)", "user_summary", true),
     works("工作信息(仅支持模糊查询)", "works", true),
     alg_remark("算法标签(仅支持模糊查询)", "alg_remark", true),
