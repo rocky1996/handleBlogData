@@ -50,9 +50,10 @@ public class EsConfig {
                     @Override
                     public RequestConfig.Builder customizeRequestConfig(
                             RequestConfig.Builder requestConfigBuilder) {
-                        return requestConfigBuilder.setConnectTimeout(300000) // 连接超时（默认为1秒）
-                                .setSocketTimeout(400000)
-                                .setConnectionRequestTimeout(0);// 套接字超时（默认为30秒）//更改客户端的超时限制默认30秒现在改为100*1000分钟
+                        return requestConfigBuilder
+                                .setConnectTimeout(30000) // 连接超时（默认为1秒）
+                                .setSocketTimeout(90000)
+                                .setConnectionRequestTimeout(90000); // 套接字超时（默认为30秒）//更改客户端的超时限制默认30秒现在改为100*1000分钟
                     }
                 }));
     }
