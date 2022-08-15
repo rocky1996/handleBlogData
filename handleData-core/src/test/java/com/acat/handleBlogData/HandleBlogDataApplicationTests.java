@@ -1,6 +1,10 @@
 package com.acat.handleBlogData;
 
 import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
+import org.elasticsearch.client.GetAliasesResponse;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import com.acat.handleBlogData.constants.RedisKeyConstants;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.dao.UserDao;
@@ -27,6 +31,8 @@ import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.AcknowledgedResponse;
+import org.elasticsearch.client.indices.GetIndexResponse;
+import org.elasticsearch.cluster.metadata.AliasMetadata;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -521,6 +527,25 @@ class HandleBlogDataApplicationTests {
             UpdateRequest updateRequest = new UpdateRequest("twitter_v2", documentFields.getId()).doc(map);
             restHighLevelClient.update(updateRequest, toBuilder());
         }
+    }
+
+    @Test
+    public void test18() throws Exception{
+        GetIndexRequest request = new GetIndexRequest("twitter_v2", "instagram_v2");
+        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
+
+//        GetSettingsRequest request = new GetSettingsRequest();
+//        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
+//        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
+//        Set<String> indices = map.keySet();
+//        for (String key : indices) {
+//            System.out.println(key);
+//        }
 
     }
 
