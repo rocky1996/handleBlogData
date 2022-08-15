@@ -21,12 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.AcknowledgedResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -40,9 +43,8 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @Slf4j
@@ -77,6 +79,8 @@ class HandleBlogDataApplicationTests {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Resource
     private RedisServiceImpl redisService;
+
+    private static final List<String> fieldList = Lists.newArrayList("台湾", "香港", "澳门", "中国台湾", "中国香港", "中国澳门");
 //    @Resource
 //    private SendEmailService sendEmailService;
 
@@ -472,10 +476,53 @@ class HandleBlogDataApplicationTests {
         }
     }
 
-//    @Test
-//    public void test17() {
-//        wxNoticeService.sendWxMsg();
-//    }
+    @Test
+    public void test17() throws Exception {
+
+        BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+        for(String fieldValue: fieldList){
+            channelQueryBuilder.should(QueryBuilders.matchQuery("country", fieldValue));
+        }
+        bigBuilder.must(channelQueryBuilder);
+
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .query(bigBuilder)
+                .trackTotalHits(true);
+
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("twitter_v2");
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+        // 执行请求
+        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+        if (response == null) {
+
+        }
+
+        SearchHit[] searchHits = response.getHits().getHits();
+        if (CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+            return;
+        }
+
+//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> {
+//
+//                Map map = new HashMap();
+//                map.put("country", "中国");
+//                UpdateRequest updateRequest = new UpdateRequest("twitter_v2", e.getId()).doc(map);
+//                restHighLevelClient.update(updateRequest, toBuilder());
+////
+//            });
+        for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
+            Map map = new HashMap();
+            map.put("country", "中国");
+            UpdateRequest updateRequest = new UpdateRequest("twitter_v2", documentFields.getId()).doc(map);
+            restHighLevelClient.update(updateRequest, toBuilder());
+        }
+
+    }
 
     private RequestOptions toBuilder() {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();

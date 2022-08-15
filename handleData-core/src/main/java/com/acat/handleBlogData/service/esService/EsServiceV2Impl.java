@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -58,6 +59,12 @@ public class EsServiceV2Impl {
             MediaSourceEnum.LINKEDIN_BUSINESS.getEs_index_v2(),
             MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v2(),
     };
+
+    /**
+     * 跑脚本list
+     */
+    private static final List<String> fieldList = Lists.newArrayList("台湾", "香港", "澳门", "中国台湾", "中国香港", "中国澳门");
+
 
     /**
      * 搜索查询
@@ -876,7 +883,47 @@ public class EsServiceV2Impl {
         return "落河系统报错通知: 当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错,报错信息: " + e.getMessage() + ", 入参为: " + JacksonUtil.beanToStr(object);
     }
 
-    public static void main(String[] args) {
-        System.out.println("test");
+    /*************************************************************************/
+    public RestResult updateEsInfo(MediaSourceEnum mediaSourceEnum) {
+        try {
+            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+            for(String fieldValue: fieldList){
+                channelQueryBuilder.should(QueryBuilders.matchQuery("country", fieldValue));
+            }
+            bigBuilder.must(channelQueryBuilder);
+            SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(bigBuilder)
+                    .trackTotalHits(true);
+
+            //搜索
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.indices(mediaSourceEnum.getEs_index_v2());
+            searchRequest.types("_doc");
+            searchRequest.source(builder);
+            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+            if (response == null) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+
+            SearchHit[] searchHits = response.getHits().getHits();
+            if (CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+                return new RestResult<>(RestEnum.PLEASE_TRY);
+            }
+
+            for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
+                Map map = new HashMap();
+                map.put("country", "中国");
+                UpdateRequest updateRequest = new UpdateRequest(mediaSourceEnum.getEs_index_v2(), documentFields.getId()).doc(map);
+                restHighLevelClient.update(updateRequest, toBuilder());
+            }
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            log.error("EsServiceImpl2.updateEsInfo has error:{}",e.getMessage());
+            DingTalkUtil.sendDdMessage(assemblingStr(e, "刷" + mediaSourceEnum.getEs_index_v2() + "索引的脚本接口", ""));
+        }
+        return new RestResult<>(RestEnum.FAILED.getCode(), "刷脚本失败");
     }
+
+
 }
