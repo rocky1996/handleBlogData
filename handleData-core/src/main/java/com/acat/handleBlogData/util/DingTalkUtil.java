@@ -22,7 +22,7 @@ public class DingTalkUtil {
         Map<String,Object> json = Maps.newHashMap();
         Map<String,Object> text = Maps.newHashMap();
         json.put("msgtype","text");
-        text.put("content","项目告警通知:" + msg + "\n关键字信息为:" + "rsync," + "kafka," + "ftp," + "sjzx," + "api, " + "lh");
+        text.put("content","项目通知:" + msg + "\n关键字信息为:" + "rsync," + "kafka," + "ftp," + "sjzx," + "api, " + "lh");
         json.put("text",text);
         //发送post请求
         String response = SendHttps.sendPostByMap(DING_DING_TOKEN, json);

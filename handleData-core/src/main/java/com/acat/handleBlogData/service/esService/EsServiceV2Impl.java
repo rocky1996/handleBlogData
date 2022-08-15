@@ -917,6 +917,8 @@ public class EsServiceV2Impl {
                 UpdateRequest updateRequest = new UpdateRequest(mediaSourceEnum.getEs_index_v2(), documentFields.getId()).doc(map);
                 restHighLevelClient.update(updateRequest, toBuilder());
             }
+
+            DingTalkUtil.sendDdMessage(mediaSourceEnum.getEs_index_v2() + "索引数据已经刷完,请查看！！！");
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             log.error("EsServiceImpl2.updateEsInfo has error:{}",e.getMessage());
