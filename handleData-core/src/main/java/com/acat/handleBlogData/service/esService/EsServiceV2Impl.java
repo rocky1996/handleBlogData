@@ -124,7 +124,7 @@ public class EsServiceV2Impl {
 
         try {
             SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(QueryBuilders.matchQuery("uuid", searchDetailReq.getUuid()));
+                    .query(QueryBuilders.termQuery("uuid.keyword", searchDetailReq.getUuid()));
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
