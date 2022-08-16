@@ -40,9 +40,9 @@ public class EsConfig {
                     public RequestConfig.Builder customizeRequestConfig(
                             RequestConfig.Builder requestConfigBuilder) {
                         return requestConfigBuilder
-                                .setConnectTimeout(300000)
-                                .setSocketTimeout(400000)
-                                .setConnectionRequestTimeout(90000);
+                                .setConnectTimeout(5000 * 1000)
+                                .setSocketTimeout(6000 * 1000)
+                                .setConnectionRequestTimeout(0);
                     }
                 }));
     }
