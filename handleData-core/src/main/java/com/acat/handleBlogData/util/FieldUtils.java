@@ -113,7 +113,7 @@ public class FieldUtils {
         fieldMap.put("local_profile_pic_background_url", "本地背景图路径");
         fieldMap.put("media_title", "附件媒体文字");
         fieldMap.put("media_type_embeded", "媒介类型");
-        fieldMap.put("media_url_name", "本地媒体url");
+        fieldMap.put("media_url_name", "媒介名称");
         fieldMap.put("opening_hours", "运营时间");
         fieldMap.put("personal_web_url", "个人网址");
         fieldMap.put("photo_album_url", "相册url地址");
@@ -177,14 +177,14 @@ public class FieldUtils {
         fieldMap.put("description_location", "居住地址");
         fieldMap.put("industry_name", "所属行业");
         fieldMap.put("summary", "用户简介");
-        fieldMap.put("experiences_job_title", "工作经历");
-        fieldMap.put("experiences_company_id", "工作经历");
+        fieldMap.put("experiences_job_title", "工作经历-职位名称");
+        fieldMap.put("experiences_company_id", "工作经历-企业id");
         fieldMap.put("experiences_company_name", "工作经历-公司名称");
         fieldMap.put("experiences_company_logo", "工作经历-公司头像");
-        fieldMap.put("experiences_company_local_logo", "工作经历");
+        fieldMap.put("experiences_company_local_logo", "工作经历-企业logo");
         fieldMap.put("experiences_company_location", "工作经历-地址名称");
         fieldMap.put("experiences_time_period_time", "工作经历-开始时间+结束时间");
-        fieldMap.put("experiences_description", "工作经历");
+        fieldMap.put("experiences_description", "工作经历-描述");
         fieldMap.put("certifications_name", "资格认证");
         fieldMap.put("certifications_authority", "资格认证");
         fieldMap.put("certifications_license", "资格认证");
@@ -195,8 +195,8 @@ public class FieldUtils {
         fieldMap.put("volunteer_experiences_cause", "志愿原因");
         fieldMap.put("volunteer_experiences_time_period_time", "志愿时间段");
         fieldMap.put("volunteer_experiences_description", "志愿描述");
-        fieldMap.put("educations_school_id", "教育经历");
-        fieldMap.put("educations_school_name", "教育经历");
+        fieldMap.put("educations_school_id", "教育经历-学校id");
+        fieldMap.put("educations_school_name", "教育经历-学校名称");
         fieldMap.put("educations_school_logo", "教育经历-学校头像");
         fieldMap.put("educations_school_local_logo", "教育经历-学校本地头像");
         fieldMap.put("educations_diplomaqq", "教育经历-学位名称");
