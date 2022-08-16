@@ -42,7 +42,7 @@ public class EsConfig {
                         return requestConfigBuilder
                                 .setConnectTimeout(300000)
                                 .setSocketTimeout(400000)
-                                .setConnectionRequestTimeout(0);
+                                .setConnectionRequestTimeout(90000);
                     }
                 }));
     }
