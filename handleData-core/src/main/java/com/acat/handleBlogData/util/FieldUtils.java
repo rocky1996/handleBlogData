@@ -65,7 +65,7 @@ public class FieldUtils {
         fieldMap.put("tf_effective", "是否有博文");
         fieldMap.put("time_zone", "时区");
         fieldMap.put("com_from", "来源");
-        fieldMap.put("diff_time", "治理后的注册日期");
+        fieldMap.put("registration_date", "治理后的注册日期");
         fieldMap.put("extend", "扩展信息");
 
         /**
@@ -120,7 +120,7 @@ public class FieldUtils {
         fieldMap.put("photo_wall", "照片墙链接");
         fieldMap.put("position_message", "位置信息");
         fieldMap.put("register_number","签到数");
-        fieldMap.put("registration_date", "治理后的注册日期");
+        fieldMap.put("diff_time", "治理后的注册日期");
         fieldMap.put("related_home_page", "相关主页信息");
         fieldMap.put("shop_content", "商品信息");
         fieldMap.put("family_and_relation_ships", "家庭成员与感情情况");
