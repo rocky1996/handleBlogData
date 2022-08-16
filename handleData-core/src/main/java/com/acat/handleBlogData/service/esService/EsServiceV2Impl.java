@@ -330,7 +330,7 @@ public class EsServiceV2Impl {
             if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
-                builder.from(0).size(900000000);
+                builder.from(0).size(10000);
             }
 
             //搜索
@@ -511,7 +511,7 @@ public class EsServiceV2Impl {
             if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
             }else {
-                builder.from(0).size(900000000);
+                builder.from(0).size(10000);
             }
 
             //搜索

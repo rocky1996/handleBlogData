@@ -37,6 +37,11 @@ curl:
     curl -XPUT http://172.17.75.6:9201/link_school/_settings -H 'content-Type:application/json' -d '{"index":{'max_result_window':900000000}}'
     curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9301/es-bd-sku-index/_settings -d '{ "index.max_result_window" :"100000000"}'
 
+
+    curl -H "Content-Type: application/json" -XPUT 172.17.75.6:9201/twitter_v4/_settings -d '{ "max_num_segments" :"1"}'
+    curl -XPOST "172.17.75.6:9201/twitter_v4/_optimize?max_num_segments=1"
+
+
     单点登录地址：http://172.17.75.6:8091/#/?username=baidu-002&token=baihu-002
 
     https://blog.csdn.net/z13428212556/article/details/121445055
