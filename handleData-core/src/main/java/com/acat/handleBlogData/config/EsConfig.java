@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 @Component
 public class EsConfig {
@@ -44,6 +46,8 @@ public class EsConfig {
                                 .setSocketTimeout(400000)
                                 .setConnectionRequestTimeout(0);
                     }
-                }));
+                })
+                .setHttpClientConfigCallback(requestConfig -> requestConfig.setKeepAliveStrategy(
+                        (response, context) -> TimeUnit.MINUTES.toMillis(1))));
     }
 }
