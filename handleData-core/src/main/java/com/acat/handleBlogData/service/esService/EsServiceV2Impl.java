@@ -880,7 +880,7 @@ public class EsServiceV2Impl {
      * @return
      */
     private String assemblingStr(Exception e, String interFaceName, Object object) {
-        return "落河系统报错通知: 当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错,报错信息: " + e.getMessage() + ", 入参为: " + JacksonUtil.beanToStr(object);
+        return "落河系统报错通知: 当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错,报错信息: " + JacksonUtil.beanToStr(e) + ", 入参为: " + JacksonUtil.beanToStr(object);
     }
 
     /*************************************************************************/
