@@ -43,7 +43,8 @@ public class EsConfig {
                             RequestConfig.Builder requestConfigBuilder) {
                         return requestConfigBuilder
                                 .setConnectTimeout(300000)
-                                .setSocketTimeout(400000);
+                                .setSocketTimeout(400000)
+                                .setConnectionRequestTimeout(10000);
                     }
                 })
                 .setHttpClientConfigCallback(requestConfig -> requestConfig.setKeepAliveStrategy(
