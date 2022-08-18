@@ -129,8 +129,8 @@ class HandleBlogDataApplicationTests {
 //        return blogSystemUserMapper.selectByExample(example).stream().findFirst().orElse(null);
 //    }
 
-    @Test
-    void contextLoads() {
+//    @Test
+//    void contextLoads() {
 //        try{
 //            BlogSystemUserExample example = new BlogSystemUserExample();
 //            example.createCriteria()
@@ -142,7 +142,7 @@ class HandleBlogDataApplicationTests {
 //            log.error("{}",e.getMessage());
 //        }
 
-    }
+//    }
 
 //    @Test
 //    public void testLanguageIdentify() {
@@ -251,26 +251,26 @@ class HandleBlogDataApplicationTests {
 //        }
 //    }
 
-    @Test
-    public void test03() throws Exception{
+//    @Test
+//    public void test03() throws Exception{
+////        SearchSourceBuilder builder = new SearchSourceBuilder()
+////                .query(QueryBuilders.matchQuery("uuid", "ed8badcc-19a9-4fb1-a8a7-a58fecc7d643"));
+//
+////        SearchSourceBuilder builder = new SearchSourceBuilder()
+////                .query(QueryBuilders.queryStringQuery("glas").field("use_name"));
+//
 //        SearchSourceBuilder builder = new SearchSourceBuilder()
-//                .query(QueryBuilders.matchQuery("uuid", "ed8badcc-19a9-4fb1-a8a7-a58fecc7d643"));
-
-//        SearchSourceBuilder builder = new SearchSourceBuilder()
-//                .query(QueryBuilders.queryStringQuery("glas").field("use_name"));
-
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(QueryBuilders.wildcardQuery("use_name","*glas*"));
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter");
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-        // 执行请求
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(response);
-    }
+//                .query(QueryBuilders.wildcardQuery("use_name","*glas*"));
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter");
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//        // 执行请求
+//        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//        System.out.println(response);
+//    }
 
 //    @Test
 //    public void test04() throws Exception{
@@ -455,99 +455,99 @@ class HandleBlogDataApplicationTests {
         System.out.println(fbUserData_v2);
     }
 
-    @Test
-    public void test15() throws Exception{
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.should(
-                QueryBuilders.rangeQuery("source_create_time.keyword").format("yyyy-MM-dd HH:mm:ss").gte("2021-01-01").lte("2021-12-30")
-        );
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(boolQueryBuilder);
-        sourceBuilder.from(0).size(10);
-        sourceBuilder.trackTotalHits(true);
-        sourceBuilder.sort("integrity", SortOrder.DESC);
-
-        SearchRequest searchRequest = new SearchRequest();
-//        if (!judgeSearchParamAllEmpty(searchReq)) {
-//            searchRequest.indices(indexArray_v2);
-//        }else {
-            searchRequest.indices("twitter_v2");
-//        }
-        searchRequest.types("_doc");
-        searchRequest.source(sourceBuilder);
-        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-        if (response == null) {
-            System.out.println();
-        }
-    }
-
-    @Test
-    public void test17() throws Exception {
-
-        BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
-        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-        for(String fieldValue: fieldList){
-            channelQueryBuilder.should(QueryBuilders.matchQuery("country", fieldValue));
-        }
-        bigBuilder.must(channelQueryBuilder);
-
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(bigBuilder)
-                .trackTotalHits(true);
-
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices("twitter_v2");
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-        // 执行请求
-        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-        if (response == null) {
-
-        }
-
-        SearchHit[] searchHits = response.getHits().getHits();
-        if (CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
-            return;
-        }
-
-//            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> {
+//    @Test
+//    public void test15() throws Exception{
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        boolQueryBuilder.should(
+//                QueryBuilders.rangeQuery("source_create_time.keyword").format("yyyy-MM-dd HH:mm:ss").gte("2021-01-01").lte("2021-12-30")
+//        );
 //
-//                Map map = new HashMap();
-//                map.put("country", "中国");
-//                UpdateRequest updateRequest = new UpdateRequest("twitter_v2", e.getId()).doc(map);
-//                restHighLevelClient.update(updateRequest, toBuilder());
-////
-//            });
-        for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
-            Map map = new HashMap();
-            map.put("country", "中国");
-            UpdateRequest updateRequest = new UpdateRequest("twitter_v2", documentFields.getId()).doc(map);
-            restHighLevelClient.update(updateRequest, toBuilder());
-        }
-    }
-
-    @Test
-    public void test18() throws Exception{
-        GetIndexRequest request = new GetIndexRequest("twitter_v2", "instagram_v2");
-        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
-
-//        GetSettingsRequest request = new GetSettingsRequest();
-//        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
-//        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
-//        Set<String> indices = map.keySet();
-//        for (String key : indices) {
-//            System.out.println(key);
+//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//        sourceBuilder.query(boolQueryBuilder);
+//        sourceBuilder.from(0).size(10);
+//        sourceBuilder.trackTotalHits(true);
+//        sourceBuilder.sort("integrity", SortOrder.DESC);
+//
+//        SearchRequest searchRequest = new SearchRequest();
+////        if (!judgeSearchParamAllEmpty(searchReq)) {
+////            searchRequest.indices(indexArray_v2);
+////        }else {
+//            searchRequest.indices("twitter_v2");
+////        }
+//        searchRequest.types("_doc");
+//        searchRequest.source(sourceBuilder);
+//        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//        if (response == null) {
+//            System.out.println();
 //        }
+//    }
 
-    }
+//    @Test
+//    public void test17() throws Exception {
+//
+//        BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+//        BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+//        for(String fieldValue: fieldList){
+//            channelQueryBuilder.should(QueryBuilders.matchQuery("country", fieldValue));
+//        }
+//        bigBuilder.must(channelQueryBuilder);
+//
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(bigBuilder)
+//                .trackTotalHits(true);
+//
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices("twitter_v2");
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//        // 执行请求
+//        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//        if (response == null) {
+//
+//        }
+//
+//        SearchHit[] searchHits = response.getHits().getHits();
+//        if (CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+//            return;
+//        }
+//
+////            Arrays.stream(searchHits).collect(Collectors.toList()).forEach(e -> {
+////
+////                Map map = new HashMap();
+////                map.put("country", "中国");
+////                UpdateRequest updateRequest = new UpdateRequest("twitter_v2", e.getId()).doc(map);
+////                restHighLevelClient.update(updateRequest, toBuilder());
+//////
+////            });
+//        for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
+//            Map map = new HashMap();
+//            map.put("country", "中国");
+//            UpdateRequest updateRequest = new UpdateRequest("twitter_v2", documentFields.getId()).doc(map);
+//            restHighLevelClient.update(updateRequest, toBuilder());
+//        }
+//    }
+
+//    @Test
+//    public void test18() throws Exception{
+//        GetIndexRequest request = new GetIndexRequest("twitter_v2", "instagram_v2");
+//        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
+//
+////        GetSettingsRequest request = new GetSettingsRequest();
+////        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
+////        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
+////        Set<String> indices = map.keySet();
+////        for (String key : indices) {
+////            System.out.println(key);
+////        }
+//
+//    }
 
     private RequestOptions toBuilder() {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
