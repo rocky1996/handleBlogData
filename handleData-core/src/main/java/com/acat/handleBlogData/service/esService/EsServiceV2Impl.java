@@ -318,47 +318,48 @@ public class EsServiceV2Impl {
 //                return new RestResult<>(RestEnum.SUCCESS,
 //                        SearchCountryResp.builder().countryList(countryListFromCache).build());
 //            }
-
-            String[] includeFields = new String[]{"country"};
-            CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(QueryBuilders.matchAllQuery())
-                    .fetchSource(includeFields, null)
-                    .collapse(collapseBuilder)
-//                    .from(0).size(10000)
-                    .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(10000);
-            }
-
-            //搜索
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(indexArray_v2);
-            searchRequest.types("_doc");
-            searchRequest.source(builder);
-            // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-            if (response == null) {
-                return new RestResult<>(RestEnum.PLEASE_TRY);
-            }
-
-            SearchHit[] searchHits = response.getHits().getHits();
-            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
-                return new RestResult<>(RestEnum.SUCCESS,
-                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
-            }
-
-            List<String> countryList = Arrays.stream(searchHits)
-                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
-                    .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
-                    .distinct()
-                    .collect(Collectors.toList());
-
-//            if(!CollectionUtils.isEmpty(countryList)) {
-//                redisService.leftPushAll(COUNTRY_KEY, countryList);
+//
+//            String[] includeFields = new String[]{"country"};
+//            CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
+//            SearchSourceBuilder builder = new SearchSourceBuilder()
+//                    .query(QueryBuilders.matchAllQuery())
+//                    .fetchSource(includeFields, null)
+//                    .collapse(collapseBuilder)
+////                    .from(0).size(10000)
+//                    .trackTotalHits(true);
+//            if ("test".equals(env) || "pre".equals(env)) {
+//                builder.from(0).size(10000);
+//            }else {
+//                builder.from(0).size(10000);
 //            }
+//
+//            //搜索
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices(indexArray_v2);
+//            searchRequest.types("_doc");
+//            searchRequest.source(builder);
+//            // 执行请求
+//            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//            if (response == null) {
+//                return new RestResult<>(RestEnum.PLEASE_TRY);
+//            }
+//
+//            SearchHit[] searchHits = response.getHits().getHits();
+//            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
+//            }
+//
+//            List<String> countryList = Arrays.stream(searchHits)
+//                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
+//                    .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
+//                    .distinct()
+//                    .collect(Collectors.toList());
+//
+////            if(!CollectionUtils.isEmpty(countryList)) {
+////                redisService.leftPushAll(COUNTRY_KEY, countryList);
+////            }
+            List<String> countryList = Lists.newArrayList("中国", "美国", "澳大利亚");
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
