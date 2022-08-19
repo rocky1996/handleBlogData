@@ -557,7 +557,31 @@ class HandleBlogDataApplicationTests {
 //        for (String key : indices) {
 //            System.out.println(key);
 //        }
+    }
 
+    @Test
+    public void test19() throws Exception{
+        CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .query(QueryBuilders.matchAllQuery())
+                .fetchSource("country", null)
+                .collapse(collapseBuilder)
+                .trackTotalHits(true)
+                .from(0).size(10000);
+
+        //搜索
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(indexArray_v2);
+        searchRequest.types("_doc");
+        searchRequest.source(builder);
+        // 执行请求
+        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+        if (response == null) {
+            log.info("");
+        }
+
+
+        System.out.println("ababababa");
     }
 
     private RequestOptions toBuilder() {

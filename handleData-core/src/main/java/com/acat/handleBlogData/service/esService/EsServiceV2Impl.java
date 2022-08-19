@@ -320,11 +320,10 @@ public class EsServiceV2Impl {
                         SearchCountryResp.builder().countryList(countryListFromCache).build());
             }
 
-            CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(new String[]{"country"}, null)
-                    .collapse(collapseBuilder)
+                    .collapse(new CollapseBuilder("country.keyword"))
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
             if ("test".equals(env) || "pre".equals(env)) {
@@ -380,11 +379,10 @@ public class EsServiceV2Impl {
                         SearchCityResp.builder().cityList(cityListFromCache).build());
             }
 
-            CollapseBuilder collapseBuilder = new CollapseBuilder("city.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(new String[]{"city"}, null)
-                    .collapse(collapseBuilder)
+                    .collapse(new CollapseBuilder("city.keyword"))
                     //做限制
 //                    .from(0).size(1000000)
                     .trackTotalHits(true);
@@ -441,11 +439,10 @@ public class EsServiceV2Impl {
                         SearchIntegrityResp.builder().integrityList(integrityListFromCache).build());
             }
 
-            CollapseBuilder collapseBuilder = new CollapseBuilder("integrity");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
                     .fetchSource(new String[]{"integrity"}, null)
-                    .collapse(collapseBuilder)
+                    .collapse(new CollapseBuilder("integrity"))
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
             if ("test".equals(env) || "pre".equals(env)) {
