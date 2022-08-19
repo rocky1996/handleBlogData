@@ -13,6 +13,7 @@ import com.acat.handleBlogData.service.IndexTargetService;
 import com.acat.handleBlogData.service.esService.EsServiceImpl;
 import com.acat.handleBlogData.service.esService.EsServiceV2Impl;
 import com.acat.handleBlogData.service.impl.IndexTargetServiceImpl;
+import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.acat.handleBlogData.util.LanguageUtil;
 import com.google.common.collect.ImmutableMap;
@@ -46,6 +47,8 @@ public class CommonController {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Resource
     private IndexTargetService indexTargetService;
+    @Resource
+    private RedisServiceImpl redisService;
 
     private static final String ZH = "zh";
     private static LoginRespVo loginRespVo = null;
@@ -85,6 +88,19 @@ public class CommonController {
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             log.error("CommonController.deleteIndex has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @GetMapping("/deleteRedisKey")
+    public RestResult deleteRedisKey(String redisKey) {
+
+        try {
+            boolean result = redisService.deleteKey(redisKey);
+            return new RestResult<>(RestEnum.SUCCESS.getCode(), result == true ? "删除成功" : "删除失败", null);
+        }catch (Exception e) {
+            log.error("CommonController.deleteRedisKey has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }

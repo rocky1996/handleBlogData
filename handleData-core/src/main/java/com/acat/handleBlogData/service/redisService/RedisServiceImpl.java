@@ -32,6 +32,15 @@ public class RedisServiceImpl {
     }
 
     /**
+     * 删除key
+     * @param key
+     * @return
+     */
+    public boolean deleteKey(String key) {
+        return redisTemplate.delete(key);
+    }
+
+    /**
      * set
      * @param key
      * @param value
