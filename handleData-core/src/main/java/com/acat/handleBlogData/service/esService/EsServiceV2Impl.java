@@ -5,6 +5,7 @@ import com.acat.handleBlogData.controller.req.SearchDetailReq;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.enums.*;
+import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -41,13 +42,18 @@ public class EsServiceV2Impl {
 
     @Resource
     private RestHighLevelClient restHighLevelClient;
-//    @Autowired
-//    private WxNoticeServiceImpl wxNoticeService;
+    @Resource
+    private RedisServiceImpl redisService;
     @Value("${spring.profiles.active}")
     private String env;
 
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
+
+    //redis->key
+    public static final String COUNTRY_KEY = "country_v2";
+    public static final String CITY_KEY = "city_v2";
+    public static final String INTEGRITY_KEY = "integrity_v2";
 
     /**
      * 新的索引
@@ -251,8 +257,8 @@ public class EsServiceV2Impl {
                 if (isParticiple.equals(1)) {
                     channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue));
                 }else {
-                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField, "*"+fieldValue+"*"));
-                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField));
+                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
+                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
                 }
             }
             bigBuilder.must(channelQueryBuilder);
@@ -307,19 +313,17 @@ public class EsServiceV2Impl {
      * @return
      */
     public RestResult<SearchCountryResp> getCountryList() {
-
         try {
-//            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
-//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-//                return new RestResult<>(RestEnum.SUCCESS,
-//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-//            }
+            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+            }
 
-            String[] includeFields = new String[]{"country"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
-                    .fetchSource(includeFields, null)
+                    .fetchSource(new String[]{"country"}, null)
                     .collapse(collapseBuilder)
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
@@ -352,10 +356,9 @@ public class EsServiceV2Impl {
                     .distinct()
                     .collect(Collectors.toList());
 
-//            if(!CollectionUtils.isEmpty(countryList)) {
-//                redisService.leftPushAll(COUNTRY_KEY, countryList);
-//            }
-//            List<String> countryList = Lists.newArrayList("中国", "美国", "澳大利亚");
+            if(!CollectionUtils.isEmpty(countryList)) {
+                redisService.leftPushAll(COUNTRY_KEY, countryList);
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -371,17 +374,16 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCityResp> getCityList() {
         try {
-//            List<String> cityListFromCache = redisService.range(CITY_KEY, 0L, -1L);
-//            if (!CollectionUtils.isEmpty(cityListFromCache)) {
-//                return new RestResult<>(RestEnum.SUCCESS,
-//                        SearchCityResp.builder().cityList(cityListFromCache).build());
-//            }
+            List<String> cityListFromCache = redisService.range(CITY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(cityListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCityResp.builder().cityList(cityListFromCache).build());
+            }
 
-            String[] includeFields = new String[]{"city"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("city.keyword");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
-                    .fetchSource(includeFields, null)
+                    .fetchSource(new String[]{"city"}, null)
                     .collapse(collapseBuilder)
                     //做限制
 //                    .from(0).size(1000000)
@@ -414,10 +416,9 @@ public class EsServiceV2Impl {
                     .map(e -> (String) e.getSourceAsMap().get("city"))
                     .distinct()
                     .collect(Collectors.toList());
-//            if (!CollectionUtils.isEmpty(cityList)) {
-//                redisService.leftPushAll(CITY_KEY, cityList);
-//            }
-
+            if (!CollectionUtils.isEmpty(cityList)) {
+                redisService.leftPushAll(CITY_KEY, cityList);
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
         }catch (Exception e) {
@@ -434,6 +435,12 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchIntegrityResp> getIntegrityList() {
         try {
+            List<String> integrityListFromCache = redisService.range(INTEGRITY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(integrityListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchIntegrityResp.builder().integrityList(integrityListFromCache).build());
+            }
+
             String[] includeFields = new String[]{"integrity"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("integrity");
             SearchSourceBuilder builder = new SearchSourceBuilder()
@@ -471,6 +478,9 @@ public class EsServiceV2Impl {
                     .distinct()
                     .sorted()
                     .collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(integrityList)) {
+                redisService.leftPushAll(INTEGRITY_KEY, integrityList);
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchIntegrityResp.builder().integrityList(integrityList).build());
         }catch (Exception e) {

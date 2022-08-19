@@ -139,6 +139,7 @@ public class RedisServiceImpl {
      * @return
      */
     public List range(String key, Long start, Long end) {
+        redisTemplate.expire(key, 1, TimeUnit.DAYS);
         return redisTemplate.opsForList().range(key, start, end);
     }
 
