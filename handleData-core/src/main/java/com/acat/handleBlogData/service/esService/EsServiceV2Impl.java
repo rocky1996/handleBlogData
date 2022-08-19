@@ -18,6 +18,8 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -285,20 +287,14 @@ public class EsServiceV2Impl {
      */
     public Long getMediaIndexSize(MediaSourceEnum mediaSourceEnum) {
         try {
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(QueryBuilders.matchAllQuery())
-                    .trackTotalHits(true);
-            //搜索
-            SearchRequest searchRequest = new SearchRequest();
+            CountRequest countRequest = new CountRequest();
             if (MediaSourceEnum.ALL == mediaSourceEnum) {
-                searchRequest.indices(indexArray_v2);
+                countRequest.indices(indexArray_v2);
             }else {
-                searchRequest.indices(mediaSourceEnum.getEs_index_v2());
+                countRequest.indices(mediaSourceEnum.getEs_index_v2());
             }
-            searchRequest.types("_doc");
-            searchRequest.source(builder);
-            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-            return response == null ? 0L : response.getHits().getTotalHits().value;
+            CountResponse countResponse = restHighLevelClient.count(countRequest, toBuilder());
+            return countResponse == null ? 0L : countResponse.getCount();
         }catch (Exception e) {
             log.error("EsServiceV2Impl.getMediaIndexSize has error,",e);
             DingTalkUtil.sendDdMessage(assemblingStr(e, "查询索引数量接口", mediaSourceEnum));

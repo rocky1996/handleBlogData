@@ -4,6 +4,8 @@ import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
 import org.elasticsearch.client.GetAliasesResponse;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import com.acat.handleBlogData.constants.RedisKeyConstants;
 import com.acat.handleBlogData.constants.RestResult;
@@ -529,25 +531,34 @@ class HandleBlogDataApplicationTests {
 //        }
 //    }
 
-//    @Test
-//    public void test18() throws Exception{
-//        GetIndexRequest request = new GetIndexRequest("twitter_v2", "instagram_v2");
-//        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
-//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
-//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
-//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
-//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
-//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
-//
-////        GetSettingsRequest request = new GetSettingsRequest();
-////        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
-////        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
-////        Set<String> indices = map.keySet();
-////        for (String key : indices) {
-////            System.out.println(key);
-////        }
-//
-//    }
+    @Test
+    public void test18() throws Exception{
+        CountRequest countRequest = new CountRequest();
+        countRequest.indices("twitter_v4", "instagram_v4", "fb_v4");
+//        countRequest.query();
+        CountResponse countResponse = restHighLevelClient.count(countRequest, toBuilder());
+        System.out.println((countResponse.getCount()));
+
+
+
+
+        GetIndexRequest request = new GetIndexRequest("twitter_v4", "instagram_v4");
+        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
+        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
+
+//        GetSettingsRequest request = new GetSettingsRequest();
+//        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
+//        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
+//        Set<String> indices = map.keySet();
+//        for (String key : indices) {
+//            System.out.println(key);
+//        }
+
+    }
 
     private RequestOptions toBuilder() {
         RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
