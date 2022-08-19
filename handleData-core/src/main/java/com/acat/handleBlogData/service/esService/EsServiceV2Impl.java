@@ -206,10 +206,10 @@ public class EsServiceV2Impl {
                         .builder()
                         .userId(userId)
                         .userName(userName)
-                        .uuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))))
-                        .userQuanName(PatternUtil.handleStr(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name"))))
+                        .uuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")))
+                        .userQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")))
                         .mediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build())
-                        .userUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))))
+                        .userUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")))
                         .build();
                 List<BeforeNameInfo> beforeNameList = Lists.newArrayList(beforeNameInfo);
                 userDetailResp.setBeforeNameInfoList(beforeNameList);
@@ -441,11 +441,10 @@ public class EsServiceV2Impl {
                         SearchIntegrityResp.builder().integrityList(integrityListFromCache).build());
             }
 
-            String[] includeFields = new String[]{"integrity"};
             CollapseBuilder collapseBuilder = new CollapseBuilder("integrity");
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
-                    .fetchSource(includeFields, null)
+                    .fetchSource(new String[]{"integrity"}, null)
                     .collapse(collapseBuilder)
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
@@ -509,8 +508,8 @@ public class EsServiceV2Impl {
 //            }
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-            boolQueryBuilder.should(QueryBuilders.wildcardQuery(fieldName+".keyword", "*" + textValue + "*"));
-            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*" + textValue + "*").field(fieldName+".keyword"));
+            boolQueryBuilder.should(QueryBuilders.wildcardQuery(fieldName + ".keyword", "*" + textValue + "*"));
+            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*" + textValue + "*").field(fieldName + ".keyword"));
 
             SearchSourceBuilder builder = new SearchSourceBuilder();
             builder.query(boolQueryBuilder);
@@ -541,9 +540,9 @@ public class EsServiceV2Impl {
                     }
 
                     if ("country".equals(fieldName)) {
-                        resultList.add(PatternUtil.handleStr(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country"))));
+                        resultList.add(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
                     }else if ("city".equals(fieldName)) {
-                        resultList.add(PatternUtil.handleStr(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city"))));
+                        resultList.add(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
                     }
                 }
             }
@@ -636,11 +635,11 @@ public class EsServiceV2Impl {
                 }
 
                 BeforeNameInfo beforeNameInfo = new BeforeNameInfo();
-                beforeNameInfo.setUuid(PatternUtil.handleStr(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid"))));
-                beforeNameInfo.setUserId(PatternUtil.handleStr(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"))));
-                beforeNameInfo.setUserName(PatternUtil.handleStr(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"))));
-                beforeNameInfo.setUserQuanName(PatternUtil.handleStr(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name"))));
-                beforeNameInfo.setUserUrl(PatternUtil.handleStr(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url"))));
+                beforeNameInfo.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
+                beforeNameInfo.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                beforeNameInfo.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                beforeNameInfo.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+                beforeNameInfo.setUserUrl(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
                 MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndex(hit.getIndex());
                 beforeNameInfo.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
                 searchBeforeNameRespList.add(beforeNameInfo);
