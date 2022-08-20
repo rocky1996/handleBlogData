@@ -341,11 +341,11 @@ public class EsServiceV2Impl {
                     .collapse(new CollapseBuilder("country.keyword"))
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
+//            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(10000);
-            }
+//            }else {
+//                builder.from(0).size(10000);
+//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -401,11 +401,11 @@ public class EsServiceV2Impl {
                     //做限制
 //                    .from(0).size(1000000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
+//            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(10000);
-            }
+//            }else {
+//                builder.from(0).size(10000);
+//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -460,11 +460,11 @@ public class EsServiceV2Impl {
                     .collapse(new CollapseBuilder("integrity"))
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
+//            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(900000000);
-            }
+//            }else {
+//                builder.from(0).size(900000000);
+//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -526,11 +526,11 @@ public class EsServiceV2Impl {
             SearchSourceBuilder builder = new SearchSourceBuilder();
             builder.query(boolQueryBuilder);
             builder.trackTotalHits(true);
-            if ("test".equals(env) || "pre".equals(env)) {
+//            if ("test".equals(env) || "pre".equals(env)) {
                 builder.from(0).size(10000);
-            }else {
-                builder.from(0).size(10000);
-            }
+//            }else {
+//                builder.from(0).size(10000);
+//            }
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
@@ -621,11 +621,11 @@ public class EsServiceV2Impl {
             builder.query(QueryBuilders.termsQuery("screen_name.keyword", value));
         }
 
-        if ("test".equals(env) || "pre".equals(env)) {
+//        if ("test".equals(env) || "pre".equals(env)) {
             builder.from(0).size(10000);
-        } else {
-            builder.from(0).size(900000000);
-        }
+//        } else {
+//            builder.from(0).size(900000000);
+//        }
 
         //搜索
         SearchRequest searchRequest = new SearchRequest();
