@@ -255,12 +255,11 @@ public class EsServiceV2Impl {
      * @param searchField
      * @param fieldList
      * @param isParticiple
-     * @param mediaSourceEnum
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple, MediaSourceEnum mediaSourceEnum, Integer pageNum, Integer pageSize) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple, Integer pageNum, Integer pageSize) {
         try {
             if (pageSize * pageNum > max_result_window) {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "分页查询只支持前" + max_result_window/pageSize + "页数据,或请进行条件查询！！！");
@@ -285,7 +284,8 @@ public class EsServiceV2Impl {
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
+//            searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
+            searchRequest.indices(indexArray_v2);
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
