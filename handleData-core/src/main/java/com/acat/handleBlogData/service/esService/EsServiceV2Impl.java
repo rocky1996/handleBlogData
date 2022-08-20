@@ -53,9 +53,9 @@ public class EsServiceV2Impl {
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
     //redis->key
-    public static final String COUNTRY_KEY = "country_v2";
-    public static final String CITY_KEY = "city_v2";
-    public static final String INTEGRITY_KEY = "integrity_v2";
+    public static final String COUNTRY_KEY = "country_v3";
+    public static final String CITY_KEY = "city_v3";
+    public static final String INTEGRITY_KEY = "integrity_v3";
 
     /**
      * 新的索引
@@ -187,7 +187,7 @@ public class EsServiceV2Impl {
             userDetailResp.setVerified(hit.getSourceAsMap().get("verified") == null ? "" : String.valueOf(hit.getSourceAsMap().get("verified")));
             userDetailResp.setNameUserdBefore(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
             userDetailResp.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
-            userDetailResp.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+            userDetailResp.setCountry(hit.getSourceAsMap().get("country") == null ? "" : handleCountry(String.valueOf(hit.getSourceAsMap().get("country"))));
             userDetailResp.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
             userDetailResp.setUserReligion(hit.getSourceAsMap().get("user_religion") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religion")));
             userDetailResp.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
@@ -366,6 +366,7 @@ public class EsServiceV2Impl {
 
             List<String> countryList = Arrays.stream(searchHits)
                     .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
+                    .filter(e -> !fieldList.contains(String.valueOf(e.getSourceAsMap().get("country"))))
                     .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
                     .distinct()
                     .collect(Collectors.toList());
@@ -809,7 +810,7 @@ public class EsServiceV2Impl {
                 userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
                 userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
                 userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
-                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : handleCountry(String.valueOf(hit.getSourceAsMap().get("country"))));
                 userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
                 userData.setUserHomePage(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
                 userData.setGender(hit.getSourceAsMap().get("gender") == null ? "" : String.valueOf(hit.getSourceAsMap().get("gender")));
@@ -884,6 +885,21 @@ public class EsServiceV2Impl {
      */
     private String assemblingStr(Exception e, String interFaceName, Object object) {
         return "落河系统("+env+"环境)报错通知: 当前时间" + DateUtils.dateToStr(new Date()) + interFaceName + "报错,报错信息: " + JacksonUtil.beanToStr(e) + ", 入参为: " + JacksonUtil.beanToStr(object);
+    }
+
+    /**
+     * 处理国家字段等
+     * @param country
+     * @return
+     */
+    private String handleCountry(String country){
+        if (StringUtils.isBlank(country)) {
+            return "";
+        }
+        if (fieldList.contains(country)) {
+            return "中国";
+        }
+        return country;
     }
 
     /*************************************************************************/
