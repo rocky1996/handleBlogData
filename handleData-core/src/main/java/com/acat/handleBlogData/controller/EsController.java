@@ -112,12 +112,18 @@ public class EsController {
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
                                              @RequestParam("isParticiple") Integer isParticiple,
+                                             @RequestParam("mediaCode") Integer mediaCode,
                                              @RequestParam("pageNum") Integer pageNum,
                                              @RequestParam("pageSize") Integer pageSize
     ) {
         try {
             if (pageNum == null || pageSize == null) {
                 return new RestResult<>(RestEnum.FEN_YE_ERROR);
+            }
+
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.ALL;
+            if (mediaCode != null && MediaSourceEnum.getMediaSourceEnum(mediaCode) != null) {
+                mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaCode);
             }
 
             String originalFilename = file.getOriginalFilename();
@@ -141,7 +147,7 @@ public class EsController {
             if (fieldList.size() > 1000) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
             }
-            return esServiceV2.batchQuery(searchField, fieldList, isParticiple, pageNum, pageSize);
+            return esServiceV2.batchQuery(searchField, fieldList, isParticiple, mediaSourceEnum, pageNum, pageSize);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

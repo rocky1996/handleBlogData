@@ -46,6 +46,8 @@ public class EsServiceV2Impl {
     private RedisServiceImpl redisService;
     @Value("${spring.profiles.active}")
     private String env;
+    @Value("${spring.max_result_window}")
+    private Integer max_result_window;
 
     private static final String PRO_PIC_URL = "https://20.10.0.11:9002/gateway/api-file/file/download?fileName=";
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
@@ -82,6 +84,12 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchResp> searchData(SearchReq searchReq) {
         try {
+            Integer pageSize = searchReq.getPageSize();
+            Integer pageNum = searchReq.getPageNum();
+            if (pageSize * pageNum > max_result_window) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "分页查询只支持前" + max_result_window/pageSize + "页数据,或请进行条件查询！！！");
+            }
+
             if (searchReq.getIsParticiple() == null) {
                 searchReq.setIsParticiple(1);
             }
@@ -95,7 +103,7 @@ public class EsServiceV2Impl {
 
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
-            sourceBuilder.from((searchReq.getPageNum() > 0 ? (searchReq.getPageNum() - 1) : 0) * searchReq.getPageSize()).size(searchReq.getPageSize());
+            sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
             sourceBuilder.trackTotalHits(true);
             sourceBuilder.sort("integrity", SortOrder.DESC);
 
@@ -103,7 +111,7 @@ public class EsServiceV2Impl {
             if (!judgeSearchParamAllEmpty(searchReq)) {
                 searchRequest.indices(indexArray_v2);
             }else {
-                searchRequest.indices(getEsIndex(searchReq).stream().toArray(String[]::new));
+                searchRequest.indices(getEsIndex(searchReq.getMediaType()).stream().toArray(String[]::new));
             }
             searchRequest.types("_doc");
             searchRequest.source(sourceBuilder);
@@ -247,10 +255,17 @@ public class EsServiceV2Impl {
      * @param searchField
      * @param fieldList
      * @param isParticiple
+     * @param mediaSourceEnum
+     * @param pageNum
+     * @param pageSize
      * @return
      */
-    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple, Integer pageNum, Integer pageSize) {
+    public RestResult<SearchResp> batchQuery(String searchField, List<String> fieldList, Integer isParticiple, MediaSourceEnum mediaSourceEnum, Integer pageNum, Integer pageSize) {
         try {
+            if (pageSize * pageNum > max_result_window) {
+                return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "分页查询只支持前" + max_result_window/pageSize + "页数据,或请进行条件查询！！！");
+            }
+
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
@@ -270,7 +285,7 @@ public class EsServiceV2Impl {
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(indexArray_v2);
+            searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
@@ -823,11 +838,11 @@ public class EsServiceV2Impl {
 
     /**
      * 返回索引
-     * @param searchReq
+     * @param mediaCode
      * @return
      */
-    private List<String> getEsIndex(SearchReq searchReq) {
-        MediaSourceEnum sourceEnum = MediaSourceEnum.getMediaSourceEnum(searchReq.getMediaType());
+    private List<String> getEsIndex(Integer mediaCode) {
+        MediaSourceEnum sourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaCode);
         if (MediaSourceEnum.ALL == sourceEnum
                 || null == sourceEnum) {
             return Arrays.stream(indexArray_v2).collect(Collectors.toList());
