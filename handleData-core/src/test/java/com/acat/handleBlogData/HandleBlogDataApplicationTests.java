@@ -348,16 +348,16 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test07() {
-        String str = "There was nothing casual about this";
-        String result =  translateOuterService.getTranslateValue("en", str);
-        System.out.println(result);
+//        String str = "BSD| 太中 | 다자츄 | 약(?)수위 문스독.붐은.온다 | 멘션 스루 고의 X 커플헤더-@kku0ubal, @dmqbd010_";
+//        String result =  translateOuterService.getTranslateValue("ko", str);
+//        System.out.println(result);
     }
 
     @Test
     public void test08() {
-        String str = "nullただただ呟く";
-        String result = translateOuterService.getLanguageDelectResult(str);
-        System.out.println("result:" + result);
+//        String str = "BSD| 太中 | 다자츄 | 약(?)수위 문스독.붐은.온다 | 멘션 스루 고의 X 커플헤더-@kku0ubal, @dmqbd010_";
+//        String result = translateOuterService.getLanguageDelectResult(str);
+//        System.out.println("result:" + result);
     }
 
 
@@ -424,15 +424,15 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test12() {
-        String qName = "Katie Bethea";
-        String languageType = translateOuterService.getLanguageDelectResult(qName);
-        if ("zh".equals(languageType)) {
-            System.out.println(qName.trim());
-        }else if ("en".equals(languageType) || "vi".equals(languageType)) {
-            System.out.println(CountryUtil.handleStr(qName));
-        }else {
-            System.out.println(qName);
-        }
+//        String qName = "Katie Bethea";
+//        String languageType = translateOuterService.getLanguageDelectResult(qName);
+//        if ("zh".equals(languageType)) {
+//            System.out.println(qName.trim());
+//        }else if ("en".equals(languageType) || "vi".equals(languageType)) {
+//            System.out.println(CountryUtil.handleStr(qName));
+//        }else {
+//            System.out.println(qName);
+//        }
     }
 
     @Test
@@ -442,24 +442,24 @@ class HandleBlogDataApplicationTests {
 //        list.forEach(e-> {
 //            System.out.println(e);
 //        });
-        String str = "{\n" +
-                "    \"userFacebookUrl\":\"https://www.facebook.com/profile.php?id=100025599426924\",\n" +
-                "    \"userFormerNickname\":\"\",\n" +
-                "    \"userId\":\"100025599426924\",\n" +
-                "    \"userFormerName\":\"PatelRakesh Amrut\",\n" +
-                "    \"userFormerNameDate\":\"2022-04-05 17:34:20\"\n" +
-                "}";
-
-        Map<String, Objects> map = JacksonUtil.strToBean(str, Map.class);
-        System.out.println(map);
+//        String str = "{\n" +
+//                "    \"userFacebookUrl\":\"https://www.facebook.com/profile.php?id=100025599426924\",\n" +
+//                "    \"userFormerNickname\":\"\",\n" +
+//                "    \"userId\":\"100025599426924\",\n" +
+//                "    \"userFormerName\":\"PatelRakesh Amrut\",\n" +
+//                "    \"userFormerNameDate\":\"2022-04-05 17:34:20\"\n" +
+//                "}";
+//
+//        Map<String, Objects> map = JacksonUtil.strToBean(str, Map.class);
+//        System.out.println(map);
     }
 
     @Test
     public void test14() {
 //        System.out.println(redisService.getValue(RedisKeyConstants.TWITTER_PRO_GOV_NUM_KEY));
-        String str = "{\"user_political_views\":\"\",\"user_systent_name\":\"\",\"w3_fb_url\":\"\",\"institution_id\":\"\",\"is_community_page\":\"\",\"communication_philosophy\":\"\",\"have_product\":\"\",\"exchange_number\":\"\",\"visit_number\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"teach_message\":\"\",\"acquisition_time\":\"2022-03-05 18:54:01\",\"affective_state\":\"\",\"background_picture_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"business_story\":\"\",\"classify_message\":\"\",\"com_from\":\"blogger\",\"company_profile\":\"\",\"country_region\":\"China|中国\",\"country_region_city\":\"\",\"detailed_summary\":\"\",\"favorite_quotes\":\"\",\"found\":\"2010年5月21日\",\"gender_orientation\":\"\",\"go_through\":\"\",\"like_number_int\":\"\",\"local_profile_pic_background_url\":\"\",\"media_title\":\"头像|背景图\",\"media_type_embeded\":\"P|P\",\"media_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F|https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"media_url_name\":\"fb_info_100064738204514_photo_0_.jpg|fb_info_100064738204514_banner_0_.jpg\",\"opening_hours\":\"\",\"personal_web_url\":\"http://www.MurrietaCA.gov/\",\"photo_album_url\":\"\",\"photo_wall\":\"\",\"position_message\":\"\",\"register_number\":\"\",\"registration_date\":\"\",\"related_home_page\":\"\",\"shop_content\":\"\",\"family_and_relation_ships\":\"\",\"skill\":\"\",\"user_birthday\":\"\",\"user_classify\":\"政府机构\",\"user_description\":\"\",\"follower_number_int\":\"\",\"uuid\":\"b97cb952-8f5a-48cb-a2a3-c4e4ae01626b\",\"platform\":\"FB\",\"data_source\":\"fb_20220726120408_00\",\"create_time\":\"2022-07-26 12:04:09\",\"importance\":\"0\",\"remark\":\"\",\"language_type\":\"en\",\"source_id\":\"56858\",\"user_id\":\"100064738204514\",\"screen_name\":\"CityofMurrieta\",\"use_name\":\"City of Murrieta - City Government\",\"user_url\":\"https://www.facebook.com/profile.php?id\\u003d100064738204514\",\"user_avatar\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F\",\"local_photo_url\":\"fb_Info_100064738204514_photo.jpg\",\"gender\":\"未知\",\"country\":\"China|中国\",\"city\":\"\",\"user_type\":\"个人账号\",\"verified\":\"非认证\",\"followers_count\":\"0\",\"friend_count\":\"0\",\"post_count\":\"0\",\"like_count\":\"0\",\"source_create_time\":\"2022-07-26 12:04:09\",\"mobile\":\"\",\"email\":\"\",\"name_userd_before\":\"\",\"language\":\"en\",\"user_religion\":\"\",\"works\":\"\",\"location\":\"\",\"marriage\":\"\",\"home_town\":\"\",\"user_summary\":\"\",\"integrity\":23,\"impl_or_history_type\":\"imp\"}";
-        FbUserData_v2 fbUserData_v2 = JacksonUtil.strToBean(str, FbUserData_v2.class);
-        System.out.println(fbUserData_v2);
+//        String str = "{\"user_political_views\":\"\",\"user_systent_name\":\"\",\"w3_fb_url\":\"\",\"institution_id\":\"\",\"is_community_page\":\"\",\"communication_philosophy\":\"\",\"have_product\":\"\",\"exchange_number\":\"\",\"visit_number\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"teach_message\":\"\",\"acquisition_time\":\"2022-03-05 18:54:01\",\"affective_state\":\"\",\"background_picture_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"business_story\":\"\",\"classify_message\":\"\",\"com_from\":\"blogger\",\"company_profile\":\"\",\"country_region\":\"China|中国\",\"country_region_city\":\"\",\"detailed_summary\":\"\",\"favorite_quotes\":\"\",\"found\":\"2010年5月21日\",\"gender_orientation\":\"\",\"go_through\":\"\",\"like_number_int\":\"\",\"local_profile_pic_background_url\":\"\",\"media_title\":\"头像|背景图\",\"media_type_embeded\":\"P|P\",\"media_url\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F|https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/242615571_227562046078401_7075016216550821750_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d105\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003de3f864\\u0026_nc_ohc\\u003dD7ZbIIMBmjwAX_F-GAQ\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT9kfFigFQTV8JLIplhpWS4Y4OSoE5lvxLqQt4ztmo5PRQ\\u0026oe\\u003d622876F0\",\"media_url_name\":\"fb_info_100064738204514_photo_0_.jpg|fb_info_100064738204514_banner_0_.jpg\",\"opening_hours\":\"\",\"personal_web_url\":\"http://www.MurrietaCA.gov/\",\"photo_album_url\":\"\",\"photo_wall\":\"\",\"position_message\":\"\",\"register_number\":\"\",\"registration_date\":\"\",\"related_home_page\":\"\",\"shop_content\":\"\",\"family_and_relation_ships\":\"\",\"skill\":\"\",\"user_birthday\":\"\",\"user_classify\":\"政府机构\",\"user_description\":\"\",\"follower_number_int\":\"\",\"uuid\":\"b97cb952-8f5a-48cb-a2a3-c4e4ae01626b\",\"platform\":\"FB\",\"data_source\":\"fb_20220726120408_00\",\"create_time\":\"2022-07-26 12:04:09\",\"importance\":\"0\",\"remark\":\"\",\"language_type\":\"en\",\"source_id\":\"56858\",\"user_id\":\"100064738204514\",\"screen_name\":\"CityofMurrieta\",\"use_name\":\"City of Murrieta - City Government\",\"user_url\":\"https://www.facebook.com/profile.php?id\\u003d100064738204514\",\"user_avatar\":\"https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-1/242579847_227562042745068_5573555501940023031_n.jpg?stp\\u003dcp0_dst-jpg_e15_fr_q65\\u0026_nc_cat\\u003d104\\u0026ccb\\u003d1-5\\u0026_nc_sid\\u003dc6021c\\u0026_nc_ohc\\u003d_wo2E9voadsAX-HJssY\\u0026_nc_ad\\u003dz-m\\u0026_nc_cid\\u003d0\\u0026_nc_ht\\u003dscontent-sjc3-1.xx\\u0026oh\\u003d00_AT8fSoES3CBriFODSgsZeuewHPyalUuA2qO64dcQdkdF3g\\u0026oe\\u003d6227913F\",\"local_photo_url\":\"fb_Info_100064738204514_photo.jpg\",\"gender\":\"未知\",\"country\":\"China|中国\",\"city\":\"\",\"user_type\":\"个人账号\",\"verified\":\"非认证\",\"followers_count\":\"0\",\"friend_count\":\"0\",\"post_count\":\"0\",\"like_count\":\"0\",\"source_create_time\":\"2022-07-26 12:04:09\",\"mobile\":\"\",\"email\":\"\",\"name_userd_before\":\"\",\"language\":\"en\",\"user_religion\":\"\",\"works\":\"\",\"location\":\"\",\"marriage\":\"\",\"home_town\":\"\",\"user_summary\":\"\",\"integrity\":23,\"impl_or_history_type\":\"imp\"}";
+//        FbUserData_v2 fbUserData_v2 = JacksonUtil.strToBean(str, FbUserData_v2.class);
+//        System.out.println(fbUserData_v2);
     }
 
 //    @Test
@@ -538,59 +538,59 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test18() throws Exception{
-        CountRequest countRequest = new CountRequest();
-        countRequest.indices("twitter_v4", "instagram_v4", "fb_v4");
-//        countRequest.query();
-        CountResponse countResponse = restHighLevelClient.count(countRequest, toBuilder());
-        System.out.println((countResponse.getCount()));
-
-
-
-
-        GetIndexRequest request = new GetIndexRequest("twitter_v4", "instagram_v4");
-        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
-        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
-
-//        GetSettingsRequest request = new GetSettingsRequest();
-//        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
-//        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
-//        Set<String> indices = map.keySet();
-//        for (String key : indices) {
-//            System.out.println(key);
-//        }
+//        CountRequest countRequest = new CountRequest();
+//        countRequest.indices("twitter_v4", "instagram_v4", "fb_v4");
+////        countRequest.query();
+//        CountResponse countResponse = restHighLevelClient.count(countRequest, toBuilder());
+//        System.out.println((countResponse.getCount()));
+//
+//
+//
+//
+//        GetIndexRequest request = new GetIndexRequest("twitter_v4", "instagram_v4");
+//        GetIndexResponse getIndexResponse = restHighLevelClient.indices().get(request, toBuilder());
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getAliases()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getIndices()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getMappings()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getSettings()));
+//        System.out.println(JacksonUtil.beanToStr(getIndexResponse.getDefaultSettings()));
+//
+////        GetSettingsRequest request = new GetSettingsRequest();
+////        GetAliasesResponse getAliasesResponse =  restHighLevelClient.indices().getSettings(request, RequestOptions.DEFAULT);
+////        Map<String, Set<AliasMetadata>> map = getAliasesResponse.getAliases();
+////        Set<String> indices = map.keySet();
+////        for (String key : indices) {
+////            System.out.println(key);
+////        }
     }
 
     @Test
     public void test19() throws Exception{
-        CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .query(QueryBuilders.matchAllQuery())
-                .fetchSource("country", null)
-                .collapse(collapseBuilder)
-                .trackTotalHits(true)
-                .from(0).size(10000);
-
-        //搜索
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.indices(indexArray_v2);
-        searchRequest.types("_doc");
-        searchRequest.source(builder);
-        // 执行请求
-        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-        if (response == null) {
-            log.info("");
-        }
-        System.out.println("ababababa");
+//        CollapseBuilder collapseBuilder = new CollapseBuilder("country.keyword");
+//        SearchSourceBuilder builder = new SearchSourceBuilder()
+//                .query(QueryBuilders.matchAllQuery())
+//                .fetchSource("country", null)
+//                .collapse(collapseBuilder)
+//                .trackTotalHits(true)
+//                .from(0).size(10000);
+//
+//        //搜索
+//        SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.indices(indexArray_v2);
+//        searchRequest.types("_doc");
+//        searchRequest.source(builder);
+//        // 执行请求
+//        SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//        if (response == null) {
+//            log.info("");
+//        }
+//        System.out.println("ababababa");
     }
 
     @Test
     public void test20() {
-        System.out.println(env);
-        System.out.println(max_result_window);
+//        System.out.println(env);
+//        System.out.println(max_result_window);
     }
 
     private RequestOptions toBuilder() {
