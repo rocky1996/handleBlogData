@@ -3,6 +3,7 @@ server:
 
 spring:
   profiles: test
+  max_result_window: 100000
 
   servlet:
     multipart:

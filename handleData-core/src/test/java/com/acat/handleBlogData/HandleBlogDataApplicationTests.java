@@ -42,6 +42,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -87,6 +88,10 @@ class HandleBlogDataApplicationTests {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Resource
     private RedisServiceImpl redisService;
+    @Value("${spring.profiles.active}")
+    private String env;
+    @Value("${spring.max_result_window}")
+    private Integer max_result_window;
 
     private static final List<String> fieldList = Lists.newArrayList("台湾", "香港", "澳门", "中国台湾", "中国香港", "中国澳门");
 //    @Resource
@@ -579,9 +584,13 @@ class HandleBlogDataApplicationTests {
         if (response == null) {
             log.info("");
         }
-
-
         System.out.println("ababababa");
+    }
+
+    @Test
+    public void test20() {
+        System.out.println(env);
+        System.out.println(max_result_window);
     }
 
     private RequestOptions toBuilder() {

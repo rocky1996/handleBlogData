@@ -3,6 +3,7 @@ server:
 
 spring:
   profiles: prod
+  max_result_window: 1000000
 
   servlet:
     multipart:
