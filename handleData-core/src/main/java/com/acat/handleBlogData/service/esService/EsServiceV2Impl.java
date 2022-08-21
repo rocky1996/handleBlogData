@@ -373,6 +373,7 @@ public class EsServiceV2Impl {
 
             if(!CollectionUtils.isEmpty(countryList)) {
                 redisService.leftPushAll(COUNTRY_KEY, countryList);
+                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
             }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
@@ -432,6 +433,7 @@ public class EsServiceV2Impl {
                     .collect(Collectors.toList());
             if (!CollectionUtils.isEmpty(cityList)) {
                 redisService.leftPushAll(CITY_KEY, cityList);
+                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + CITY_KEY + "入redis缓存完毕！！！");
             }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
@@ -492,6 +494,7 @@ public class EsServiceV2Impl {
                     .collect(Collectors.toList());
             if (!CollectionUtils.isEmpty(integrityList)) {
                 redisService.leftPushAll(INTEGRITY_KEY, integrityList);
+                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + INTEGRITY_KEY + "入redis缓存完毕！！！");
             }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchIntegrityResp.builder().integrityList(integrityList).build());
