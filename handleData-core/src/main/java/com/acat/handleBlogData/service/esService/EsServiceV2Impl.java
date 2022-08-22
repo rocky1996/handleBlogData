@@ -710,28 +710,28 @@ public class EsServiceV2Impl {
         //精准查询
         if (searchReq.getIsParticiple().equals(1)) {
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("user_id.keyword", searchReq.getUserId().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("user_id.keyword", searchReq.getUserId().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("screen_name.keyword", searchReq.getUserName().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("screen_name.keyword", searchReq.getUserName().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("use_name.keyword", searchReq.getUserQuanName().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("use_name.keyword", searchReq.getUserQuanName().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("name_userd_before.keyword", searchReq.getNameUserdBefore().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("name_userd_before.keyword", searchReq.getNameUserdBefore().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("mobile.keyword", searchReq.getPhoneNum().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("mobile.keyword", searchReq.getPhoneNum().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("email.keyword", searchReq.getEmail().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("email.keyword", searchReq.getEmail().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("country.keyword", searchReq.getCountry().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("country.keyword", searchReq.getCountry().trim()));
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery("city.keyword", searchReq.getCity().trim()));
+                boolQueryBuilder.must(QueryBuilders.termQuery("city.keyword", searchReq.getCity().trim()));
             }
         }else {
             //分词查询
