@@ -329,7 +329,7 @@ public class FqUserData_v2 {
     /**
      * 用户简介    ->     bio
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+//    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String user_summary;
 
     /**

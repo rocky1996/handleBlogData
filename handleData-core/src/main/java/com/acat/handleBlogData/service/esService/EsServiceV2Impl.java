@@ -760,19 +760,19 @@ public class EsServiceV2Impl {
                 boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail().trim()+"*").field("email.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                //均大写
-                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toLowerCase().trim()+"*"));
-                }
-                //均小写
-                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toUpperCase().trim()+"*"));
-                }else {
+//                //均大写
+//                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
+//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
+//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toLowerCase().trim()+"*"));
+//                }
+//                //均小写
+//                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
+//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
+//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toUpperCase().trim()+"*"));
+//                }else {
                     boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
                     boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCountry().trim()+"*").field("country.keyword"));
-                }
+               // }
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
                 boolQueryBuilder.should(QueryBuilders.wildcardQuery("city.keyword", "*"+searchReq.getCity().trim()+"*"));
@@ -948,6 +948,4 @@ public class EsServiceV2Impl {
         }
         return new RestResult<>(RestEnum.FAILED.getCode(), "刷脚本失败");
     }
-
-
 }
