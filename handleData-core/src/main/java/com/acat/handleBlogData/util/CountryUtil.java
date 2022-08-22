@@ -9,6 +9,7 @@ public class CountryUtil {
 
     public static Map<String, String> countryMap = new HashMap<>();
     static {
+        countryMap.put("台湾", "中国台湾");
         countryMap.put("TW", "中国台湾");
         countryMap.put("MX", "墨西哥");
         countryMap.put("US", "美国");

@@ -73,7 +73,8 @@ public class EsServiceV2Impl {
     /**
      * 跑脚本list
      */
-    private static final List<String> fieldList = Lists.newArrayList("台湾", "香港", "澳门", "中国台湾", "中国香港", "中国澳门");
+    private static final List<String> fieldList_one = Lists.newArrayList("台湾","香港","澳门","中国台湾","中国香港","中国澳门");
+    private static final List<String> fieldList_taiwan = Lists.newArrayList("台湾");
 
 
     /**
@@ -366,7 +367,7 @@ public class EsServiceV2Impl {
 
             List<String> countryList = Arrays.stream(searchHits)
                     .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
-                    .filter(e -> !fieldList.contains(String.valueOf(e.getSourceAsMap().get("country"))))
+                    .filter(e -> !fieldList_one.contains(String.valueOf(e.getSourceAsMap().get("country"))))
                     .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
                     .distinct()
                     .collect(Collectors.toList());
@@ -899,7 +900,7 @@ public class EsServiceV2Impl {
         if (StringUtils.isBlank(country)) {
             return "";
         }
-        if (fieldList.contains(country)) {
+        if (fieldList_one.contains(country)) {
             return "中国";
         }
         return country;
@@ -910,7 +911,7 @@ public class EsServiceV2Impl {
         try {
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-            for(String fieldValue: fieldList){
+            for(String fieldValue: fieldList_taiwan){
                 channelQueryBuilder.should(QueryBuilders.matchQuery("country", fieldValue));
             }
             bigBuilder.must(channelQueryBuilder);
@@ -935,7 +936,7 @@ public class EsServiceV2Impl {
 
             for (SearchHit documentFields : Arrays.stream(searchHits).collect(Collectors.toList())) {
                 Map map = new HashMap();
-                map.put("country", "中国");
+                map.put("country", "中国台湾");
                 UpdateRequest updateRequest = new UpdateRequest(mediaSourceEnum.getEs_index_v2(), documentFields.getId()).doc(map);
                 restHighLevelClient.update(updateRequest, toBuilder());
             }
