@@ -4,6 +4,8 @@ import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.controller.req.SearchDetailReq;
 import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
+import com.acat.handleBlogData.dao.CountryDao;
+import com.acat.handleBlogData.domain.entity.BlogSystemCountryDataEntity;
 import com.acat.handleBlogData.enums.*;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.*;
@@ -44,6 +46,9 @@ public class EsServiceV2Impl {
     private RestHighLevelClient restHighLevelClient;
     @Resource
     private RedisServiceImpl redisService;
+    @Resource
+    private CountryDao countryDao;
+
     @Value("${spring.profiles.active}")
     private String env;
     @Value("${spring.max_result_window}")
@@ -369,41 +374,48 @@ public class EsServiceV2Impl {
                         SearchCountryResp.builder().countryList(countryListFromCache).build());
             }
 
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(QueryBuilders.matchAllQuery())
-                    .fetchSource(new String[]{"country"}, null)
-                    .collapse(new CollapseBuilder("country.keyword"))
-//                    .from(0).size(10000)
-                    .trackTotalHits(true);
-//            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(5000);
-//            }else {
-//                builder.from(0).size(10000);
+//            SearchSourceBuilder builder = new SearchSourceBuilder()
+//                    .query(QueryBuilders.matchAllQuery())
+//                    .fetchSource(new String[]{"country"}, null)
+//                    .collapse(new CollapseBuilder("country.keyword"))
+////                    .from(0).size(10000)
+//                    .trackTotalHits(true);
+////            if ("test".equals(env) || "pre".equals(env)) {
+//                builder.from(0).size(1000);
+////            }else {
+////                builder.from(0).size(10000);
+////            }
+//
+//            //搜索
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices(indexArray_v2);
+//            searchRequest.types("_doc");
+//            searchRequest.source(builder);
+//            // 执行请求
+//            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//            if (response == null) {
+//                return new RestResult<>(RestEnum.PLEASE_TRY);
+//            }
+//
+//            SearchHit[] searchHits = response.getHits().getHits();
+//            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
 //            }
 
-            //搜索
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(indexArray_v2);
-            searchRequest.types("_doc");
-            searchRequest.source(builder);
-            // 执行请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-            if (response == null) {
-                return new RestResult<>(RestEnum.PLEASE_TRY);
-            }
-
-            SearchHit[] searchHits = response.getHits().getHits();
-            if (CollectionUtils.isEmpty(Arrays.asList(searchHits))) {
+            List<BlogSystemCountryDataEntity> blogSystemCountryDataList = countryDao.getAllCountryEntity();
+            if (CollectionUtils.isEmpty(blogSystemCountryDataList)) {
                 return new RestResult<>(RestEnum.SUCCESS,
                         SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
             }
 
-            List<String> countryList = Arrays.stream(searchHits)
-                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
-//                    .filter(e -> !fieldList_one.contains(String.valueOf(e.getSourceAsMap().get("country"))))
-                    .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
-                    .distinct()
-                    .collect(Collectors.toList());
+            List<String> countryList = blogSystemCountryDataList.stream().map(e -> e.getCountry()).distinct().collect(Collectors.toList());
+//            List<String> countryList = Arrays.stream(searchHits)
+//                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
+////                    .filter(e -> !fieldList_one.contains(String.valueOf(e.getSourceAsMap().get("country"))))
+//                    .map(e -> ReaderFileUtil.isChinese((String) e.getSourceAsMap().get("country")) ? (String) e.getSourceAsMap().get("country") : ((String) e.getSourceAsMap().get("country")).toUpperCase())
+//                    .distinct()
+//                    .collect(Collectors.toList());
 
             if(!CollectionUtils.isEmpty(countryList)) {
                 redisService.leftPushAll(COUNTRY_KEY, countryList);
