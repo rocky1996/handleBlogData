@@ -152,6 +152,17 @@ public class RedisServiceImpl {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
+    /**
+     * 获取指定下标间的值，默认0,-1
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public List rangeV2(String key, Long start, Long end) {
+        return redisTemplate.opsForList().range(key, start, end);
+    }
+
     /**Hash*************************
      * https://blog.csdn.net/weixin_43658899/article/details/121063660
      * *****************************/

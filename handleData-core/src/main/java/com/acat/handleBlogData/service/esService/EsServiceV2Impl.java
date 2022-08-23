@@ -53,8 +53,8 @@ public class EsServiceV2Impl {
     private static final String PROD_PIC_URL = "http://big-data-project-department.dc.gtcom.prod/big-data-project-department/fb/info/";
 
     //redis->key
-    public static final String COUNTRY_KEY = "country_v3";
-    public static final String CITY_KEY = "city_v3";
+    public static final String COUNTRY_KEY = "country_v4";
+    public static final String CITY_KEY = "city_v4";
     public static final String INTEGRITY_KEY = "integrity_v3";
 
     /**
@@ -330,11 +330,11 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCountryResp> getCountryList() {
         try {
-//            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
-//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-//                return new RestResult<>(RestEnum.SUCCESS,
-//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-//            }
+            List<String> countryListFromCache = redisService.rangeV2(COUNTRY_KEY, 0L, -1L);
+            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+                return new RestResult<>(RestEnum.SUCCESS,
+                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+            }
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
@@ -343,7 +343,7 @@ public class EsServiceV2Impl {
 //                    .from(0).size(10000)
                     .trackTotalHits(true);
 //            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(10000);
+                builder.from(0).size(5000);
 //            }else {
 //                builder.from(0).size(10000);
 //            }
@@ -372,10 +372,10 @@ public class EsServiceV2Impl {
                     .distinct()
                     .collect(Collectors.toList());
 
-//            if(!CollectionUtils.isEmpty(countryList)) {
-//                redisService.leftPushAll(COUNTRY_KEY, countryList);
+            if(!CollectionUtils.isEmpty(countryList)) {
+                redisService.leftPushAll(COUNTRY_KEY, countryList);
 //                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
-//            }
+            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -391,7 +391,7 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCityResp> getCityList() {
         try {
-            List<String> cityListFromCache = redisService.range(CITY_KEY, 0L, -1L);
+            List<String> cityListFromCache = redisService.rangeV2(CITY_KEY, 0L, -1L);
             if (!CollectionUtils.isEmpty(cityListFromCache)) {
                 return new RestResult<>(RestEnum.SUCCESS,
                         SearchCityResp.builder().cityList(cityListFromCache).build());
@@ -405,7 +405,7 @@ public class EsServiceV2Impl {
 //                    .from(0).size(1000000)
                     .trackTotalHits(true);
 //            if ("test".equals(env) || "pre".equals(env)) {
-                builder.from(0).size(10000);
+                builder.from(0).size(5000);
 //            }else {
 //                builder.from(0).size(10000);
 //            }
@@ -434,7 +434,7 @@ public class EsServiceV2Impl {
                     .collect(Collectors.toList());
             if (!CollectionUtils.isEmpty(cityList)) {
                 redisService.leftPushAll(CITY_KEY, cityList);
-                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + CITY_KEY + "入redis缓存完毕！！！");
+//                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + CITY_KEY + "入redis缓存完毕！！！");
             }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCityResp.builder().cityList(cityList).build());
