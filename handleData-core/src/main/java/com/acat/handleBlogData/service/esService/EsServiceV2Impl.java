@@ -95,13 +95,38 @@ public class EsServiceV2Impl {
                 searchReq.setIsParticiple(1);
             }
 
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            //youhua -> add
+            if (judgeParamIsEmpty(searchReq)) {
+                SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+                sourceBuilder.query(boolQueryBuilder);
+                sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+                sourceBuilder.trackTotalHits(true);
+                sourceBuilder.sort("integrity", SortOrder.DESC);
+
+                SearchRequest searchRequest = new SearchRequest();
+                searchRequest.indices(MediaSourceEnum.LINKEDIN_SCHOOL.getEs_index_v2());
+                searchRequest.types("_doc");
+                searchRequest.source(sourceBuilder);
+                SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+                if (response == null) {
+                    return new RestResult<>(RestEnum.PLEASE_TRY);
+                }
+
+                SearchHits searchHits = response.getHits();
+                if (searchHits == null || searchHits.getHits() == null) {
+                    return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,
+                            "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
+                }
+                return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, true));
+            }
+
             if (searchReq.getIsParticiple().equals(1) && StringUtils.isNotBlank(searchReq.getUserSummary().trim())) {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "用户简介不支持精准查询,请改为模糊(分词)查询");
             }
 
-            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-            assembleParam(searchReq, boolQueryBuilder);
 
+            assembleParam(searchReq, boolQueryBuilder);
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.query(boolQueryBuilder);
             sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
@@ -126,7 +151,7 @@ public class EsServiceV2Impl {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,
                         "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
             }
-            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
+            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.searchData has error,",e);
             DingTalkUtil.sendDdMessage(assemblingStr(e, "搜索查询接口", searchReq));
@@ -294,7 +319,7 @@ public class EsServiceV2Impl {
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
-            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response));
+            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error,",e);
             DingTalkUtil.sendDdMessage(assemblingStr(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
@@ -798,7 +823,7 @@ public class EsServiceV2Impl {
      * @param response
      * @return
      */
-    private SearchResp assembleResult(SearchResponse response) {
+    private SearchResp assembleResult(SearchResponse response, boolean flag) {
         List<SearchResp.UserData> userDataList = Lists.newArrayList();
         SearchHit[] searchHits = response.getHits().getHits();
         if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
@@ -834,11 +859,16 @@ public class EsServiceV2Impl {
         }
 
         TotalHits totalHits = response.getHits().getTotalHits();
-        return SearchResp
-                .builder()
-                .totalSize(totalHits.value)
-                .dataList(userDataList)
-                .build();
+
+        SearchResp searchResp = new SearchResp();
+        searchResp.setDataList(userDataList);
+        if (flag) {
+            Long size = getMediaIndexSize(MediaSourceEnum.ALL);
+            searchResp.setTotalSize(size);
+        }else {
+            searchResp.setTotalSize(totalHits.value);
+        }
+        return searchResp;
     }
 
     /**
@@ -948,5 +978,25 @@ public class EsServiceV2Impl {
             DingTalkUtil.sendDdMessage(assemblingStr(e, "刷" + mediaSourceEnum.getEs_index_v2() + "索引的脚本接口", ""));
         }
         return new RestResult<>(RestEnum.FAILED.getCode(), "刷脚本失败");
+    }
+
+    public boolean judgeParamIsEmpty(SearchReq searchReq) {
+        boolean flag = false;
+        if (StringUtils.isBlank(searchReq.getUserId())
+            && StringUtils.isBlank(searchReq.getUserName())
+            && StringUtils.isBlank(searchReq.getUserQuanName())
+            && StringUtils.isBlank(searchReq.getNameUserdBefore())
+            && StringUtils.isBlank(searchReq.getPhoneNum())
+            && StringUtils.isBlank(searchReq.getEmail())
+            && StringUtils.isBlank(searchReq.getCountry())
+            && StringUtils.isBlank(searchReq.getCity())
+            && StringUtils.isBlank(searchReq.getUserSummary())
+            && StringUtils.isBlank(searchReq.getStartTime())
+            && StringUtils.isBlank(searchReq.getEndTime())
+            && searchReq.getIntegrity() == null
+            && searchReq.getMediaType() == null) {
+            flag = true;
+        }
+        return flag;
     }
 }
