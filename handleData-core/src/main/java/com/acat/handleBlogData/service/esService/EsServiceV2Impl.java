@@ -322,7 +322,15 @@ public class EsServiceV2Impl {
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
         }catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error,",e);
-            DingTalkUtil.sendDdMessage(assemblingStr(e, "批量查询接口", ImmutableMap.of("searchField",searchField,"fieldList",fieldList,"isParticiple",isParticiple,"pageNum",pageNum,"pageSize",pageSize)));
+
+            Map<String, Object> batchMap = Maps.newHashMap();
+            batchMap.put("searchField", searchField);
+            batchMap.put("fieldList", fieldList);
+            batchMap.put("isParticiple", isParticiple);
+            batchMap.put("mediaSourceEnum", mediaSourceEnum);
+            batchMap.put("pageNum", pageNum);
+            batchMap.put("pageSize", pageSize);
+            DingTalkUtil.sendDdMessage(assemblingStr(e, "批量查询接口", batchMap));
             return new RestResult<>(RestEnum.FAILED);
         }
     }
