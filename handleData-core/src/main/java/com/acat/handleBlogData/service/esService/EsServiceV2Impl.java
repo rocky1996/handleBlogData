@@ -270,7 +270,7 @@ public class EsServiceV2Impl {
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
                 if (isParticiple.equals(1)) {
-                    channelQueryBuilder.should(QueryBuilders.matchQuery(searchField + ".keyword", fieldValue.trim()));
+                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue.trim()));
                 }else {
                     channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue.trim()+"*"));
                     channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue.trim()+"*").field(searchField + ".keyword"));
@@ -330,11 +330,11 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCountryResp> getCountryList() {
         try {
-            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
-            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-                return new RestResult<>(RestEnum.SUCCESS,
-                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-            }
+//            List<String> countryListFromCache = redisService.range(COUNTRY_KEY, 0L, -1L);
+//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+//            }
 
             SearchSourceBuilder builder = new SearchSourceBuilder()
                     .query(QueryBuilders.matchAllQuery())
@@ -372,10 +372,10 @@ public class EsServiceV2Impl {
                     .distinct()
                     .collect(Collectors.toList());
 
-            if(!CollectionUtils.isEmpty(countryList)) {
-                redisService.leftPushAll(COUNTRY_KEY, countryList);
-                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
-            }
+//            if(!CollectionUtils.isEmpty(countryList)) {
+//                redisService.leftPushAll(COUNTRY_KEY, countryList);
+//                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
+//            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         }catch (Exception e) {
@@ -526,7 +526,7 @@ public class EsServiceV2Impl {
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             boolQueryBuilder.should(QueryBuilders.wildcardQuery(fieldName + ".keyword", "*" + textValue + "*"));
-            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*" + textValue + "*").field(fieldName + ".keyword"));
+//            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*" + textValue + "*").field(fieldName + ".keyword"));
 
             SearchSourceBuilder builder = new SearchSourceBuilder();
             builder.query(boolQueryBuilder);
