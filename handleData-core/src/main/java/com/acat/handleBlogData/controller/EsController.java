@@ -121,9 +121,9 @@ public class EsController {
                 return new RestResult<>(RestEnum.FEN_YE_ERROR);
             }
 
-            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.ALL;
-            if (StringUtils.isNotBlank(mediaCode) && MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode)) != null) {
-                mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
+            if (mediaSourceEnum == null) {
+                return new RestResult<>(RestEnum.MEDIA_SOURCE_IS_EMPTY);
             }
 
             String originalFilename = file.getOriginalFilename();
