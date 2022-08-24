@@ -339,7 +339,7 @@ public class EsServiceV2Impl {
             batchMap.put("pageNum", pageNum);
             batchMap.put("pageSize", pageSize);
             DingTalkUtil.sendDdMessage(assemblingStr(e, "批量查询接口", batchMap));
-            return new RestResult<>(RestEnum.FAILED);
+            return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_HAS_SP_CHAR);
         }
     }
 

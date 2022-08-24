@@ -147,6 +147,17 @@ public class EsController {
             if (fieldList.size() > 1000) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
             }
+
+            boolean flag = false;
+            for (String field : fieldList) {
+                if (field.contains("/")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_HAS_SP_CHAR);
+            }
             return esServiceV2.batchQuery(searchField, fieldList, isParticiple, mediaSourceEnum, pageNum, pageSize);
         }catch (Exception e) {
             log.error("EsController.retrieveDataList has error:{}",e.getMessage());
