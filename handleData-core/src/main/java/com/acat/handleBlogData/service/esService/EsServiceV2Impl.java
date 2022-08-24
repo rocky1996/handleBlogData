@@ -127,11 +127,11 @@ public class EsServiceV2Impl {
             }
 
             if (searchReq.getIsParticiple().equals(1)
-                    && StringUtils.isNotBlank(searchReq.getUserSummary().trim())) {
+                    && StringUtils.isNotBlank(searchReq.getUserSummary())) {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "用户简介不支持精准查询,请改为模糊(分词)查询");
             }
             if (searchReq.getIsParticiple().equals(1)
-                    && StringUtils.isNotBlank(searchReq.getNameUserdBefore().trim())) {
+                    && StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,  "曾用名不支持精准查询,请改为模糊(分词)查询");
             }
 
