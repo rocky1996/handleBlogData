@@ -83,7 +83,7 @@ public class SearchReq {
     /**
      * 完整度
      */
-    private Integer integrity;
+    private String integrity;
 
     /**
      * 分页
