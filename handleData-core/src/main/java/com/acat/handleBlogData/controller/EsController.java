@@ -112,7 +112,7 @@ public class EsController {
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
                                              @RequestParam("isParticiple") Integer isParticiple,
-                                             @RequestParam("mediaCode") String mediaCode,
+                                             @RequestParam("mediaCode") Integer mediaCode,
                                              @RequestParam("pageNum") Integer pageNum,
                                              @RequestParam("pageSize") Integer pageSize
     ) {
@@ -123,8 +123,8 @@ public class EsController {
 
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.ALL;
             if (mediaCode != null) {
-                if (MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode)) != null) {
-                    mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
+                if (MediaSourceEnum.getMediaSourceEnum(mediaCode) != null) {
+                    mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(mediaCode);
                 }
             }
 
