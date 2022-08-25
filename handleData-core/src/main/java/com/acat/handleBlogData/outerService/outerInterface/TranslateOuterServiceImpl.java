@@ -63,7 +63,7 @@ public class TranslateOuterServiceImpl {
                 return languageTypeList.get(0);
             }
         }catch (Exception e) {
-            log.error("TranslateOuterServiceImpl.getLanguageDelectResult has error",e.getMessage());
+            log.error("TranslateOuterServiceImpl.getLanguageDelectResult has error",e);
         }
         return null;
     }
@@ -115,7 +115,7 @@ public class TranslateOuterServiceImpl {
             Map<String, Object> trMap = (Map<String, Object>) translatedList.get(0);
             return Objects.isNull(trMap) ? "" : (String) trMap.get("text");
         }catch (Exception e) {
-            log.error("TranslateOuterServiceImpl.getTranslateValue has error",e.getMessage());
+            log.error("TranslateOuterServiceImpl.getTranslateValue has error",e);
             return null;
         }
     }

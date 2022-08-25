@@ -350,19 +350,19 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
 //    }
 
-//    @Test
-//    public void test07() {
-//        String str = "ddengle03";
-//        String result =  translateOuterService.getTranslateValue("en", str);
-//        System.out.println(result);
-//    }
+    @Test
+    public void test07() {
+        String str = "ddengle03";
+        String result =  translateOuterService.getTranslateValue("en", str);
+        System.out.println(result);
+    }
 
-//    @Test
-//    public void test08() {
-//        String str = "땡글";
-//        String result = translateOuterService.getLanguageDelectResult(str);
-//        System.out.println("result:" + result);
-//    }
+    @Test
+    public void test08() {
+        String str = "땡글";
+        String result = translateOuterService.getLanguageDelectResult(str);
+        System.out.println("result:" + result);
+    }
 
 
     /**
