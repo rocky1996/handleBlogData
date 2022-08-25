@@ -121,12 +121,12 @@ public class EsController {
                 return new RestResult<>(RestEnum.FEN_YE_ERROR);
             }
 
-            if (mediaCode == null
-                || StringUtils.isBlank(mediaCode)
-                || MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode)) == null) {
-                return new RestResult<>(RestEnum.MEDIA_SOURCE_IS_EMPTY);
+            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.ALL;
+            if (mediaCode != null || StringUtils.isNotBlank(mediaCode)) {
+                if (MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode)) != null) {
+                    mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
+                }
             }
-            MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
 
             String originalFilename = file.getOriginalFilename();
             String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));

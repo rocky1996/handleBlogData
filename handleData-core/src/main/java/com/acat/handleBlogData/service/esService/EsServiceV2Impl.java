@@ -304,10 +304,10 @@ public class EsServiceV2Impl {
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
                 if (isParticiple.equals(1)) {
-                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
+                    channelQueryBuilder.must(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
                 }else {
-                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
-                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
+                    channelQueryBuilder.must(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
+//                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
                 }
             }
             bigBuilder.must(channelQueryBuilder);
@@ -786,58 +786,47 @@ public class EsServiceV2Impl {
         }else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_id.keyword", "*"+searchReq.getUserId()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserId()+"*").field("user_id.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id.keyword", "*"+searchReq.getUserId()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserId()+"*").field("user_id.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("screen_name.keyword", "*"+searchReq.getUserName()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserName()+"*").field("screen_name.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("screen_name.keyword", "*"+searchReq.getUserName()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserName()+"*").field("screen_name.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("use_name.keyword", "*"+searchReq.getUserQuanName()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserQuanName()+"*").field("use_name.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name.keyword", "*"+searchReq.getUserQuanName()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserQuanName()+"*").field("use_name.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("name_userd_before.keyword", "*"+searchReq.getNameUserdBefore()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before.keyword", "*"+searchReq.getNameUserdBefore()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("mobile.keyword", "*"+searchReq.getPhoneNum()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getPhoneNum()+"*").field("mobile.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile.keyword", "*"+searchReq.getPhoneNum()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getPhoneNum()+"*").field("mobile.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("email.keyword", "*"+searchReq.getEmail()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("email.keyword", "*"+searchReq.getEmail()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-//                //均大写
-//                if (ReaderFileUtil.isAcronym(searchReq.getCountry(), true)) {
-//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
-//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toLowerCase().trim()+"*"));
-//                }
-//                //均小写
-//                else if (ReaderFileUtil.isAcronym(searchReq.getCountry(), false)) {
-//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().trim()+"*"));
-//                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry().toUpperCase().trim()+"*"));
-//                }else {
-                    boolQueryBuilder.should(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry()+"*"));
-                    boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCountry()+"*").field("country.keyword"));
-               // }
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("country.keyword", "*"+searchReq.getCountry()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCountry()+"*").field("country.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.should(QueryBuilders.wildcardQuery("city.keyword", "*"+searchReq.getCity()+"*"));
-                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCity()+"*").field("city.keyword"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("city.keyword", "*"+searchReq.getCity()+"*"));
+//                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCity()+"*").field("city.keyword"));
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-            boolQueryBuilder.should(QueryBuilders.wildcardQuery("user_summary.keyword", "*"+searchReq.getUserSummary()+"*"));
-            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary.keyword"));
+            boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_summary.keyword", "*"+searchReq.getUserSummary()+"*"));
+//            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary.keyword"));
         }
         if (StringUtils.isNotBlank(searchReq.getIntegrity())) {
-            boolQueryBuilder.should(QueryBuilders.matchQuery("integrity", Integer.valueOf(searchReq.getIntegrity())));
+            boolQueryBuilder.must(QueryBuilders.matchQuery("integrity", Integer.valueOf(searchReq.getIntegrity())));
         }
         if (StringUtils.isNotBlank(searchReq.getStartTime()) && StringUtils.isNotBlank(searchReq.getEndTime())) {
-            boolQueryBuilder.should(QueryBuilders.rangeQuery("source_create_time.keyword").gte(searchReq.getStartTime()).lte(searchReq.getEndTime()).format("yyyy-MM-dd HH:mm:ss"));
+            boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time.keyword").gte(searchReq.getStartTime()).lte(searchReq.getEndTime()).format("yyyy-MM-dd HH:mm:ss"));
         }
     }
 
