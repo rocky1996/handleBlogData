@@ -146,7 +146,7 @@ public class EsController {
             if (CollectionUtils.isEmpty(fieldList)) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_LIST_EMPTY);
             }
-            if (fieldList.size() > 1000) {
+            if (fieldList.size() > 500) {
                 return new RestResult<>(RestEnum.BATCH_QUERY_FIELD_SIZE_TOO_LARGE);
             }
 
