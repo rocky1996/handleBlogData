@@ -352,14 +352,14 @@ class HandleBlogDataApplicationTests {
 
 //    @Test
 //    public void test07() {
-//        String str = "#千葉ロッテマリーンズ に関する嬉しみなど 鳥谷世代　#chibalotte #clm";
-//        String result =  translateOuterService.getTranslateValue("ja", str);
+//        String str = "ddengle03";
+//        String result =  translateOuterService.getTranslateValue("en", str);
 //        System.out.println(result);
 //    }
 
 //    @Test
 //    public void test08() {
-//        String str = "#千葉ロッテマリーンズ に関する嬉しみなど 鳥谷世代　#chibalotte #clm";
+//        String str = "땡글";
 //        String result = translateOuterService.getLanguageDelectResult(str);
 //        System.out.println("result:" + result);
 //    }

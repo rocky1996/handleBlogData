@@ -204,10 +204,10 @@ public class CommonController {
                     continue;
                 }
 
-                if (ReaderFileUtil.isChinese(tranValue)) {
-                    tranResultMap.put(key, tranValue);
-                    continue;
-                }
+//                if (ReaderFileUtil.isChinese(tranValue)) {
+//                    tranResultMap.put(key, tranValue);
+//                    continue;
+//                }
 
                 String languageType = translateOuterService.getLanguageDelectResult(tranValue);
                 if (StringUtils.isBlank(languageType)) {
