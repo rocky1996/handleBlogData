@@ -55,7 +55,13 @@ public class TranslateOuterServiceImpl {
                 log.info("TranslateOuterServiceImpl.getLanguageDelectResult,translate failed!!!");
                 return null;
             }
-            return delectResp.getResponseData().getLanguage();
+
+            List<String> languageTypeList = delectResp.getResponseData().getLanguage();
+            if (CollectionUtils.isEmpty(languageTypeList)) {
+                return "";
+            }else {
+                return languageTypeList.get(0);
+            }
         }catch (Exception e) {
             log.error("TranslateOuterServiceImpl.getLanguageDelectResult has error",e.getMessage());
         }

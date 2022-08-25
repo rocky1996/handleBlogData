@@ -16,6 +16,7 @@ import com.acat.handleBlogData.service.impl.IndexTargetServiceImpl;
 import com.acat.handleBlogData.service.redisService.RedisServiceImpl;
 import com.acat.handleBlogData.util.JwtUtils;
 import com.acat.handleBlogData.util.LanguageUtil;
+import com.acat.handleBlogData.util.ReaderFileUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -185,7 +186,7 @@ public class CommonController {
         }
     }
 
-    @Auth
+//    @Auth
     @PostMapping("/getTranResult")
     public RestResult<TranResp> getTranResult(@RequestBody Map<String, String> tranMap) {
         try {
@@ -193,13 +194,18 @@ public class CommonController {
             for (String key : tranMap.keySet()) {
 
                 String tranValue = tranMap.get(key);
+                if (StringUtils.isBlank(tranValue)) {
+                    tranResultMap.put(key, "");
+                    continue;
+                }
+
                 if ("language".equals(key) && StringUtils.isNotBlank(tranValue)) {
                     tranResultMap.put(key, LanguageUtil.getLanguageName(tranValue));
                     continue;
                 }
 
-                if (StringUtils.isBlank(tranValue)) {
-                    tranResultMap.put(key, "");
+                if (ReaderFileUtil.isChinese(tranValue)) {
+                    tranResultMap.put(key, tranValue);
                     continue;
                 }
 
@@ -213,7 +219,9 @@ public class CommonController {
                     tranResultMap.put(key, "");
                     continue;
                 }
-                tranResultMap.put(key, translateOuterService.getTranslateValue(languageType, tranValue));
+
+                String translateStr = translateOuterService.getTranslateValue(languageType, tranValue);
+                tranResultMap.put(key, translateStr);
             }
             return new RestResult(RestEnum.SUCCESS, TranResp.builder().tranMap(tranResultMap).build());
         }catch (Exception e) {

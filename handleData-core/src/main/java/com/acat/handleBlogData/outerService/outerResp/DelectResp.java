@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 public class DelectResp {
 
@@ -14,6 +16,6 @@ public class DelectResp {
     @Data
     public static class ResponseData{
         private Integer confidence;
-        private String language;
+        private List<String> language;
     }
 }
