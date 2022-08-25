@@ -112,7 +112,7 @@ public class EsController {
                                              @RequestParam("file") MultipartFile file,
                                              @RequestParam("searchField") String searchField,
                                              @RequestParam("isParticiple") Integer isParticiple,
-                                             @RequestParam("mediaCode") Integer mediaCode,
+                                             @RequestParam(required = false, name = "mediaCode") Integer mediaCode,
                                              @RequestParam("pageNum") Integer pageNum,
                                              @RequestParam("pageSize") Integer pageSize
     ) {
