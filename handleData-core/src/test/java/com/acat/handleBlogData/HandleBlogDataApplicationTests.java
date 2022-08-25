@@ -3,6 +3,8 @@ package com.acat.handleBlogData;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
 import com.acat.handleBlogData.dao.CountryDao;
 import com.acat.handleBlogData.domain.entity.BlogSystemCountryDataEntity;
+import com.acat.handleBlogData.util.DingTalkUtil;
+import com.google.common.collect.Maps;
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
 import org.elasticsearch.client.GetAliasesResponse;
@@ -350,19 +352,303 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
 //    }
 
-    @Test
-    public void test07() {
-        String str = "ddengle03";
-        String result =  translateOuterService.getTranslateValue("en", str);
-        System.out.println(result);
-    }
-
-    @Test
-    public void test08() {
-        String str = "commits behind main.";
-        String result = translateOuterService.getLanguageDelectResult(str);
-        System.out.println("result:" + result);
-    }
+//    @Test
+//    public void test07() {
+//        List<String> list = Lists.newArrayList(
+//                "ddengle003",
+//                "NEDonBoard",
+//                "Christian Theological Seminary",
+//                "Christ School",
+//                "Loughborough University",
+//                "John XXIII College | Perth",
+//                "Wright State University",
+//                "Queen Mary University of London",
+//                "Eastern Michigan University",
+//                "Harvard Extension School",
+//                "The British School of Paris",
+//                "Polytechnic Institute of Setúbal",
+//                "William & Mary",
+//                "Botho University",
+//                "KCC INSTITUTE OF TECHNOLOGY AND MANAGEMENT",
+//                "cs2i Bourgogne - Ecole Supérieure d'Informatique",
+//                "Lackawanna College",
+//                "AIM WA",
+//                "Indian Institute for Human Settlements",
+//                "Converse University",
+//                "tbsc-institute",
+//                "hebrew-union-college",
+//                "College of the Sequoias",
+//                "Comp Lair™",
+//                "frankfurtschool",
+//                "Universidad ICESI",
+//                "university-of-nottingham-ningbo-china",
+//                "UNC School of Education",
+//                "Renmin University of China",
+//                "escola-superior-de-ecommerce",
+//                "Trinity College Dublin",
+//                "gateway-community-college_2",
+//                "42heilbronn",
+//                "UT Southwestern Medical Center",
+//                "tekedia",
+//                "stony-brook-shtm",
+//                "enae-business-school",
+//                "spelman-college_2",
+//                "university-of-buckingham",
+//                "frontier-nursing-university",
+//                "lancastertheologicalseminary",
+//                "INACAP",
+//                "stocktonuniversity",
+//                "GenCo Legal®",
+//                "rotella-legal-group-p-a-",
+//                "DeepTarget Inc.",
+//                "artfusion",
+//                "cole-schotz-p-c-",
+//                "uk-department-for-education",
+//                "coraphysicaltherapy",
+//                "ls-lexjus-sinacta",
+//                "LS Lexjus Sinacta",
+//                "SESAR 3 Joint Undertaking",
+//                "We are now ASBN - Follow our new page linked in the tagline",
+//                "ASTEC",
+//                "Guru.com",
+//                "i-com-global",
+//                "McGill immobilier | McGill Real Estate",
+//                "Siegel+Gale",
+//                "LeTort Trust",
+//                "aurigo-software-technologies",
+//                "ls2g",
+//                "LS2group",
+//                "Cedar Falls Tourism & Visitors Bureau",
+//                "MCL IT GmbH",
+//                "BRONX Fashion B.V.",
+//                "CryptoStopper™",
+//                "bnp-paribas-switzerland",
+//                "Wheeler Trigg O'Donnell LLP",
+//                "advance-digital-graphics-ltd",
+//                "penner-international",
+//                "Linkfluence - a Meltwater company",
+//                "censa---council-for-emerging-national-security-affairs",
+//                "c21-media",
+//                "es-relazioni-istituzionali-&-comunicazione",
+//                "Bryant Miller Olive P.A.",
+//                "Laboratorios LAM",
+//                "Portland Business Journal",
+//                "ajev",
+//                "ccsfundraising",
+//                "B.E. Smith",
+//                "CM&B Inc.",
+//                "berkeley-research-group-llc",
+//                "B&B TOOLS",
+//                "ymca-of-greater-providence",
+//                "southlight-inc.",
+//                "127-worldwide",
+//                "MEDI COMP",
+//                "ADR India & MyNeta",
+//                "usaging",
+//                "massachusetts-life-sciences-center",
+//                "eastridge-workforce-solutions",
+//                "ambler-savings-bank",
+//                "thekidzclub",
+//                "northholm-grammar-school-ltd",
+//                "3d-perception",
+//                "USPCA",
+//                "ummedicalsystem",
+//                "castlight-health",
+//                "ATEM-Polska Sp. z o.o."
+//        );
+//        System.out.println(list.size());
+//        Map<String, String> resultMap = Maps.newHashMap();
+//        list.forEach(e -> {
+//            String result =  translateOuterService.getTranslateValue("en", e);
+//            resultMap.put(e, result);
+//        });
+//        System.out.println(JacksonUtil.beanToStr(resultMap));
+//    }
+//
+//    @Test
+//    public void test08() {
+//
+//        List<String> list = Lists.newArrayList(
+//                "당신이 가자",
+////                "금기",
+//                "사탕",
+//                "의 꿈",
+//                "인기",
+//                "세요",
+//                "햇볕과너",
+//                "미래",
+//                "거짓말",
+//                "제멋대로",
+//                "추억",
+//                "슈퍼맨",
+//                "옛정",
+//                "분홍",
+//                "더 이상 만 나",
+//                "마음 만약 양지",
+//                "이야기 너와",
+//                "나 안 이야기",
+//                "마치 어제",
+//                "뒷모습",
+//                "방종하다",
+//                "낯익다",
+//                "손잡고먼곳",
+//                "차가운중가",
+//                "밤하늘 의 크리스털",
+//                "사랑한다",
+//                "사랑해",
+//                "외로운 환자",
+//                "사람",
+//                "오래 된 유령",
+//                "미쳤어",
+//                "나 잊지 마",
+//                "좋아해요",
+//                "사랑 기침",
+//                "그 는 그녀 와",
+//                "나 중 에",
+//                "卞白贤",
+//                "마음에 들어",
+//                "한 종이 난 언",
+//                "듣는편지",
+//                "김종대RLA+WHD+EO",
+//                "말없는",
+//                "엑소",
+//                "치유 자",
+//                "레이",
+//                "풋내기",
+//                "하루하루",
+//                "안다싫증나다",
+//                "루 한, 당신은 지출하지 않았다",
+//                "그레이 사진",
+//                "저 를",
+//                "소탈하다",
+//                "얼음이없는 레몬 슬라이스",
+//                "김민선",
+//                "변백현",
+//                "떠 나",
+//                "닿지않는다",
+//                "안 정 감",
+//                "싱크대",
+//                "범인",
+//                "김종인",
+//                "무지개 의 미",
+//                "가시 돋친 어떻게 둘러싼다",
+//                "따뜻한 내",
+//                "장대한",
+//                "피 노 키 오",
+//                "땡글",
+//                "무금반",
+//                "단어뜻단어뜻",
+//                "물건",
+//                "탁자",
+//                "자전",
+//                "의자",
+//                "신문 알리다",
+//                "시계 시간",
+//                "잡지",
+//                "시계겉",
+//                "글자",
+//                "안경",
+//                "문장",
+//                "우산",
+//                "그림",
+//                "치약",
+//                "색깔",
+//                "성냥",
+//                "라이타",
+//                "노임,임금",
+//                "급료,월급",
+//                "상자",
+//                "지역,곳,장소",
+//                "텔레비젼",
+//                "전부",
+//                "라디오",
+//                "냉장고",
+//                "방향",
+//                "선풍기",
+//                "세계",
+//                "에어콘",
+//                "국가",
+//                "세탁기",
+//                "에스카레이터"
+////
+////　　70. 计算机(dian nao)컴퓨터 乡下(xiang xia)시골.
+////
+////　　71. 照相机(zhao xiang ji)사진기 城市(cheng shi)도시
+////
+////　　72. 电话(dian hua)전화 街(jie)거리,길
+////
+////　　73. 电报(dian bao)전보 道(dao)도로,길
+////
+////　　74. 信(xin)편지 路(lu)길,도로
+////
+////　　75. 邮票(you piao)우표 桥(qiao)다리
+////
+////　　76. 明信片(ming xin pian)엽서 樓(lou)건물,층
+////
+////　　77. 名片(ming pian)명함 工厂(gongchang)공장
+////
+////　　78. 照片(zhao pian)사진 邮局(you ju)우체국
+////
+////　　79. 自行车(zi xing che )자전거 银行(yin hang)은행
+////
+////　　80. 汽车(qi che)자동차 公司(gong si)회사
+////
+////　　81. 公共汽车(gonggongqi che)버스 市场(shi chang)시장
+////
+////　　82. 出租车(chu zu che)택시 铺子(pu zi)가게,상점
+////
+////　　83. 火车(huo che)기차 饭店(fan dian)호텔,여관
+////
+////　　84. 地下铁(di xia tie)지하철 公园(gong yuan)공원
+////
+////　　85. 船(chuan)배 工程(gong cheng)공사,공정
+////
+////　　86. 飞机(fei ji)비행기 故事(gu shi)이야기,고사
+////
+////　　87. 交通(jiao tong)교통 电影(dian ying)영화
+////
+////　　88. 旅行(lu xing)여행 话剧(hua ju)연극
+////
+////　　89. 车站(che zhan)정거장，역 学校(xue xiao)학교
+////
+////　　90. 票(piao)표 敎室(jiao shi)교실
+////
+////　　91. 门票(men piao)입장권 图书馆(tu shu guan)도서관
+////
+////　　92. 纸(zhi)종이 黑板(hei ban)칠판
+////
+////　　93. 铅笔(qian bi)연필 功课(gong ke)과목,학습
+////
+////　　94. 毛笔(mao bi)붓 考试(kao shi)시험
+////
+////　　95. 分笔fen bi)분필 事情(shi qing)일,사건
+////
+////　　96. 刚笔(gang bi)만년필 方法(fang fa)방법
+////
+////　　97. 圆珠笔(yuan zhu bi)볼펜 情形(qing xing)일의상황,정황,형편
+////
+////　　98. 墨水(mo shui)먹물,잉크 新闻(xin wen)뉴스
+////
+////　　99. 단어뜻단어뜻
+////
+////　　100. 毛病(mao bing)질병,약점,나쁜버릇 将来(jiang lai)장래,미래
+//
+//
+//        );
+//
+////        System.out.println(list.size());
+//
+////        String str = "땡글";
+//
+//        Map<String, String> resultMap = new HashMap<>();
+//        list.forEach(e -> {
+//            String result = translateOuterService.getLanguageDelectResult(e);
+//            resultMap.put(e, result);
+//        });
+////        String result = translateOuterService.getLanguageDelectResult(str);
+////        System.out.println("result:" + result);
+//        System.out.println(JacksonUtil.beanToStr(resultMap));
+//    }
 
 
     /**
