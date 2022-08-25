@@ -304,10 +304,10 @@ public class EsServiceV2Impl {
             BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
             for(String fieldValue: fieldList){
                 if (isParticiple.equals(1)) {
-                    channelQueryBuilder.must(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
+                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
                 }else {
-                    channelQueryBuilder.must(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
-//                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
+                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
+                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
                 }
             }
             bigBuilder.must(channelQueryBuilder);

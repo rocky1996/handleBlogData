@@ -359,7 +359,7 @@ class HandleBlogDataApplicationTests {
 
     @Test
     public void test08() {
-        String str = "땡글";
+        String str = "commits behind main.";
         String result = translateOuterService.getLanguageDelectResult(str);
         System.out.println("result:" + result);
     }
