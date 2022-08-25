@@ -122,7 +122,7 @@ public class EsController {
             }
 
             MediaSourceEnum mediaSourceEnum = MediaSourceEnum.ALL;
-            if (mediaCode != null || StringUtils.isNotBlank(mediaCode)) {
+            if (mediaCode != null) {
                 if (MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode)) != null) {
                     mediaSourceEnum = MediaSourceEnum.getMediaSourceEnum(Integer.parseInt(mediaCode));
                 }
