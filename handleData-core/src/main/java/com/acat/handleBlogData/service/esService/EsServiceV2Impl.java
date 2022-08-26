@@ -307,7 +307,7 @@ public class EsServiceV2Impl {
                     channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
                 }else {
                     channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*"+fieldValue+"*"));
-                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
+//                    channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
                 }
             }
             bigBuilder.must(channelQueryBuilder);
