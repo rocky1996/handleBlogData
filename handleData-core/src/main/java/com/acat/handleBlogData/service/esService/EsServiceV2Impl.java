@@ -1101,7 +1101,7 @@ public class EsServiceV2Impl {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH,
                         "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
             }
-            List<Map<String, Object>> bigList = zuZhuangList(searchResponse);
+            List<Map<String, Object>> bigList = assembleList(searchResponse);
             if (CollectionUtils.isEmpty(bigList)) {
                 return new RestResult<>(RestEnum.DOWNLOAD_DATA_IS_EMPTY);
             }
@@ -1119,7 +1119,7 @@ public class EsServiceV2Impl {
      * @param searchResponse
      * @return
      */
-    public List<Map<String, Object>> zuZhuangList(SearchResponse searchResponse) {
+    public List<Map<String, Object>> assembleList(SearchResponse searchResponse) {
 
         List<Map<String, Object>> bigList = Lists.newArrayList();
         SearchHit[] searchs = searchResponse.getHits().getHits();
