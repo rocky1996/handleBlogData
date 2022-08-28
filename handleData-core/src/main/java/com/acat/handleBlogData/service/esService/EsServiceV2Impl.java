@@ -1067,7 +1067,7 @@ public class EsServiceV2Impl {
                             "您好,此搜索条件会存在超时风险,请更换搜索条件,系统正在持续优化中ing！！！");
                 }
 
-                List<Map<String, Object>> bigList = zuZhuangList(searchResponse);
+                List<Map<String, Object>> bigList = assembleList(searchResponse);
                 if (CollectionUtils.isEmpty(bigList)) {
                     return new RestResult<>(RestEnum.DOWNLOAD_DATA_IS_EMPTY);
                 }
