@@ -212,9 +212,10 @@ public class EsServiceV2Impl {
             userDetailResp.setGender(hit.getSourceAsMap().get("gender") == null ? "" : String.valueOf(hit.getSourceAsMap().get("gender")));
             String userId = hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id"));
             String userName = hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name"));
+            String userQuanName = hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name"));
             userDetailResp.setUserId(userId);
             userDetailResp.setUserName(userName);
-            userDetailResp.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+            userDetailResp.setUserQuanName(userQuanName);
             userDetailResp.setBornTime(hit.getSourceAsMap().get("born_time") == null ? "" : String.valueOf(hit.getSourceAsMap().get("born_time")));
             userDetailResp.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
             userDetailResp.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
@@ -245,14 +246,14 @@ public class EsServiceV2Impl {
 
 
             /******新增字段*******/
-            List<BeforeNameInfo> beforeNameInfoList = searchBeforeNameInfoV2(userId, userName);
+            List<BeforeNameInfo> beforeNameInfoList = searchBeforeNameInfoV2(userId, userQuanName);
             if (!CollectionUtils.isEmpty(beforeNameInfoList)) {
                 userDetailResp.setBeforeNameInfoList(beforeNameInfoList);
             } else {
                 BeforeNameInfo beforeNameInfo = BeforeNameInfo
                         .builder()
                         .userId(userId)
-                        .userName(userName)
+                        .userName(userQuanName)
                         .uuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")))
                         .userQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")))
                         .mediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build())
@@ -683,7 +684,7 @@ public class EsServiceV2Impl {
         if (whereValue) {
             builder.query(QueryBuilders.termsQuery("user_id.keyword", value));
         } else {
-            builder.query(QueryBuilders.termsQuery("screen_name.keyword", value));
+            builder.query(QueryBuilders.termsQuery("use_name.keyword", value));
         }
 
 //        if ("test".equals(env) || "pre".equals(env)) {
@@ -726,7 +727,7 @@ public class EsServiceV2Impl {
     }
 
 
-    public List<BeforeNameInfo> searchBeforeNameInfoV2(String userId, String userName) {
+    public List<BeforeNameInfo> searchBeforeNameInfoV2(String userId, String userQuanName) {
         try {
             // 创建请求
             List<BeforeNameInfo> userIdList = Lists.newArrayList();
@@ -734,8 +735,8 @@ public class EsServiceV2Impl {
             if (StringUtils.isNotBlank(userId)) {
                 userIdList = yi_ci_search(true, userId);
             }
-            if (StringUtils.isNotBlank(userName)) {
-                userNameList = yi_ci_search(false, userName);
+            if (StringUtils.isNotBlank(userQuanName)) {
+                userNameList = yi_ci_search(false, userQuanName);
             }
 
             List<BeforeNameInfo> bigList = Lists.newArrayList();
