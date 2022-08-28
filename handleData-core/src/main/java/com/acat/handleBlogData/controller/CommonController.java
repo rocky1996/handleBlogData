@@ -268,7 +268,8 @@ public class CommonController {
 
     @Auth
     @PostMapping("/downloadFile")
-    public RestResult downloadFile(@RequestBody SearchReq searchReq, HttpServletResponse response) {
+    public RestResult downloadFile(@RequestBody SearchReq searchReq,
+                                   HttpServletResponse response) {
         try {
             return esServiceV2.downloadFile(searchReq, response);
         }catch (Exception e) {

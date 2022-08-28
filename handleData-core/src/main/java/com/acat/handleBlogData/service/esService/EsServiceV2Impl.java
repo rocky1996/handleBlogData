@@ -1139,7 +1139,7 @@ public class EsServiceV2Impl {
                         continue;
                     }
                     newObjectMap.put(
-                            FieldUtils.getFieldNameFromZh(key) != null ? FieldUtils.getFieldNameFromZh(key) : key,
+                            key,
                             "impl_or_history_type".equals(key) ? ("imp".equals(stringObjectMap.get(key)) ? "完整属性" : "部分属性") : stringObjectMap.get(key)
                     );
                 }
