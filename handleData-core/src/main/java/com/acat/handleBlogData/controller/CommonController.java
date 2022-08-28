@@ -3,6 +3,7 @@ package com.acat.handleBlogData.controller;
 import com.acat.handleBlogData.aop.Auth;
 import com.acat.handleBlogData.constants.RestResult;
 import com.acat.handleBlogData.constants.UrlConstants;
+import com.acat.handleBlogData.controller.req.SearchReq;
 import com.acat.handleBlogData.controller.resp.*;
 import com.acat.handleBlogData.domain.entity.BlogSystemIndexTargetDataEntity;
 import com.acat.handleBlogData.enums.BatchSearchFieldEnum;
@@ -28,6 +29,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -260,6 +262,17 @@ public class CommonController {
             return new RestResult(RestEnum.SUCCESS, indexTargetRespList);
         }catch (Exception e) {
             log.error("CommonController.getIndexTargetNum has error:{}",e.getMessage());
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth
+    @PostMapping("/downloadFile")
+    public RestResult downloadFile(@RequestBody SearchReq searchReq, HttpServletResponse response) {
+        try {
+            return esServiceV2.downloadFile(searchReq, response);
+        }catch (Exception e) {
+            log.error("CommonController.downloadFile has error:{}",e);
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }
