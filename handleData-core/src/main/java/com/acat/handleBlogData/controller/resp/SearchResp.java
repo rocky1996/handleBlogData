@@ -1,5 +1,6 @@
 package com.acat.handleBlogData.controller.resp;
 
+import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -121,5 +123,10 @@ public class SearchResp {
          * 数据来源
          */
         private MediaTypeResp mediaTypeResp;
+
+        /**
+         * 原始字段
+         */
+        private Map<String, Object> fieldMap = Maps.newHashMap();
     }
 }

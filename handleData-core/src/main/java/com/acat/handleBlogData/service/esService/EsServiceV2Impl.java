@@ -878,6 +878,23 @@ public class EsServiceV2Impl {
 
                 MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndexV2(hit.getIndex());
                 userData.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+
+
+                Map<String, Object> newObjectMap = Maps.newHashMap();
+                Map<String, Object> stringObjectMap = hit.getSourceAsMap();
+                if (Objects.isNull(stringObjectMap)) {
+                    continue;
+                }
+                for (String key : stringObjectMap.keySet()) {
+                    if (StringUtils.isBlank(key)) {
+                        continue;
+                    }
+                    if ("_class".equals(key)) {
+                        continue;
+                    }
+                    newObjectMap.put(key, "impl_or_history_type".equals(key) ? ("imp".equals(stringObjectMap.get(key)) ? "完整属性" : "部分属性") : stringObjectMap.get(key));
+                }
+                userData.setFieldMap(newObjectMap);
                 userDataList.add(userData);
             }
         }
