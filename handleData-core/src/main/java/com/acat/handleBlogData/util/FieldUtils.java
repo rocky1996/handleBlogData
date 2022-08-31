@@ -43,7 +43,7 @@ public class FieldUtils {
         fieldMap.put("email", "邮箱地址");
         fieldMap.put("user_religion", "宗教信仰");
         fieldMap.put("works", "工作信息");
-        fieldMap.put("location", "位置信息");
+        fieldMap.put("location", "居住地");
         fieldMap.put("marriage", "婚姻情况");
         fieldMap.put("home_town", "家乡地址");
         fieldMap.put("user_summary", "用户简介");
@@ -118,7 +118,7 @@ public class FieldUtils {
         fieldMap.put("personal_web_url", "个人网址");
         fieldMap.put("photo_album_url", "相册url地址");
         fieldMap.put("photo_wall", "照片墙链接");
-        fieldMap.put("position_message", "位置信息");
+        fieldMap.put("position_message", "工作地点");
         fieldMap.put("register_number","签到数");
         fieldMap.put("diff_time", "治理后的注册日期");
         fieldMap.put("related_home_page", "相关主页信息");
