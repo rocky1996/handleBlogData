@@ -265,16 +265,16 @@ public class CommonController {
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
         }
     }
-
-    @Auth
-    @PostMapping("/downloadFile")
-    public RestResult downloadFile(@RequestBody SearchReq searchReq,
-                                   HttpServletResponse response) {
-        try {
-            return esServiceV2.downloadFile(searchReq, response);
-        }catch (Exception e) {
-            log.error("CommonController.downloadFile has error:{}",e);
-            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
-        }
-    }
+//
+//    @Auth
+//    @PostMapping("/downloadFile")
+//    public RestResult downloadFile(@RequestBody SearchReq searchReq,
+//                                   HttpServletResponse response) {
+//        try {
+//            return esServiceV2.downloadFile(searchReq, response);
+//        }catch (Exception e) {
+//            log.error("CommonController.downloadFile has error:{}",e);
+//            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+//        }
+//    }
 }
