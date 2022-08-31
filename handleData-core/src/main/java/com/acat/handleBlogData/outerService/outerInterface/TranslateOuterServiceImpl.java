@@ -100,19 +100,18 @@ public class TranslateOuterServiceImpl {
                 return null;
             }
 
-//            Map<String, Object> resultMap = (Map<String, Object>) translateOuterService.getTranslateValue("en", str);
             Map<String, Object> tranMap = JacksonUtil.strToBean(outerResp.getBody(), Map.class);
             List<Map<String, Object>> translationList = (List<Map<String, Object>>) tranMap.get("translation");
             if (CollectionUtils.isEmpty(translationList)) {
-                System.out.println("");
+                return null;
             }
 
             Map<String, Object> oneMap = translationList.get(0);
             List<Map<String, Object>> translatedList = (List<Map<String, Object>>) oneMap.get("translated");
             if (CollectionUtils.isEmpty(translatedList)) {
-                System.out.println("");
+                return null;
             }
-            Map<String, Object> trMap = (Map<String, Object>) translatedList.get(0);
+            Map<String, Object> trMap = translatedList.get(0);
             return Objects.isNull(trMap) ? "" : (String) trMap.get("text");
         }catch (Exception e) {
             log.error("TranslateOuterServiceImpl.getTranslateValue has error",e);
