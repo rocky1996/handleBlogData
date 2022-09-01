@@ -352,8 +352,8 @@ class HandleBlogDataApplicationTests {
 //        System.out.println(response == null ? 0 : response.getHits().getTotalHits().value);
 //    }
 
-//    @Test
-//    public void test07() {
+    @Test
+    public void test07() {
 //        List<String> list = Lists.newArrayList(
 //                "ddengle003",
 //                "NEDonBoard",
@@ -463,7 +463,9 @@ class HandleBlogDataApplicationTests {
 //            resultMap.put(e, result);
 //        });
 //        System.out.println(JacksonUtil.beanToStr(resultMap));
-//    }
+//        String result = translateOuterService.getTranslateValue("en","Cedar Falls Tourism & Visitors Bureau");
+//        log.info(result);
+    }
 //
 //    @Test
 //    public void test08() {
