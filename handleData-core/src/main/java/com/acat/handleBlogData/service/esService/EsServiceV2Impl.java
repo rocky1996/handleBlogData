@@ -39,6 +39,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,6 +66,233 @@ public class EsServiceV2Impl {
     public static final String COUNTRY_KEY = "country_v4";
     public static final String CITY_KEY = "city_v4";
     public static final String INTEGRITY_KEY = "integrity_v3";
+
+    public static List<String> countryList = Lists.newArrayList("意第绪",
+                    "瓜拉尼",
+                    "泰卢固",
+                    "坎纳达",
+                    "马拉雅拉姆",
+                    "几内亚比绍",
+                    "尼日尔",
+                    "格林纳达",
+                    "美属维京群岛",
+                    "圣马力诺",
+                    "圣文森特和格陵纳丁斯",
+                    "叙利亚",
+                    "塔吉克斯坦",
+                    "法属德洛普群岛",
+                    "利比亚",
+                    "吉布提",
+                    "新卡里多尼亚",
+                    "塞拉利昂",
+                    "关岛",
+                    "乍得",
+                    "莱索托",
+                    "库克群岛",
+                    "安提瓜和巴布达",
+                    "赤道几内亚",
+                    "布隆迪",
+                    "科摩罗",
+                    "海地",
+                    "缅甸",
+                    "法属尼留旺岛",
+                    "佛得角",
+                    "马尔代夫",
+                    "埃塞俄比亚",
+                    "加蓬",
+                    "中非",
+                    "布基纳法索",
+                    "毛里塔尼亚",
+                    "苏里南",
+                    "捷克斯洛伐克",
+                    "格陵兰岛",
+                    "法罗群岛",
+                    "所罗门群岛",
+                    "几内亚",
+                    "马里",
+                    "直布罗陀",
+                    "贝宁",
+                    "利比里亚",
+                    "赞比亚",
+                    "阿曼",
+                    "牙买加",
+                    "乌兹别克斯坦",
+                    "英属维京群岛",
+                    "巴巴多斯",
+                    "圭亚那",
+                    "圣多美和普林西比",
+                    "古巴",
+                    "白俄罗斯",
+                    "开曼群岛",
+                    "玻利维亚",
+                    "危地马拉",
+                    "纳米比亚",
+                    "喀麦隆",
+                    "斐济",
+                    "圣卢西亚",
+                    "圣基茨和尼维斯",
+                    "刚果(布)",
+                    "瓦努阿鲁",
+                    "黎巴嫩",
+                    "阿塞拜疆",
+                    "洪都拉斯",
+                    "摩纳哥",
+                    "委内瑞拉",
+                    "毛里求斯",
+                    "荷属安德列斯",
+                    "乌干达",
+                    "蒙古",
+                    "苏丹",
+                    "博茨瓦纳",
+                    "斯威士兰",
+                    "多米尼加共和国",
+                    "泽西岛",
+                    "波黑",
+                    "斯罗文尼亚",
+                    "卢旺达",
+                    "阿富汗",
+                    "百慕大",
+                    "伯里兹",
+                    "萨尔瓦多",
+                    "马达加斯加",
+                    "阿尔及利亚",
+                    "莫桑比克",
+                    "列支顿士登",
+                    "厄瓜多尔",
+                    "刚果(金)",
+                    "巴布亚新几内亚",
+                    "安哥拉",
+                    "不丹",
+                    "多哥",
+                    "马拉维",
+                    "塞内加尔",
+                    "卢森堡",
+                    "中国澳门",
+                    "约旦",
+                    "加纳",
+                    "特立尼达和多巴哥",
+                    "乌拉圭",
+                    "奥地利",
+                    "摩尔多瓦",
+                    "印度卡纳塔克邦",
+                    "北马其顿",
+                    "坦桑尼亚",
+                    "捷克共和国",
+                    "威尔士公国",
+                    "中国大陆",
+                    "突尼斯",
+                    "尼加拉瓜",
+                    "塞普路斯",
+                    "吉尔吉斯斯坦",
+                    "哥伦比亚",
+                    "秘鲁",
+                    "尼日利亚",
+                    "波多黎各",
+                    "哥斯达黎加",
+                    "伊朗",
+                    "沙特阿拉伯王国",
+                    "冈比亚",
+                    "文莱布鲁萨兰",
+                    "巴基斯坦",
+                    "亚美尼亚",
+                    "肯尼亚",
+                    "塞舌尔",
+                    "巴林",
+                    "格鲁吉亚",
+                    "伊拉克",
+                    "柬埔寨",
+                    "智利",
+                    "巴哈马",
+                    "摩洛哥",
+                    "老挝",
+                    "孟加拉国",
+                    "阿拉伯联合酋长国",
+                    "科威特",
+                    "哈萨克斯坦",
+                    "以色列",
+                    "西班牙",
+                    "比利时",
+                    "土尔其",
+                    "新西兰",
+                    "南非",
+                    "巴拉圭",
+                    "埃及",
+                    "瑞士",
+                    "澳大利亚",
+                    "新加坡",
+                    "斯里兰卡",
+                    "加拿大",
+                    "中国香港",
+                    "英国",
+                    "多米尼加联邦",
+                    "菲律宾",
+                    "卡塔尔",
+                    "中国台湾",
+                    "马其顿",
+                    "乌尔都",
+                    "尼泊尔",
+                    "马拉地",
+                    "泰米尔",
+                    "旁遮普",
+                    "加泰罗尼亚",
+                    "希伯来",
+                    "海地克里奥尔",
+                    "冰岛",
+                    "立陶宛",
+                    "拉脱维亚",
+                    "威尔士",
+                    "布列塔尼",
+                    "塞尔维亚",
+                    "塔加拉",
+                    "巴斯克",
+                    "马耳他",
+                    "加利西亚",
+                    "高棉",
+                    "孟加拉",
+                    "索马里",
+                    "北印度",
+                    "阿尔巴尼亚",
+                    "奧克",
+                    "斯瓦希里",
+                    "乌克兰",
+                    "希腊",
+                    "斯洛伐克",
+                    "匈牙利",
+                    "波斯",
+                    "韩国",
+                    "阿拉伯",
+                    "瑞典",
+                    "土耳其",
+                    "爱尔兰",
+                    "荷兰",
+                    "罗马尼亚",
+                    "爱沙尼亚",
+                    "葡萄牙",
+                    "保加利亚",
+                    "卡斯提尔",
+                    "泰国",
+                    "波兰",
+                    "克罗地亚",
+                    "芬兰",
+                    "挪威",
+                    "丹麦",
+                    "日本",
+                    "印度尼西亚",
+                    "捷克",
+                    "斯洛文尼亚",
+                    "法国",
+                    "德国",
+                    "马来西亚",
+                    "越南",
+                    "俄罗斯",
+                    "中国",
+                    "墨西哥",
+                    "意大利",
+                    "阿根廷",
+                    "巴西",
+                    "美国",
+                    "香港",
+                    "印度");
 
     /**
      * 新的索引
@@ -380,11 +609,11 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCountryResp> getCountryList() {
         try {
-            List<String> countryListFromCache = redisService.rangeV2(COUNTRY_KEY, 0L, -1L);
-            if (!CollectionUtils.isEmpty(countryListFromCache)) {
-                return new RestResult<>(RestEnum.SUCCESS,
-                        SearchCountryResp.builder().countryList(countryListFromCache).build());
-            }
+//            List<String> countryListFromCache = redisService.rangeV2(COUNTRY_KEY, 0L, -1L);
+//            if (!CollectionUtils.isEmpty(countryListFromCache)) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(countryListFromCache).build());
+//            }
 
 //            SearchSourceBuilder builder = new SearchSourceBuilder()
 //                    .query(QueryBuilders.matchAllQuery())
@@ -414,14 +643,14 @@ public class EsServiceV2Impl {
 //                return new RestResult<>(RestEnum.SUCCESS,
 //                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
 //            }
+//
+//            List<BlogSystemCountryDataEntity> blogSystemCountryDataList = countryDao.getAllCountryEntity();
+//            if (CollectionUtils.isEmpty(blogSystemCountryDataList)) {
+//                return new RestResult<>(RestEnum.SUCCESS,
+//                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
+//            }
 
-            List<BlogSystemCountryDataEntity> blogSystemCountryDataList = countryDao.getAllCountryEntity();
-            if (CollectionUtils.isEmpty(blogSystemCountryDataList)) {
-                return new RestResult<>(RestEnum.SUCCESS,
-                        SearchCountryResp.builder().countryList(Lists.newArrayList()).build());
-            }
-
-            List<String> countryList = blogSystemCountryDataList.stream().map(e -> e.getCountry()).distinct().collect(Collectors.toList());
+//            List<String> countryList = blogSystemCountryDataList.stream().map(e -> e.getCountry()).distinct().collect(Collectors.toList());
 //            List<String> countryList = Arrays.stream(searchHits)
 //                    .filter(e -> StringUtils.isNotBlank(String.valueOf(e.getSourceAsMap().get("country"))))
 ////                    .filter(e -> !fieldList_one.contains(String.valueOf(e.getSourceAsMap().get("country"))))
@@ -429,10 +658,10 @@ public class EsServiceV2Impl {
 //                    .distinct()
 //                    .collect(Collectors.toList());
 
-            if (!CollectionUtils.isEmpty(countryList)) {
-                redisService.leftPushAll(COUNTRY_KEY, countryList);
-//                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
-            }
+//            if (!CollectionUtils.isEmpty(countryList)) {
+//                redisService.leftPushAll(COUNTRY_KEY, countryList);
+////                DingTalkUtil.sendDdMessage("落河系统通知: redis-key:" + COUNTRY_KEY + "入redis缓存完毕！！！");
+//            }
             return new RestResult<>(RestEnum.SUCCESS,
                     SearchCountryResp.builder().countryList(countryList).build());
         } catch (Exception e) {
@@ -577,12 +806,17 @@ public class EsServiceV2Impl {
 
         try {
 
-//            if ("country".equals(fieldName)) {
-//                List<String> list = redisService.range(fieldName, 0L, -1L);
-//                if (!CollectionUtils.isEmpty(list)) {
-//                    return new RestResult<>(RestEnum.SUCCESS, list.stream().filter(e -> e.contains(textValue)).distinct().collect(Collectors.toList()));
-//                }
-//            }
+            if ("country".equals(fieldName)) {
+                List<String> resultCountryList = Lists.newArrayList();
+                Pattern pattern = Pattern.compile(textValue);
+                for(int i=0; i < countryList.size(); i++) {
+                    Matcher matcher = pattern.matcher((countryList.get(i)));
+                    if (matcher.find()) {
+                        resultCountryList.add(countryList.get(i));
+                    }
+                }
+                return new RestResult<>(RestEnum.SUCCESS, resultCountryList);
+            }
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             boolQueryBuilder.should(QueryBuilders.wildcardQuery(fieldName + ".keyword", "*" + textValue + "*"));
