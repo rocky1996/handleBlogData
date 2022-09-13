@@ -1,7 +1,7 @@
 server:
   port: 8050
 
-#指定环境
+#指定环境,http://wjhsh.net/songjn-p-13354564.html
 spring:
   profiles:
     active: prod
