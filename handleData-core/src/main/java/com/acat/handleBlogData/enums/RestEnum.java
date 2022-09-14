@@ -22,6 +22,7 @@ public enum RestEnum {
     SERVICE_IS_ERROR(411, "服务报错请重试或联系相关人员！！！"),
     MEDIA_SOURCE_IS_EMPTY(412, "数据源不能为空！！！"),
     DOWNLOAD_DATA_IS_EMPTY(413, "下载数据为空！！！"),
+    USER_IS_EMPTY(414, "该用户不存在"),
 //    SYSTEM_ERROR(402, "系统错误"),
 //    NO_HAVING_DATA(403, "没有搜索到任何相关数据"),
     FAILED(500, "服务端失败"),

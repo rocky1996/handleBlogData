@@ -41,4 +41,14 @@ public class UserServiceImpl implements UserService {
         BlogSystemUserEntity blogSystemUser = UserReq.covertBean(userReq);
         userDao.save(blogSystemUser);
     }
+
+    @Override
+    public BlogSystemUserEntity getUserById(Integer userId) {
+        return userDao.selectById(userId);
+    }
+
+    @Override
+    public void updateUserStatus(BlogSystemUserEntity blogSystemUser) {
+        userDao.save(blogSystemUser);
+    }
 }

@@ -1,6 +1,7 @@
 package com.acat.handleBlogData.controller.req;
 
 import com.acat.handleBlogData.domain.entity.BlogSystemUserEntity;
+import com.acat.handleBlogData.enums.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +17,6 @@ import java.util.Objects;
 @NoArgsConstructor
 public class UserReq {
 
-    private Integer id;
-
     private String userName;
 
     private String passWord;
@@ -31,9 +30,6 @@ public class UserReq {
      */
     public static BlogSystemUserEntity covertBean(UserReq userReq) {
         BlogSystemUserEntity blogSystemUser = new BlogSystemUserEntity();
-        if (!Objects.isNull(userReq.getId())) {
-            blogSystemUser.setId(userReq.getId());
-        }
         if (StringUtils.isNotBlank(userReq.getUserName())) {
             blogSystemUser.setUsername(userReq.getUserName());
         }
@@ -45,6 +41,7 @@ public class UserReq {
         }
 
         Date newDate = new Date();
+        blogSystemUser.setIsFlag(StatusEnum.OPEN_EFFECTIVE.getCode());
         blogSystemUser.setCreateTime(newDate);
         blogSystemUser.setUpdateTime(newDate);
         return blogSystemUser;

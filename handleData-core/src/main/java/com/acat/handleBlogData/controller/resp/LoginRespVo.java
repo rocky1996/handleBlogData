@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -17,6 +19,9 @@ public class LoginRespVo {
     private String userName;
     private String passWord;
     private String userNickname;
+    private Integer isFlag;
+    private Date createTime;
+    private Date updateTime;
     private String token;
 
     public static LoginRespVo covertBean(BlogSystemUserEntity blogSystemUser) {
@@ -27,6 +32,9 @@ public class LoginRespVo {
                     .userName(blogSystemUser.getUsername())
                     .passWord(blogSystemUser.getPassword())
                     .userNickname(blogSystemUser.getUserNickname())
+                    .isFlag(blogSystemUser.getIsFlag())
+                    .createTime(blogSystemUser.getCreateTime())
+                    .updateTime(blogSystemUser.getUpdateTime())
                     .build();
         }
         return null;

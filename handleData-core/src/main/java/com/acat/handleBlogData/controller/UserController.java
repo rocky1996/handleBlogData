@@ -8,6 +8,7 @@ import com.acat.handleBlogData.controller.req.UserReq;
 import com.acat.handleBlogData.controller.resp.LoginRespVo;
 import com.acat.handleBlogData.domain.entity.BlogSystemUserEntity;
 import com.acat.handleBlogData.enums.RestEnum;
+import com.acat.handleBlogData.enums.StatusEnum;
 import com.acat.handleBlogData.service.tokenService.TokenServiceImpl;
 import com.acat.handleBlogData.service.UserService;
 import com.acat.handleBlogData.util.JwtUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,8 +44,8 @@ public class UserController {
     }
 
     @Auth(required = false)
-    @PostMapping("/addOrUpdate")
-    public RestResult addOrUpdate(HttpServletRequest httpServletRequest,
+    @PostMapping("/addAccount")
+    public RestResult addAccount(HttpServletRequest httpServletRequest,
                                   @RequestBody UserReq userReq) {
         try {
             if (StringUtils.isBlank(userReq.getUserName())) {
@@ -56,6 +58,75 @@ public class UserController {
                 return new RestResult<>(RestEnum.NICK_NAME_EMPTY);
             }
             userService.addOrUpdate(userReq);
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @GetMapping("/updateUserStatus")
+    public RestResult updateUserStatus(Integer userId, Integer statusCode) {
+
+        try {
+            BlogSystemUserEntity blogSystemUser = userService.getUserById(userId);
+            if (blogSystemUser == null) {
+                return new RestResult<>(RestEnum.USER_IS_EMPTY);
+            }
+
+            StatusEnum statusEnum = StatusEnum.getStatusEnum(statusCode);
+            if (statusEnum == null) {
+                return new RestResult<>(RestEnum.USER_IS_EMPTY.getCode(), "用户状态参数错误,标准状态,0:开启,1:关闭");
+            }
+
+            BlogSystemUserEntity updateUser = new BlogSystemUserEntity();
+            updateUser.setId(userId);
+            updateUser.setUsername(blogSystemUser.getUsername());
+            updateUser.setPassword(blogSystemUser.getPassword());
+            updateUser.setUserNickname(blogSystemUser.getUserNickname());
+            updateUser.setIsFlag(statusCode);
+            updateUser.setCreateTime(blogSystemUser.getCreateTime());
+            updateUser.setUpdateTime(new Date());
+            userService.updateUserStatus(updateUser);
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Auth(required = false)
+    @GetMapping("/updatePassword")
+    public RestResult updateUserStatus(String userName, String password, String newPassword) {
+
+        try {
+
+            if (StringUtils.isBlank(userName)) {
+                return new RestResult<>(RestEnum.USERNAME_EMPTY_PARAM);
+            }
+            if (StringUtils.isBlank(password)) {
+                return new RestResult<>(RestEnum.PASSWORD_EMPTY_PARAM);
+            }
+            if (StringUtils.isBlank(newPassword)) {
+                return new RestResult<>(RestEnum.NICK_NAME_EMPTY.getCode(), "新密码不能为空！！！");
+            }
+            if (password.equals(newPassword)) {
+                return new RestResult<>(RestEnum.NICK_NAME_EMPTY.getCode(), "新老密码不能一致,请重新修改");
+            }
+
+            LoginRespVo loginRespVo = userService.login(userName, password);
+            if (loginRespVo == null) {
+                return new RestResult<>(RestEnum.USER_IS_EMPTY);
+            }
+
+            BlogSystemUserEntity updateUser = new BlogSystemUserEntity();
+            updateUser.setId(loginRespVo.getId());
+            updateUser.setUsername(loginRespVo.getUserName());
+            updateUser.setPassword(newPassword);
+            updateUser.setUserNickname(loginRespVo.getUserNickname());
+            updateUser.setIsFlag(loginRespVo.getIsFlag());
+            updateUser.setCreateTime(loginRespVo.getCreateTime());
+            updateUser.setUpdateTime(new Date());
+            userService.updateUserStatus(updateUser);
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

@@ -31,6 +31,9 @@ public class BlogSystemUserEntity implements Serializable {
     @Column(name = "user_nickname")
     private String userNickname;
 
+    @Column(name = "is_flag")
+    private Integer isFlag;
+
     @Column(name = "create_time")
     private Date createTime;
 

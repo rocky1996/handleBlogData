@@ -27,4 +27,17 @@ public interface UserService {
      * @param userReq
      */
     void addOrUpdate(UserReq userReq);
+
+    /**
+     * 获取用户
+     * @param userId
+     * @return
+     */
+    BlogSystemUserEntity getUserById(Integer userId);
+
+    /**
+     * 更新用户状态
+     * @param blogSystemUser
+     */
+    void updateUserStatus(BlogSystemUserEntity blogSystemUser);
 }
