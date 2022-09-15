@@ -142,7 +142,6 @@ public class UserController {
     @GetMapping("/deleteUser")
     public RestResult deleteUser(Integer userId) {
         try {
-
             if (userId == null) {
                 return new RestResult<>(RestEnum.USER_ID_ERROR);
             }
