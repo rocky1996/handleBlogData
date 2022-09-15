@@ -23,8 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginRespVo login(String userName, String password) {
-        BlogSystemUserEntity blogSystemUser = userDao.userLogin(userName, password);
-        if (blogSystemUser != null){
+        List<BlogSystemUserEntity> blogSystemUserList = userDao.userLogin(userName, password);
+        if (!CollectionUtils.isEmpty(blogSystemUserList)){
+            BlogSystemUserEntity blogSystemUser = blogSystemUserList.get(0);
             return LoginRespVo.covertBean(blogSystemUser);
         }
         return null;
@@ -50,5 +51,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserStatus(BlogSystemUserEntity blogSystemUser) {
         userDao.save(blogSystemUser);
+    }
+
+    @Override
+    public List<BlogSystemUserEntity> getUserByNameAndPassword(String userName, String password) {
+        return userDao.getUserByNameAndPassword(userName, password);
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+        userDao.deleteById(userId);
     }
 }

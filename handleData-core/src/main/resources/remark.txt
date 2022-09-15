@@ -166,3 +166,6 @@ get http://47.93.185.66/shopping/_search
 {
     "aggs":
 }
+
+curl -H "Content-Type: application/json" -X POST -d '{"userName":"hhhhhh","passWord":"hhhhhh","userNickname":"hhhhhh"}' "http://localhost:8051/blogSystem/user/addAccount"
+curl http://localhost:8051/blogSystem/user/addAccount -X POST -d '{"userName":"hhhhhh","passWord":"hhhhhh","userNickname":"hhhhhh"}' --header "Content-Type: application/json"

@@ -14,6 +14,7 @@ import com.acat.handleBlogData.service.UserService;
 import com.acat.handleBlogData.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,7 +33,7 @@ public class UserController {
     @Resource
     private TokenServiceImpl tokenServiceImpl;
 
-    @Auth(required = false)
+//    @Auth(required = false)
     @GetMapping("/getAllUser")
     public RestResult<List<BlogSystemUserEntity>> getAllUser(HttpServletRequest httpServletRequest) {
         try {
@@ -43,7 +44,7 @@ public class UserController {
         }
     }
 
-    @Auth(required = false)
+//    @Auth(required = false)
     @PostMapping("/addAccount")
     public RestResult addAccount(HttpServletRequest httpServletRequest,
                                   @RequestBody UserReq userReq) {
@@ -57,6 +58,11 @@ public class UserController {
             if (StringUtils.isBlank(userReq.getUserNickname())) {
                 return new RestResult<>(RestEnum.NICK_NAME_EMPTY);
             }
+
+            List<BlogSystemUserEntity> blogSystemUserEntityList = userService.getUserByNameAndPassword(userReq.getUserName(), userReq.getPassWord());
+            if (!CollectionUtils.isEmpty(blogSystemUserEntityList)) {
+                return new RestResult<>(RestEnum.USER_IS_EMPTY.getCode(), "该用户已经存在,请勿重复添加！！！");
+            }
             userService.addOrUpdate(userReq);
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
@@ -64,7 +70,7 @@ public class UserController {
         }
     }
 
-    @Auth(required = false)
+//    @Auth(required = false)
     @GetMapping("/updateUserStatus")
     public RestResult updateUserStatus(Integer userId, Integer statusCode) {
 
@@ -94,7 +100,7 @@ public class UserController {
         }
     }
 
-    @Auth(required = false)
+//    @Auth(required = false)
     @GetMapping("/updatePassword")
     public RestResult updateUserStatus(String userName, String password, String newPassword) {
 
@@ -127,6 +133,20 @@ public class UserController {
             updateUser.setCreateTime(loginRespVo.getCreateTime());
             updateUser.setUpdateTime(new Date());
             userService.updateUserStatus(updateUser);
+            return new RestResult<>(RestEnum.SUCCESS);
+        }catch (Exception e) {
+            return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/deleteUser")
+    public RestResult deleteUser(Integer userId) {
+        try {
+
+            if (userId == null) {
+                return new RestResult<>(RestEnum.USER_ID_ERROR);
+            }
+            userService.deleteUser(userId);
             return new RestResult<>(RestEnum.SUCCESS);
         }catch (Exception e) {
             return new RestResult<>(RestEnum.FAILED.getCode(), e.getMessage(), null);

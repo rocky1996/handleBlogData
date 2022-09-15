@@ -40,4 +40,18 @@ public interface UserService {
      * @param blogSystemUser
      */
     void updateUserStatus(BlogSystemUserEntity blogSystemUser);
+
+    /**
+     * 判断库中是否有相同的数据
+     * @param userName
+     * @param password
+     * @return
+     */
+    List<BlogSystemUserEntity> getUserByNameAndPassword(String userName, String password);
+
+    /**
+     * 删除用户
+     * @param userId
+     */
+    void deleteUser(Integer userId);
 }
