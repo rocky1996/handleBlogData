@@ -4,7 +4,7 @@ server:
 #指定环境,http://wjhsh.net/songjn-p-13354564.html
 spring:
   profiles:
-    active: test
+    active: prod
 
   main:
     allow-bean-definition-overriding: true
