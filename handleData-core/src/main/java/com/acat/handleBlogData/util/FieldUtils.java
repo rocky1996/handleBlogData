@@ -206,7 +206,7 @@ public class FieldUtils {
         fieldMap.put("educations_time_period_time", "教育经历-开始时间+结束时间");
         fieldMap.put("educations_description", "教育经历-描述");
         fieldMap.put("skills_name", "技能认可-技能名称");
-        fieldMap.put("skills_endorsement_count", "技能认可");
+        fieldMap.put("skills_endorsement_count", "技能认可-数");
         fieldMap.put("languages_name", "语言名");
         fieldMap.put("languages_proficiency", "精通");
         fieldMap.put("honors_title", "荣誉-名称");
