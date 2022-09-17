@@ -300,18 +300,6 @@ public class CountryUtil {
     }
 
     public static void main(String[] args) {
-
-//        String str = "abcde";
-//        String [] arr = str.split("\\ ");
-//
-//        StringBuffer stringBuffer = new StringBuffer(arr[arr.length-1]);
-//        for (int i=0;i<arr.length-1;i++) {
-//            stringBuffer.append(" ").append(arr[i]);
-//        }
-//        System.out.println(stringBuffer.toString());
-
-
-
-
+        System.out.println(ReaderFileUtil.isChinese("土耳其"));
     }
 }
