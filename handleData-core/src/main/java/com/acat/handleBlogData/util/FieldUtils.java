@@ -185,11 +185,11 @@ public class FieldUtils {
         fieldMap.put("experiences_company_location", "工作经历-地址名称");
         fieldMap.put("experiences_time_period_time", "工作经历-开始时间+结束时间");
         fieldMap.put("experiences_description", "工作经历-描述");
-        fieldMap.put("certifications_name", "资格认证");
+        fieldMap.put("certifications_name", "资格认证-证书名");
         fieldMap.put("certifications_authority", "资格认证");
-        fieldMap.put("certifications_license", "资格认证");
+        fieldMap.put("certifications_license", "资格认证 --证书许可");
         fieldMap.put("certifications_time_period_time", "资格认证时间");
-        fieldMap.put("cerfitications_url", "资格认证");
+        fieldMap.put("cerfitications_url", "资格认证 -证书链接");
         fieldMap.put("volunteer_experiences_role", "志愿者角色");
         fieldMap.put("volunteer_experiences_company_name", "志愿者单位名");
         fieldMap.put("volunteer_experiences_cause", "志愿原因");
