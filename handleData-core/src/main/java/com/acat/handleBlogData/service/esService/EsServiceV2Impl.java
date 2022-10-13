@@ -554,7 +554,7 @@ public class EsServiceV2Impl {
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
-//            searchRequest.indices(indexArray_v2);
+            searchRequest.indices(indexArray_v2);
             searchRequest.types("_doc");
             searchRequest.source(builder);
 
