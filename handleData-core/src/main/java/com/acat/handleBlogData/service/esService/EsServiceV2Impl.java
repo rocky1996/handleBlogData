@@ -534,28 +534,43 @@ public class EsServiceV2Impl {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, "分页查询只支持前" + max_result_window / pageSize + "页数据,或请进行条件查询！！！");
             }
 
-            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
-            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-            for (String fieldValue : fieldList) {
-                if (isParticiple.equals(1)) {
-                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
-                } else {
-                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*" + fieldValue + "*"));
-                }
+            String[] array = new String[fieldList.size()];
+            for (int i=0;i<fieldList.size();i++) {
+                array[i] = fieldList.get(i);
             }
-            bigBuilder.must(channelQueryBuilder);
 
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .query(bigBuilder)
-                    .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
-                    .trackTotalHits(true);
+            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+            if (isParticiple.equals(1)){
+                BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+                bigBuilder.filter(QueryBuilders.termsQuery(searchField + ".keyword", array));
+                sourceBuilder.query(bigBuilder);
+            }else {
+                BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+                fieldList.forEach(e -> {
+                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*" + e + "*"));
+                });
+                sourceBuilder.query(channelQueryBuilder);
+            }
+
+//            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
+//            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+//            for (String fieldValue : fieldList) {
+//                if (isParticiple.equals(1)) {
+//                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
+//                } else {
+//                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*" + fieldValue + "*"));
+//                }
+//            }
+//            bigBuilder.must(channelQueryBuilder);
+            sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+            sourceBuilder.trackTotalHits(true);
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
-//            searchRequest.indices(indexArray_v2);
+//            searchRequest.indies(indexArray_v2);
             searchRequest.types("_doc");
-            searchRequest.source(builder);
+            searchRequest.source(sourceBuilder);
 
             SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
@@ -607,6 +622,11 @@ public class EsServiceV2Impl {
      */
     public RestResult<SearchCountryResp> getCountryList() {
         try {
+
+//            String[] strArr = new String[8];
+//            MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("", strArr);
+//            matchQueryBuilder.fuzziness(Fuzziness.AUTO);
+
 //            List<String> countryListFromCache = redisService.rangeV2(COUNTRY_KEY, 0L, -1L);
 //            if (!CollectionUtils.isEmpty(countryListFromCache)) {
 //                return new RestResult<>(RestEnum.SUCCESS,
