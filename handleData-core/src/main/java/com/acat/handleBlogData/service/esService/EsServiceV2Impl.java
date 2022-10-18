@@ -375,7 +375,6 @@ public class EsServiceV2Impl {
             sourceBuilder.sort("integrity", SortOrder.DESC);
             log.info("EsServiceV2Impl.searchData,sourceBuilder:{}",sourceBuilder.toString());
 
-
             SearchRequest searchRequest = new SearchRequest();
             if (!judgeSearchParamAllEmpty(searchReq)) {
                 searchRequest.indices(indexArray_v2);
@@ -384,6 +383,9 @@ public class EsServiceV2Impl {
             }
             searchRequest.types("_doc");
             searchRequest.source(sourceBuilder);
+            log.info("EsServiceV2Impl.searchData,searchRequest:{}",searchRequest.toString());
+
+
             SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
@@ -635,27 +637,27 @@ public class EsServiceV2Impl {
                 return new RestResult<>(RestEnum.FIELD_NOT_SUPPORT_DIM_SEARCH, "分页查询只支持前" + max_result_window / pageSize + "页数据,或请进行条件查询！！！");
             }
 
-            if (BatchSearchFieldEnum.user_summary.getFieldValue().equals(searchField)){
-                List<SearchResp.UserData> dataList = Lists.newArrayList();
-                Long bigSize = 0L;
-                for (String value : fieldList) {
-                    SearchReq searchReq = new SearchReq();
-                    searchReq.setIsParticiple(0);
-                    searchReq.setUserSummary(value);
-                    searchReq.setPageNum(pageNum);
-                    searchReq.setPageSize(pageSize);
-                    searchReq.setMediaType(mediaSourceEnum.getCode());
-
-                    RestResult<SearchResp> respRestResult = searchData(searchReq);
-                    if (respRestResult.getCode() == 0) {
-                        SearchResp searchResp = respRestResult.getData();
-                        dataList.addAll(searchResp.getDataList());
-                        bigSize += searchResp.getTotalSize();
-                    }
-                }
-                SearchResp searchResp = SearchResp.builder().totalSize(bigSize).dataList(dataList).build();
-                return new RestResult<>(RestEnum.SUCCESS, searchResp);
-            }
+//            if (BatchSearchFieldEnum.user_summary.getFieldValue().equals(searchField)){
+//                List<SearchResp.UserData> dataList = Lists.newArrayList();
+//                Long bigSize = 0L;
+//                for (String value : fieldList) {
+//                    SearchReq searchReq = new SearchReq();
+//                    searchReq.setIsParticiple(0);
+//                    searchReq.setUserSummary(value);
+//                    searchReq.setPageNum(pageNum);
+//                    searchReq.setPageSize(pageSize);
+//                    searchReq.setMediaType(mediaSourceEnum.getCode());
+//
+//                    RestResult<SearchResp> respRestResult = searchData(searchReq);
+//                    if (respRestResult.getCode() == 0) {
+//                        SearchResp searchResp = respRestResult.getData();
+//                        dataList.addAll(searchResp.getDataList());
+//                        bigSize += searchResp.getTotalSize();
+//                    }
+//                }
+//                SearchResp searchResp = SearchResp.builder().totalSize(bigSize).dataList(dataList).build();
+//                return new RestResult<>(RestEnum.SUCCESS, searchResp);
+//            }
 
 
             BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
@@ -665,7 +667,6 @@ public class EsServiceV2Impl {
                     bigBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
                 } else {
                     bigBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", fieldValue + "*"));
-                    // channelQueryBuilder.should(QueryBuilders.queryStringQuery("*"+fieldValue+"*").field(searchField + ".keyword"));
                 }
             }
             SearchSourceBuilder builder = new SearchSourceBuilder()
@@ -673,19 +674,21 @@ public class EsServiceV2Impl {
                     .from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize)
                     .trackTotalHits(true)
                     .sort("integrity", SortOrder.DESC);
-
+            log.info("EsServiceV2Impl.batchQuery,builder:{}",builder.toString());
 
             //搜索
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
-//            searchRequest.indices(indexArray_v2);
             searchRequest.types("_doc");
             searchRequest.source(builder);
+            log.info("EsServiceV2Impl.batchQuery,searchRequest:{}",searchRequest.toString());
 
             SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
             if (response == null) {
                 return new RestResult<>(RestEnum.PLEASE_TRY);
             }
+
+            log.info("EsServiceV2Impl.batchQuery,response:{}",response.getHits().getTotalHits().value);
             return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
         } catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error,", e);
