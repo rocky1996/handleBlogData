@@ -539,44 +539,81 @@ public class EsServiceV2Impl {
                 array[i] = fieldList.get(i);
             }
 
+            List<SearchHit> bigHisList = Lists.newArrayList();
+            Long bigHitSize = 0L;
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             if (isParticiple.equals(1)){
                 BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
                 bigBuilder.filter(QueryBuilders.termsQuery(searchField + ".keyword", array));
                 sourceBuilder.query(bigBuilder);
+
+                sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+                sourceBuilder.trackTotalHits(true);
+                sourceBuilder.sort("integrity", SortOrder.DESC);
+
+                //搜索
+                SearchRequest searchRequest = new SearchRequest();
+                searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
+                searchRequest.types("_doc");
+                searchRequest.source(sourceBuilder);
+                log.info("searchRequest:{}",JacksonUtil.beanToStr(searchRequest));
+
+
+                SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+                if (response == null) {
+                    return new RestResult<>(RestEnum.PLEASE_TRY);
+                }
+                return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
             }else {
-                BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-                fieldList.forEach(e -> {
-                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*" + e + "*"));
-                });
-                sourceBuilder.query(channelQueryBuilder);
-            }
+                for (String value : fieldList) {
+                    SearchSourceBuilder moHuSourceBuilder = new SearchSourceBuilder();
 
-//            BoolQueryBuilder bigBuilder = QueryBuilders.boolQuery();
-//            BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
-//            for (String fieldValue : fieldList) {
-//                if (isParticiple.equals(1)) {
-//                    channelQueryBuilder.should(QueryBuilders.termQuery(searchField + ".keyword", fieldValue));
-//                } else {
-//                    channelQueryBuilder.should(QueryBuilders.wildcardQuery(searchField + ".keyword", "*" + fieldValue + "*"));
-//                }
+                    BoolQueryBuilder channelQueryBuilder = new BoolQueryBuilder();
+                    channelQueryBuilder.must(QueryBuilders.wildcardQuery(searchField + ".keyword", value + "*"));
+                    moHuSourceBuilder.query(channelQueryBuilder);
+
+                    moHuSourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+                    moHuSourceBuilder.trackTotalHits(true);
+                    moHuSourceBuilder.sort("integrity", SortOrder.DESC);
+
+                    //搜索
+                    SearchRequest searchRequest = new SearchRequest();
+                    searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
+                    searchRequest.types("_doc");
+                    searchRequest.source(moHuSourceBuilder);
+
+                    SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+                    if (response == null) {
+                        return new RestResult<>(RestEnum.PLEASE_TRY);
+                    }
+
+                    SearchHit[] searchHits = response.getHits().getHits();
+                    if (!CollectionUtils.isEmpty(Arrays.stream(searchHits).collect(Collectors.toList()))) {
+                        bigHisList.addAll(Arrays.stream(searchHits).collect(Collectors.toList()));
+                        Long size = response.getHits().getTotalHits().value;
+                        bigHitSize += size;
+                    }
+                }
+
+                return new RestResult<>(RestEnum.SUCCESS, assembleBatchResult(bigHisList, bigHitSize));
+            }
+//            sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
+//            sourceBuilder.trackTotalHits(true);
+//            sourceBuilder.sort("integrity", SortOrder.DESC);
+//
+//            //搜索
+//            SearchRequest searchRequest = new SearchRequest();
+//            searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
+//            searchRequest.types("_doc");
+//            searchRequest.source(sourceBuilder);
+//            log.info("searchRequest:{}",JacksonUtil.beanToStr(searchRequest));
+//
+//
+//            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
+//            if (response == null) {
+//                return new RestResult<>(RestEnum.PLEASE_TRY);
 //            }
-//            bigBuilder.must(channelQueryBuilder);
-            sourceBuilder.from((pageNum > 0 ? (pageNum - 1) : 0) * pageSize).size(pageSize);
-            sourceBuilder.trackTotalHits(true);
-
-            //搜索
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.indices(getEsIndex(mediaSourceEnum.getCode()).stream().toArray(String[]::new));
-//            searchRequest.indies(indexArray_v2);
-            searchRequest.types("_doc");
-            searchRequest.source(sourceBuilder);
-
-            SearchResponse response = restHighLevelClient.search(searchRequest, toBuilder());
-            if (response == null) {
-                return new RestResult<>(RestEnum.PLEASE_TRY);
-            }
-            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
+//            return new RestResult<>(RestEnum.SUCCESS, assembleResult(response, false));
         } catch (Exception e) {
             log.error("EsServiceV2Impl.batchQuery has error,", e);
 
@@ -1049,40 +1086,40 @@ public class EsServiceV2Impl {
         } else {
             //分词查询
             if (StringUtils.isNotBlank(searchReq.getUserId())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id.keyword", "*" + searchReq.getUserId() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_id.keyword", searchReq.getUserId() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserId()+"*").field("user_id.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserName())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("screen_name.keyword", "*" + searchReq.getUserName() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("screen_name.keyword", searchReq.getUserName() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserName()+"*").field("screen_name.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getUserQuanName())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name.keyword", "*" + searchReq.getUserQuanName() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("use_name.keyword", searchReq.getUserQuanName() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserQuanName()+"*").field("use_name.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getNameUserdBefore())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before.keyword", "*" + searchReq.getNameUserdBefore() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("name_userd_before.keyword", searchReq.getNameUserdBefore() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getNameUserdBefore()+"*").field("name_userd_before.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getPhoneNum())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile.keyword", "*" + searchReq.getPhoneNum() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("mobile.keyword", searchReq.getPhoneNum() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getPhoneNum()+"*").field("mobile.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getEmail())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("email.keyword", "*" + searchReq.getEmail() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("email.keyword", searchReq.getEmail() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getEmail()+"*").field("email.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getCountry())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("country.keyword", "*" + searchReq.getCountry() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("country.keyword", searchReq.getCountry() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCountry()+"*").field("country.keyword"));
             }
             if (StringUtils.isNotBlank(searchReq.getCity())) {
-                boolQueryBuilder.must(QueryBuilders.wildcardQuery("city.keyword", "*" + searchReq.getCity() + "*"));
+                boolQueryBuilder.must(QueryBuilders.wildcardQuery("city.keyword", searchReq.getCity() + "*"));
 //                boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getCity()+"*").field("city.keyword"));
             }
         }
         if (StringUtils.isNotBlank(searchReq.getUserSummary())) {
-            boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_summary.keyword", "*" + searchReq.getUserSummary() + "*"));
+            boolQueryBuilder.must(QueryBuilders.wildcardQuery("user_summary.keyword", searchReq.getUserSummary() + "*"));
 //            boolQueryBuilder.should(QueryBuilders.queryStringQuery("*"+searchReq.getUserSummary()+"*").field("user_summary.keyword"));
         }
         if (StringUtils.isNotBlank(searchReq.getIntegrity())) {
@@ -1092,6 +1129,73 @@ public class EsServiceV2Impl {
             boolQueryBuilder.must(QueryBuilders.rangeQuery("source_create_time.keyword").gte(searchReq.getStartTime()).lte(searchReq.getEndTime()).format("yyyy-MM-dd HH:mm:ss"));
         }
     }
+
+
+    /**
+     * 组装搜索的返回参数
+     *
+     * @param bigHisList
+     * @param hisSize
+     * @return
+     */
+    private SearchResp assembleBatchResult(List<SearchHit> bigHisList, Long hisSize) {
+        List<SearchResp.UserData> userDataList = Lists.newArrayList();
+        if (!CollectionUtils.isEmpty(bigHisList)) {
+            for (SearchHit hit : bigHisList) {
+                if (hit == null) {
+                    continue;
+                }
+
+                SearchResp.UserData userData = new SearchResp.UserData();
+                userData.setUserId(hit.getSourceAsMap().get("user_id") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_id")));
+                userData.setUuid(hit.getSourceAsMap().get("uuid") == null ? "" : String.valueOf(hit.getSourceAsMap().get("uuid")));
+                userData.setUserName(hit.getSourceAsMap().get("screen_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("screen_name")));
+                userData.setUserQuanName(hit.getSourceAsMap().get("use_name") == null ? "" : String.valueOf(hit.getSourceAsMap().get("use_name")));
+                userData.setPhoneNum(hit.getSourceAsMap().get("mobile") == null ? "" : String.valueOf(hit.getSourceAsMap().get("mobile")));
+                userData.setEmail(hit.getSourceAsMap().get("email") == null ? "" : String.valueOf(hit.getSourceAsMap().get("email")));
+                userData.setCountry(hit.getSourceAsMap().get("country") == null ? "" : String.valueOf(hit.getSourceAsMap().get("country")));
+                userData.setCity(hit.getSourceAsMap().get("city") == null ? "" : String.valueOf(hit.getSourceAsMap().get("city")));
+                userData.setUserHomePage(hit.getSourceAsMap().get("user_url") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_url")));
+                userData.setGender(hit.getSourceAsMap().get("gender") == null ? "" : String.valueOf(hit.getSourceAsMap().get("gender")));
+                userData.setMarriage(hit.getSourceAsMap().get("marriage") == null ? "" : String.valueOf(hit.getSourceAsMap().get("marriage")));
+                userData.setFollowersCount(hit.getSourceAsMap().get("followers_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("followers_count")));
+                userData.setFriendCount(hit.getSourceAsMap().get("friend_count") == null ? "0" : String.valueOf(hit.getSourceAsMap().get("friend_count")));
+                userData.setMaidernName(hit.getSourceAsMap().get("name_userd_before") == null ? "" : String.valueOf(hit.getSourceAsMap().get("name_userd_before")));
+                userData.setUserReligion(hit.getSourceAsMap().get("user_religio") == null ? "" : String.valueOf(hit.getSourceAsMap().get("user_religio")));
+                userData.setWorks(hit.getSourceAsMap().get("works") == null ? "" : String.valueOf(hit.getSourceAsMap().get("works")));
+                userData.setPositionMessage(hit.getSourceAsMap().get("location") == null ? "" : String.valueOf(hit.getSourceAsMap().get("location")));
+                userData.setHomeAddress(hit.getSourceAsMap().get("home_town") == null ? "" : String.valueOf(hit.getSourceAsMap().get("home_town")));
+
+                MediaSourceEnum mediaSourceEnum = MediaSourceEnum.getMediaSourceEnumByIndexV2(hit.getIndex());
+                userData.setMediaTypeResp(MediaTypeResp.builder().code(mediaSourceEnum.getCode()).desc(mediaSourceEnum.getDesc()).build());
+
+
+                Map<String, Object> newObjectMap = Maps.newHashMap();
+                Map<String, Object> stringObjectMap = hit.getSourceAsMap();
+                if (Objects.isNull(stringObjectMap)) {
+                    continue;
+                }
+                for (String key : stringObjectMap.keySet()) {
+                    if (StringUtils.isBlank(key)) {
+                        continue;
+                    }
+                    if ("_class".equals(key)) {
+                        continue;
+                    }
+                    newObjectMap.put(key, "impl_or_history_type".equals(key) ? ("imp".equals(stringObjectMap.get(key)) ? "完整属性" : "部分属性") : stringObjectMap.get(key));
+                }
+                userData.setFieldMap(newObjectMap);
+                userDataList.add(userData);
+            }
+        }
+
+        SearchResp searchResp = new SearchResp();
+        searchResp.setDataList(userDataList);
+        searchResp.setTotalSize(hisSize);
+        return searchResp;
+    }
+
+
 
     /**
      * 组装搜索的返回参数
